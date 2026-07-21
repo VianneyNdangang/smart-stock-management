@@ -1,0 +1,3 @@
+export const user_token = "_SMART_STOCK_MANAGEMENT"
+
+export const LANG_DEFAULT_KEY = "_LANG_SMART_STOCK_MANAGEMENT"

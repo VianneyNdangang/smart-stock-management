@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.dark body {
+  @apply bg-gray-950 text-gray-400;
+}
+
+:root {
+  /* light theme*/
+    --bg: #f4f4f4;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --hover: #cfd5dd;
+
+    --text-primary: #0f172a;
+    --text-secondary: #2b4160;
+    --text-third:#64748b;
+
+    --danger: #ef4444;
+    --success: #22c55e;
+    --primary: #2563eb;
+    --warning: #f59e0b;
+    
+    /*Button*/
+    --btt-bg: #c79e46;
+    --btt-hover: #ad8136;
+    --bttg-bg:#fcf2e1;
+
+    /* input */
+    --input-bg:  #f4f4f4;
+
+    /*Skeleton*/
+    --skeleton-bg: var(--hover);
+}
+    /* dark theme */
+.dark {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --border: #435266;
+    --hover: #c1d2e8;
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-third:#768498;
+
+    --bttg-bg: #c7a46839;
+
+    --input-bg:  #2d3e58;
+    
+    --skeleton-bg: #334155;
+
+}
