@@ -1,7 +1,8 @@
 <template>
   <div class="class flex flex-col gap-5">
     <!-- Button -->
-    <div class="p-8 bg-(--surface) flex md:flex-row flex-col gap-8">
+     <Card>
+    <div class=" flex md:flex-row flex-col gap-8">
       <div>
         <h1 class="text-xl font-semibold mb-3">Button</h1>
         <div class="flex items-center md:flex-row flex-col gap-3">
@@ -29,10 +30,11 @@
         </div>
       </div>
     </div>
-
+</Card>
     <!-- Input -->
-    <div class="p-8 bg-(--surface) flex md:flex-row flex-colgap-8">
-      <div>
+
+    <Card>
+      <div class=" flex md:flex-row flex-col gap-8">
         <h1 class="text-xl font-semibold mb-3">Input</h1>
         <div class="flex md:flex-row flex-col items-center gap-3">
           <InputComponent
@@ -53,9 +55,6 @@
             label="Password"
             name="password"
           />
-          <!-- <InputComponent type="date" placeholder="Date" label="Date" name="date"/>
-                    <InputComponent type="email" placeholder="Email" label="Email" name="email"/>
-                     -->
         </div>
       </div>
       <div>
@@ -66,45 +65,194 @@
                     <Button :loading="true" variant="ghost" label="ghost" type="button" />
                 </div> -->
       </div>
-    </div>
+    </Card>
 
-    <div class="p-8 bg-(--surface) flex gap-8 w-full">
+    <Card>
       <div class="w-full">
         <h1 class="text-xl font-semibold mb-3">Skeletons</h1>
 
         <TableSkeleton />
       </div>
-    </div>
-    <div class="p-8 bg-(--surface) flex gap-8 w-full">
+    </Card>
+    <Card>
       <div class="w-full">
         <h1 class="text-xl font-semibold mb-3">Drawers</h1>
-        <Button
-          type="button"
-          variant="primary"
-          label="Top"
-          :click="() => (isDrawer = true)"
+        <div class="class flex items-center flex-col md:flex-row gap-3">
+          <Button
+            type="button"
+            variant="primary"
+            label="Top"
+            :click="() => (isDrawerTop = true)"
+          />
+          <Button
+            type="button"
+            variant="primary"
+            label="Bottom"
+            :click="() => (isDrawerBottom = true)"
+          />
+          <Button
+            type="button"
+            variant="primary"
+            label="Start"
+            :click="() => (isDrawerStart = true)"
+          />
+          <Button
+            type="button"
+            variant="primary"
+            label="End"
+            :click="() => (isDrawerEnd = true)"
+          />
+        </div>
+        <Drawer
+          :isOpen="isDrawerTop"
+          @close="isDrawerTop = false"
+          placement="top"
         />
-
-        <Drawer :isOpen="isDrawer" @close="isDrawer = false" placement="top" />
+        <Drawer
+          :isOpen="isDrawerBottom"
+          @close="isDrawerBottom = false"
+          placement="bottom"
+        />
+        <Drawer
+          :isOpen="isDrawerStart"
+          @close="isDrawerStart = false"
+          placement="start"
+        />
+        <Drawer
+          :isOpen="isDrawerEnd"
+          @close="isDrawerEnd = false"
+          placement="end"
+        />
       </div>
-    </div>
-    <div class="p-8 bg-(--surface) flex gap-8 w-full">
+    </Card>
+    <Card>
       <div class="w-full">
-        <h1 class="text-xl font-semibold mb-3">Button</h1>
+        <h1 class="text-xl font-semibold mb-3">Switchs</h1>
         <div class="flex items-center md:flex-row flex-col gap-3">
-            <Switch/>
+          <div class="flex justify-center items-center flex-col">
+            <Switch />
+            <p>Simple Switch</p>
+          </div>
+
+          <div class="flex justify-center items-center flex-col">
+            <Switch :activeIcon="IconCheck" :inactiveIcon="IconX" />
+            <p>Switch with Icons</p>
+          </div>
         </div>
       </div>
-    </div>
+    </Card>
+    <Card>
+      <div class="w-full">
+        <h1 class="text-xl font-semibold mb-3">Empty States</h1>
+        <div class="flex items-center md:flex-row flex-col gap-3">
+          <EmptyState
+            title="Your cart is empty"
+            message="Explore our products and add items to your cart"
+          />
+          <EmptyState
+            title="Your cart is empty"
+            message="Explore our products and add items to your cart"
+          />
+          <EmptyState
+            title="Your cart is empty"
+            message="Explore our products and add items to your cart"
+          />
+        </div>
+      </div>
+    </Card>
+    <Card>
+      <div class="w-full">
+        <h1 class="text-xl font-semibold mb-3">Badges</h1>
+        <div class="flex items-center md:flex-row flex-col gap-3">
+        <Badge type="success" message="Success"/>
+        <Badge type="danger" message="Danger"/>
+        <Badge type="primary" message="Primary"/>
+        <Badge type="warning" message="Warning"/>
+        </div>
+      </div>
+    </Card>
+    <Card>
+      <div class="w-full">
+        <h1 class="text-xl font-semibold mb-3">Toasts</h1>
+        <div class="flex items-center md:flex-row flex-col gap-3">
+        <Button variant="primary" label="Success" type="button" :click="showSuccessToast"/>
+        <Button variant="primary" label="Danger" type="button" :click="showDangerToast"/>
+        <Button variant="primary" label="Warning" type="button" :click="showWarningToast"/>
+        <Button variant="primary" label="Info" type="button" :click="showInfoToast"/>
+        </div>
+      </div>
+    </Card>
+
+    <Card>
+      <div class="w-full">
+        <h1 class="text-xl font-semibold mb-3">Loaders</h1>
+        <div class="flex items-center md:flex-row flex-col gap-3">
+        <Button variant="primary" label="Success" type="button" :click="showSuccessToast"/>
+        <Button variant="primary" label="Danger" type="button" :click="showDangerToast"/>
+        <Button variant="primary" label="Warning" type="button" :click="showWarningToast"/>
+        <Button variant="primary" label="Info" type="button" :click="showInfoToast"/>
+        </div>
+      </div>
+    </Card>
+    <Card>
+      <Textarea placeholder="Textarea" name="textarea" label="Textarea"/>
+    </Card>
+    <Card>
+    <Chart/>
+    </Card>
+    
   </div>
 </template>
 
 <script setup lang="ts">
+import Badge from "@/components/badge/Badge.vue";
 import Button from "@/components/button/Button.vue";
 import Drawer from "@/components/drawer/Drawer.vue";
+import EmptyState from "@/components/empty/EmptyState.vue";
 import InputComponent from "@/components/input/InputComponent.vue";
 import TableSkeleton from "@/components/skeleton/TableSkeleton.vue";
 import Switch from "@/components/switch/Switch.vue";
+import { IconCheck, IconX } from "@tabler/icons-vue";
 import { ref } from "vue";
-const isDrawer = ref(false);
+import { useToastStore } from "@/store/toastStore";
+import Textarea from "./texterea/Textarea.vue";
+import Chart from "@/components/charts/Chart.vue";
+import Card from "@/components/card/Card.vue";
+
+const toast = useToastStore();
+const isDrawerTop = ref(false);
+const isDrawerBottom = ref(false);
+const isDrawerStart = ref(false);
+const isDrawerEnd = ref(false);
+const showSuccessToast = () => {
+  toast.show(
+    "Opération réussie",
+    "success",
+    "Les données ont été enregistrées avec succès."
+  );
+};
+
+const showDangerToast = () => {
+  toast.show(
+    "Une erreur est survenue",
+    "danger",
+    "Impossible de traiter votre demande. Veuillez réessayer."
+  );
+};
+
+const showWarningToast = () => {
+  toast.show(
+    "Attention",
+    "warning",
+    "Certaines informations sont incomplètes. Vérifiez les champs requis."
+  );
+};
+
+const showInfoToast = () => {
+  toast.show(
+    "Information",
+    "info",
+    "Une nouvelle mise à jour est disponible."
+  );
+};
 </script>

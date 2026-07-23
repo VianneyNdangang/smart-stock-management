@@ -43,7 +43,6 @@ const [username] = defineField("username");
 const [password] = defineField("password");
 
 const onSubmit = handleSubmit((values) => {
-  console.log("valuesvalues",values)
   log.loginUser(values);
 });
 </script>

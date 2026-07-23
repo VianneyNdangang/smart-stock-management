@@ -1,12 +1,10 @@
-
 <template>
-  
-  <!-- <p class=" flex text-xl items-startn mb-3">Table 3.1: Professional wrestlers and their signature moves.</p> -->
-   <div class="border w-full bg-(--surface) border-(--border) p-8 rounded shadow-sm overflow-auto">
-<p class="mt-2 text-lg font-semibold text-(--text-secondary)">
-      List of {{ records.length }} {{title}}.
+
+  <card>
+    <p class="mt-2 text-lg font-semibold text-(--text-secondary)">
+      List of {{ records.length }} {{ title }}.
     </p>
-   <table class=" w-full">
+    <table class=" w-full">
 
       <thead class="h-10 text-(--text-secondly)">
         <tr>
@@ -16,32 +14,30 @@
           </th>
         </tr>
       </thead>
-      <tbody> 
+      <tbody>
         <tr v-for="item in props?.records" class="hover:gb-(--hover) h-10">
-         
-          <td v-for="heade in props.headers" :class="`px-3 py-2 border-b text-${heade.textAlign} text-(--text-third) border-(--border)`">
-            <component
-            v-if="isVNode(heade.render(item))"
-            :is="heade.render(item)"
-          />
 
-          <template v-else>
-            {{ heade.render(item) }}
-          </template>
-            
+          <td v-for="heade in props.headers"
+            :class="`px-3 py-2 border-b text-${heade.textAlign} text-(--text-third) border-(--border)`">
+            <component v-if="isVNode(heade.render(item))" :is="heade.render(item)" />
+
+            <template v-else>
+              {{ heade.render(item) }}
+            </template>
+
           </td>
 
         </tr>
       </tbody>
 
     </table>
-  </div>
+  </Card>
 </template>
 <script setup lang="ts">
 import { isVNode } from 'vue';
+import Card from '../card/Card.vue';
 
-
- export type TTableheaders = {
+export type TTableheaders = {
   textAlign: 'left' | 'right';
   accessor: string;
   name: string;
