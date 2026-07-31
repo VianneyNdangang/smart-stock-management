@@ -27,41 +27,24 @@
     <section
       class="h-full w-full text-slate-900 scrollbar-thumb-transparent overflow-scroll"
     >
-      <MenuLabel :item="item" v-for="item in menu" :key="item.name" />
+      <MenuLabel v-for="item in menu" :item="item" :key="item.name" />
     </section>
     <section class="w-full">
       <div class="flex flex-col justify-center items-center gap-4">
         <ThemeButton v-if="uiStore.isSidebar" />
-        <Button
-          v-if="uiStore.isSidebar"
-          variant="primary"
-          :click="store.logoutUser"
-          type="button"
-          label="Log Out"
-          w="full"
-          :icon="IconLogout2"
-        />
       </div>
     </section>
   </div>
 </template>
 <script setup lang="ts">
 import {
-  IconLogout2,
   IconTransitionLeftFilled,
   IconTransitionRightFilled,
 } from "@tabler/icons-vue";
-import Button from "../button/Button.vue";
 import ThemeButton from "../theme/ThemeButton.vue";
-import { useUserStore } from "@/store/userStore.ts";
-// import { useRoute } from 'vue-router';
 import { MenuList } from "@/router/menu.ts";
-// import VueIcon from '@kalimahapps/vue-icons/VueIcon';
 import { useUiStore } from "@/store/uiStore.ts";
 import MenuLabel from "../menu/MenuLabel.vue";
-
-const store = useUserStore();
 const uiStore = useUiStore();
-// const route = useRoute();
 const menu = MenuList;
 </script>

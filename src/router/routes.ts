@@ -74,7 +74,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: "products",
-        name: "Products",
+        name: "products",
         component: ProductsView,
       },
       {

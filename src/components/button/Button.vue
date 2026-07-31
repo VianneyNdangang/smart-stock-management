@@ -49,6 +49,7 @@
   <!-- Ghost Button -->
   <button
     v-if="variant === 'ghost'"
+    :disabled="props?.disabled"
     :class="[
       `bg-(--bttg-bg) w-${props.w}`,
       ` cursor-not-allowed:{props.loading} py-1.5 px-4 rounded font-semibold flex items-center justify-center`,
@@ -57,12 +58,7 @@
     @type="[props.type]"
     @click="props.click"
   >
-    <div v-if="props?.loading" class="flex gap-2">
-      <div
-        class="h-5 w-5 animate-spin rounded-full border-2 border-(--btt-bg)/40 border-t-(--btt-bg)"
-      ></div>
-      Loading...
-    </div>
+      <Spiner v-if="props?.loading" size="sm"/>
     <div v-else class="flex items-center justify-center gap-2">
       <VueIcon v-if="props.icon" :name="props?.icon" class="size-5" />
       {{ props.label }}
@@ -71,6 +67,7 @@
 </template>
 <script setup lang="ts">
 import VueIcon from "@kalimahapps/vue-icons/VueIcon";
+import Spiner from "../spiner/Spiner.vue";
 
 const props = defineProps<{
   label: string;
@@ -78,6 +75,7 @@ const props = defineProps<{
   loading?: boolean;
   type: "submit" | "button";
   icon?: any;
+  disabled?: boolean;
   click?: () => any;
   w?: string;
 }>();

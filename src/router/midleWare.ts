@@ -9,7 +9,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-//   const token = localStorage.getItem("token");
 const defaultToken = localStorage.getItem(user_token);
     const token = defaultToken ? defaultToken : null
 

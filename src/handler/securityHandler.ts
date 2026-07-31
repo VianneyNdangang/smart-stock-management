@@ -10,9 +10,10 @@ export const deleteToken = () =>{
 }
 
 export const loginSchema = z.object({
-  username: z
+  email: z
     .string()
-    .min(1,"The Username is required"),
+    // .email()
+    .min(1,"The Email is required"),
 
   password: z
     .string()

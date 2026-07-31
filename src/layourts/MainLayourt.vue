@@ -10,20 +10,14 @@
     
 
     <div
-    class="transition-all duration-300 ease-in-out"
-  :class="[
-    securityRoutes.includes(route?.name as string)
-      ? ''
-      : uiStore.isSidebar
-        ? 'pl-0 md:pl-70 pt-22'
-        : 'pl-0 md:pl-20 pt-22'
-  ]"
+    class="transition-all duration-300 ease-in-out pt-22"
+  :class="layoutClass"
 >
       <motion.div :initial="{ opacity: 0, scale: 0 }" :animate="{ opacity: 1, scale: 1 }" :exit="{ opacity: 0, scale: 0 }"
       :transition="{
         duration: 0.4,
       }">
-      <main class="p-5 z-0">
+      <main class=" z-0 p-5">
         <RouterView />
       </main>
       </motion.div>
@@ -36,7 +30,23 @@ import { motion } from 'motion-v'
 import NavbarView from "@/components/navbar/NavbarView.vue";
 import SidebarView from "@/components/sideBar/SidebarView.vue";
 import { useUiStore } from "@/store/uiStore";
+import { computed } from "vue";
+import { useRSidebarStore } from "@/store/rSideBareStore";
 const route = useRoute()
 const securityRoutes = ["login", "register", "NotFound"];
 const uiStore = useUiStore();
+const rSidebareStore = useRSidebarStore()
+
+const isSecurityRoute = computed(()=>securityRoutes.includes(route?.name as string))
+const layoutClass = computed(() => {
+  if (isSecurityRoute.value) return "";
+
+  if (rSidebareStore.isSidebar)
+    return "pr-0 md:pr-96";
+
+  if (uiStore.isSidebar)
+    return "pl-0 md:pl-70";
+
+  return "pl-0 md:pl-20";
+});
 </script>

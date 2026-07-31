@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-1">
+  <div class="space-y-1 w-full">
     <label :for="props.name" class="text-sm font-medium">
       {{ props.label }}
     </label>

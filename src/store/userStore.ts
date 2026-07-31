@@ -1,22 +1,21 @@
 import { defineStore } from "pinia";
 import { apiClient } from "@/store/api.ts";
 import { ref } from "vue";
-import { deleteToken, SaveToken } from "@/handler/securityHandler";
-import { useRouter } from "vue-router";
+import { useToastStore } from "./toastStore";
 
-export const useUserStore = defineStore("users", () => {
+export const useUserStore = defineStore("staff", () => {
   const users = ref<any[]>([]);
-  const connectedUser = ref<any>();
   const loading = ref(false);
-  const router = useRouter();
   const messaError = ref();
+  const toast = useToastStore();
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (id?: any) => {
     try {
       loading.value = true;
-      const items = await apiClient
-        .get("/users")
-        .then((response) => response.data.users);
+      const items = await apiClient({
+        method: "GET",
+        url: id ? `/staff/${id}` : `/staff`,
+      }).then((response) => response.data);
       users.value = items;
     } catch (error) {
       messaError.value = error;
@@ -24,45 +23,48 @@ export const useUserStore = defineStore("users", () => {
       loading.value = false;
     }
   };
-  const createUser = async (newUser: any) => {
-    try {
-      loading.value = true;
-      const response = await apiClient.post("/users", newUser);
-      users.value.push(response.data); // Ajout local immédiat après succès
-    } catch (error) {
-      messaError.value = error;
-    } finally {
-      loading.value = false;
+
+  const createUser = async (newUser: any, id?: string) => {
+    const data = {
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      userName: newUser.userName,
+      password: newUser.password,
+      role: newUser.role,
+      email: newUser.email,
+      phone: newUser.phone,
+    };
+    if (id) {
+      if (!newUser.password) {
+        delete data["password"];
+      }
     }
+        await apiClient({
+        method: id ? "PATCH" : "POST",
+        url: id ? `/staff/${id}` : `/staff`,
+        data: data,
+      });
   };
 
-  const loginUser = async (credentials: any) => {
+  const deleteUser = async (id: string) => {
     try {
-      loading.value = true;
-      const response = await apiClient.post("/auth/login", credentials);
-      connectedUser.value = response.data;
-      const accessToken = response?.data.accessToken;
-      const refreshToken = response.data?.refreshTocken;
-      SaveToken(accessToken || refreshToken);
-      router.push("/");
+      await apiClient.delete(`/staff/${id}`);
+      users.value = users.value.filter((user: any) => user.id != id);
+      toast.show("Supprimé", "success", "L'utilisateur a ete supprimé");
     } catch (error) {
-      messaError.value = error;
-    } finally {
-      loading.value = false;
+      toast.show(
+        "Erreur",
+        "danger",
+        "Une erreure est survenue lors de la suppression",
+      );
     }
-  };
-  const logoutUser = () => {
-      deleteToken();
-      router.push("/login");
   };
 
   return {
     fetchUsers,
-    logoutUser,
     users,
-    connectedUser,
     loading,
     createUser,
-    loginUser,
+    deleteUser,
   };
 });

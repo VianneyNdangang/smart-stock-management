@@ -1,20 +1,23 @@
 <template>
   <RouterLink
+    @click="uiStore.handleClose()"
     :to="props.item.path"
     v-if="props.item?.children?.length === 0"
     class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--btt-bg) hover:text-white transition"
-    :class="{
-      'bg-(--btt-bg)/20 border-l-4 border-(--btt-bg)': route.name === props.item.name,
-    }"
+    :class="
+      route.name === props.item.name
+        ? `bg-(--btt-bg)/20 border-l-4 border-(--btt-bg) text-(--btt-bg)`
+        : `text-(--text-primary)`
+    "
   >
-    <div class="flex items-center gap-2 text-(--text-primary)">
+    <div class="flex items-center gap-2">
       <VueIcon v-if="props.item.icon" :name="props.item.icon" class="size-5" />
       <p v-if="uiStore.isSidebar">{{ props.item.label }}</p>
     </div>
   </RouterLink>
   <details v-else class="group [&_summary::-webkit-details-marker]:hidden">
     <summary
-      class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-[#b18332] hover:text-gray-200"
+      class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-[#b18332] hover:text-gray-200 text-(--text-primary)"
     >
       <div class="flex items-center gap-2">
         <VueIcon
@@ -46,13 +49,14 @@
       :class="uiStore.isSidebar ? `pl-8` : `pl-0`"
     >
       <RouterLink
+        @click="uiStore.handleClose()"
         :to="p.path"
         class="flex rounded items-center gap-2 px-3 py-1 mb-1 text-sm transition hover:bg-(--btt-bg) hover:text-white"
-        :class="{
-          'bg-(--btt-bg)/20 border-l-4 border-(--btt-bg)':
-            route.name === p.name,
-          '': route.name != p.name,
-        }"
+        :class="
+          route.name === p.name
+            ? `bg-(--btt-bg)/20 border-l-4 border-(--btt-bg) text-(--btt-bg)`
+            : `text-(--text-primary)`
+        "
       >
         <VueIcon :name="p.icon" class="size-5" />
         <p v-if="uiStore.isSidebar">{{ p.label }}</p>
@@ -66,7 +70,7 @@ import VueIcon from "@kalimahapps/vue-icons/VueIcon";
 import { RouterLink, useRoute } from "vue-router";
 
 export type menuType = {
-  label: string
+  label: string;
   path: string;
   icon: any;
   name: string;
@@ -76,9 +80,10 @@ export type menuType = {
     icon: any;
     name: string;
     // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
-  }[]};
+  }[];
+};
 
-const uiStore = useUiStore()
-const route = useRoute()
-const props = defineProps<{item: menuType}>();
+const uiStore = useUiStore();
+const route = useRoute();
+const props = defineProps<{ item: menuType }>();
 </script>

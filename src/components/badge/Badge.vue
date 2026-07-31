@@ -1,7 +1,7 @@
 <template>
   <span
-    class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
-    :class="variants[props.type]"
+    class=" flex justify-center items-center rounded-full px-3 py-1 text-xs font-medium"
+    :class="variants[props.type], `min-w-${props.w}`"
   >
     {{ props.message }}
   </span>
@@ -11,6 +11,7 @@
 const props = defineProps<{
   message: string;
   type: "danger" | "success" | "primary" | "warning";
+  w?: string
 }>();
 
 const variants = {

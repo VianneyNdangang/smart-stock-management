@@ -37,19 +37,19 @@
       <div class=" flex md:flex-row flex-col gap-8">
         <h1 class="text-xl font-semibold mb-3">Input</h1>
         <div class="flex md:flex-row flex-col items-center gap-3">
-          <InputComponent
+          <Input
             type="text"
             placeholder="Text"
             label="Text"
             name="text"
           />
-          <InputComponent
+          <Input
             type="number"
             placeholder="Number"
             label="Number"
             name="number"
           />
-          <InputComponent
+          <Input
             type="password"
             placeholder="Password"
             label="Password"
@@ -66,7 +66,27 @@
                 </div> -->
       </div>
     </Card>
+<Card>
+      <Textarea placeholder="Textarea" name="textarea" label="Textarea"/>
+    </Card>
+    <Card>
+      <h1 class="text-xl font-semibold mb-3">Formate Date</h1>
+      <FormateDate date="2026-07-26T11:16:02.259Z" lang="fr"/>
+      <FormateDate date="2026-07-26T11:16:02.259Z" lang="ag"/>
+    </Card>
 
+      <Card>
+    <div class=" flex md:flex-row flex-col gap-8">
+      <div>
+        <h1 class="text-xl font-semibold mb-3">Spiners</h1>
+        <div class="flex flex-col md:flex-row justify-center items-center gap-5">
+        <div class="flex flex-col justify-center items-center"><Spiner size="lg"/><p class="text-xl font-semibold mb-3">lg</p></div>
+        <div class="flex flex-col justify-center items-center"><Spiner size="md"/><p class="text-xl font-semibold mb-3">md</p></div>
+        <div class="flex flex-col justify-center items-center"><Spiner size="sm"/><p class="text-xl font-semibold mb-3">sm</p></div>
+        </div>
+        </div>
+    </div>
+</Card>
     <Card>
       <div class="w-full">
         <h1 class="text-xl font-semibold mb-3">Skeletons</h1>
@@ -124,6 +144,20 @@
           placement="end"
         />
       </div>
+    </Card>
+    <Card>
+      
+<h1 class="text-xl font-semibold mb-3">Combobox</h1>
+        <div class="flex items-center md:flex-row flex-col gap-3 h-30">
+    <Combobox
+    name="country"
+    label="Pays"
+    placeholder="Sélectionner un pays"
+    :options="countries"
+  />
+
+    </div>
+
     </Card>
     <Card>
       <div class="w-full">
@@ -194,9 +228,7 @@
         </div>
       </div>
     </Card>
-    <Card>
-      <Textarea placeholder="Textarea" name="textarea" label="Textarea"/>
-    </Card>
+    
     <Card>
     <Chart/>
     </Card>
@@ -209,15 +241,18 @@ import Badge from "@/components/badge/Badge.vue";
 import Button from "@/components/button/Button.vue";
 import Drawer from "@/components/drawer/Drawer.vue";
 import EmptyState from "@/components/empty/EmptyState.vue";
-import InputComponent from "@/components/input/InputComponent.vue";
+import Input from "@/components/input/Input.vue";
 import TableSkeleton from "@/components/skeleton/TableSkeleton.vue";
 import Switch from "@/components/switch/Switch.vue";
 import { IconCheck, IconX } from "@tabler/icons-vue";
 import { ref } from "vue";
 import { useToastStore } from "@/store/toastStore";
-import Textarea from "./texterea/Textarea.vue";
+import Textarea from "../../components/texterea/Textarea.vue";
 import Chart from "@/components/charts/Chart.vue";
 import Card from "@/components/card/Card.vue";
+import FormateDate from "@/components/formateDate/FormateDate.vue";
+import Spiner from "@/components/spiner/Spiner.vue";
+import Combobox from "@/components/combobox/Combobox.vue";
 
 const toast = useToastStore();
 const isDrawerTop = ref(false);
@@ -255,4 +290,12 @@ const showInfoToast = () => {
     "Une nouvelle mise à jour est disponible."
   );
 };
+
+
+const countries = [
+  { label: "Cameroun", value: "cm" },
+  { label: "France", value: "fr" },
+  { label: "Canada", value: "ca" },
+  { label: "Belgique", value: "be" },
+];
 </script>

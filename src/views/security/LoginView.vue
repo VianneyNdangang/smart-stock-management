@@ -10,16 +10,16 @@
 
       <form @submit.prevent="onSubmit" class="mt-4 w-full gap-3">
         <div class=" mb-2">
-          <InputComponent placeholder="Username" type="text" name="username" label="Username" v-model="username"
-            :error="errors.username" />
+          <Input placeholder="email" type="text" name="email" label="Email" v-model="email"
+            :error="errors.email" />
         </div>
         <div class=" mb-4">
-          <InputComponent placeholder="*******" type="password" name="password" label="Password" v-model="password"
+          <Input placeholder="*******" type="password" name="password" label="Password" v-model="password"
             :error="errors.password" :icon="IconSearch"/>
         </div>
         <div class="mt-4">
-          <Button variant="primary" type="submit" label="Login" bg="[#c79e46]" w="full" :icon="IconLogin2"
-          :loading="log.loading" />
+          <Button variant="primary" type="submit" label="Login" w="full" :icon="IconLogin2"
+          :loading="loading" />
         </div>
         
       </form>
@@ -27,22 +27,30 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useUserStore } from "@/store/userStore.ts";
 import { useForm } from "vee-validate";
 import { IconLogin2, IconSearch} from "@tabler/icons-vue";
 import { loginSchema } from "@/handler/securityHandler";
 import { toTypedSchema } from "@vee-validate/zod";
-import InputComponent from "@/components/input/InputComponent.vue";
+import Input from "@/components/input/Input.vue";
 import Button from "@/components/button/Button.vue";
+import { useProfileStore } from "@/store/profilStore";
+import { ref } from "vue";
 
 const { defineField, errors, handleSubmit } = useForm({
   validationSchema: toTypedSchema(loginSchema),
 });
-const log = useUserStore();
-const [username] = defineField("username");
+const log = useProfileStore();
+const [email] = defineField("email");
 const [password] = defineField("password");
+const loading = ref(false)
 
 const onSubmit = handleSubmit((values) => {
-  log.loginUser(values);
+  loading.value = true
+  try {
+    log.loginUser(values);
+  } catch (error) {
+    
+  }finally{loading.value = false}
+  
 });
 </script>

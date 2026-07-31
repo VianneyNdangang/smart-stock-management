@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-100 rounded-xl bg-white dark:bg-slate-900 p-6 shadow">
+  <div class="w-full h-100">
     <canvas ref="chartRef"></canvas>
   </div>
 </template>
