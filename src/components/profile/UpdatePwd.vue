@@ -58,7 +58,7 @@
                   variant="primary"
                   type="submit"
                   label="Update"
-                  :loading="store.loading"
+                  :loading="loading"
                 />
               </div>
             </form>
@@ -78,11 +78,13 @@ import Modal from "@/components/molecules/Modal.vue";
 import Card from "@/components/card/Card.vue";
 import { useProfileStore } from "@/store/profilStore";
 import { updatePasswordSchema } from "@/handler/profileHanler";
+import { ref } from "vue";
 
 const props = defineProps<{
   isOpen: boolean;
 }>();
 
+const loading = ref(false);
 const emit = defineEmits<{
   (e: "close"): void;
 }>();
@@ -97,7 +99,9 @@ const [password] = defineField("password");
 const [newPassword] = defineField('newPassword')
 
 const onSubmit = handleSubmit(async (values) => {
+  loading.value = true;
   await store.updateProfile(values);
+  loading.value = false;
   emit('close');
   resetForm();
 });

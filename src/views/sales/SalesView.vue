@@ -71,16 +71,25 @@ const header: TTableheaders[] = [
         h(IconEdit, {
           size: 18,
           class: "cursor-pointer text-slate-900 hover:text-blue-700",
+          onClick: () => {
+            selectedSale.value = record;
+            // isCreateCat.value = true;
+          },
         }),
         h(IconTrash, {
           size: 18,
           class: "cursor-pointer text-red-500 hover:text-red-700",
+          onClick: () => {
+            selectedSale.value = record;
+            // isDeleteCat.value = true;
+          },
         }),
       ]),
     width: "28",
   },
 ];
 
+const selectedSale = ref<any>(null);
 const userStore = useUserStore();
 onMounted(async () => {
   await userStore.fetchUsers();
