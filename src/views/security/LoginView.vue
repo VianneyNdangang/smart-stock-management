@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center h-screen">
+  <div class="flex items-center justify-center h-full">
     <div class="flex flex-col items-center justify-center p-10 rounded-lg shadow-xl border border-gray-300 bg-gray-100 dark:shadow-md dark:shadow-gray-700/25  dark:border-gray-600 dark:bg-gray-800 w-md">
       <img src="/images.jpg" alt="Logo" class="h-16 w-auto rounded-full" />
       <h1 class="text-2xl font-bold text-slate-900 dark:text-gray-100">Connexion</h1>
