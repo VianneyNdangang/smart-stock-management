@@ -14,6 +14,7 @@
         <h2 v-if="uiStore.isSidebar" class="text-xl font-bold">Menu</h2>
         <div>
           <button
+            name="closeSidebar"
             @click="uiStore.handleChange()"
             class="cursor-pointer flex justify-center items-center p-2"
           >

@@ -4,23 +4,22 @@ import { ref } from "vue";
 import { deleteToken, SaveToken } from "@/handler/securityHandler";
 import { useRouter } from "vue-router";
 import { useToastStore } from "./toastStore";
+import type { AxiosResponse } from "axios";
 
 export const useProfileStore = defineStore("profile", () => {
   const connectedUser = ref<any>();
   const router = useRouter();
-  const messaError = ref();
   const toast = useToastStore();
+  const loading = ref(false)
 
   const fetchProfile = async () => {
     try {
-      const items = await apiClient({
+      const items: AxiosResponse = await apiClient({
         method: "GET",
         url: `/profile`,
       }).then((response) => response.data);
       connectedUser.value = items;
-    } catch (error) {
-      messaError.value = error;
-    }
+    } finally{}
   };
 
   const updateProfile = async (data: any) => {
@@ -33,13 +32,14 @@ export const useProfileStore = defineStore("profile", () => {
         "Votre Profile a ete mis a jours",
       );
     } catch (error) {}
-    toast.show(
-      "Operation Effectuée",
-      "danger",
-      "Votre Profile a ete mis a jours",
-    );
+    // toast.show(
+    //   "Operation Effectuée",
+    //   "danger",
+    //   "Votre Profile a ete mis a jours",
+    // );
   };
   const loginUser = async (credentials: any) => {
+    loading.value=true
     try {
       const response = await apiClient.post("/auth/login", credentials);
       const accessToken = response?.data.accessToken;
@@ -47,11 +47,13 @@ export const useProfileStore = defineStore("profile", () => {
       SaveToken(accessToken || refreshToken);
       router.push("/");
     } catch (error) {
-      // toast.show(
-
-      // )
-      messaError.value = error;
+      toast.show(
+      "Connexion Echouée",
+      "danger",
+      "Une erreur s'est produite lors de la connexion",
+    );
     }
+    loading.value=false
   };
   const logoutUser = () => {
     deleteToken();
@@ -64,5 +66,6 @@ export const useProfileStore = defineStore("profile", () => {
     loginUser,
     fetchProfile,
     updateProfile,
+    loading,
   };
 });

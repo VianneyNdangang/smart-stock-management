@@ -6,7 +6,7 @@
     :class="[
       ` w-${props.w}`,
       ` cursor-not-allowed:{props.loading} py-1.5 px-4 rounded font-semibold  flex items-center justify-center`,
-      props.loading ? `cursor-not-allowed bg-(--btt-bg)/50 text-white/70` : `cursor-pointer hover:bg-(--btt-hover) bg-(--btt-bg) text-white`,
+      props.loading ? `cursor-not-allowed bg-(--secondary)/50 text-white/70` : `cursor-pointer hover:bg-(--secondary-hover) bg-(--secondary) text-white`,
     ]"
     @type="[props.type]"
     @click="props.click"
@@ -29,14 +29,14 @@
     :class="[
       ` w-${props.w}`,
       `border-2  cursor-not-allowed:{props.loading} py-1 px-3 rounded font-semibold flex items-center justify-center`,
-      props.loading ? `cursor-not-allowed border-(--btt-bg)/50 text-(--btt-bg)/50` : `cursor-pointer hover:bg-(--btt-bg)/20 border-(--btt-bg) text-(--btt-bg)`,
+      props.loading ? `cursor-not-allowed border-(--secondary)/50 text-(--secondary)/50` : `cursor-pointer hover:bg-(--secondary)/20 border-(--secondary) text-(--secondary)`,
     ]"
     @type="[props.type]"
     @click="props.click"
   >
     <div v-if="props?.loading" class="flex gap-2">
       <div
-        class="h-5 w-5 animate-spin rounded-full border-2 border-(--btt-bg)/40 border-t-(--btt-bg)"
+        class="h-5 w-5 animate-spin rounded-full border-2 border-(--secondary)/40 border-t-(--secondary)"
       ></div>
       Loading...
     </div>
@@ -53,7 +53,7 @@
     :class="[
       `bg-(--bttg-bg) w-${props.w}`,
       ` cursor-not-allowed:{props.loading} py-1.5 px-4 rounded font-semibold flex items-center justify-center`,
-      props.loading ? `cursor-not-allowed text-(--btt-bg)/50` : `cursor-pointer text-(--btt-bg) hover:bg-(--btt-bg)/20 `,
+      props.loading || props.disabled? `cursor-not-allowed text-(--secondary)/50` : `cursor-pointer text-(--secondary) hover:bg-(--secondary)/20 `,
     ]"
     @type="[props.type]"
     @click="props.click"
@@ -70,7 +70,7 @@ import VueIcon from "@kalimahapps/vue-icons/VueIcon";
 import Spiner from "../spiner/Spiner.vue";
 
 const props = defineProps<{
-  label: string;
+  label?: string;
   variant: "primary" | "secondary" | "ghost";
   loading?: boolean;
   type: "submit" | "button";

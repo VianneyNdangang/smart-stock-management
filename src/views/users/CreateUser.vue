@@ -12,7 +12,7 @@
 
             <form @submit.prevent="onSubmit()" class="mt-4 w-full">
               <section>
-                <p class="text-xs text-(--btt-bg) font-semibold">Personnal</p>
+                <p class="text-xs text-(--secondary) font-semibold">Personnal</p>
                 <div
                   class="flex flex-col md:flex-row justify-center items-center gap-0 md:gap-2"
                 >
@@ -45,7 +45,7 @@
                 </div>
               </section>
               <section>
-                <p class="text-xs text-(--btt-bg) font-semibold mt-5">
+                <p class="text-xs text-(--secondary) font-semibold mt-5">
                   Contacts
                 </p>
                 <div
@@ -70,7 +70,7 @@
                 </div>
               </section>
               <section>
-                <p class="text-xs text-(--btt-bg) font-semibold mt-5">Profil</p>
+                <p class="text-xs text-(--secondary) font-semibold mt-5">Profil</p>
                 <div
                   class="flex flex-col md:flex-row justify-center items-center gap-0 md:gap-2"
                 >
@@ -95,7 +95,7 @@
                 </div>
               </section>
               <section>
-                <p class="text-xs text-(--btt-bg) font-semibold mt-5">
+                <p class="text-xs text-(--secondary) font-semibold mt-5">
                   Security
                 </p>
                 <div

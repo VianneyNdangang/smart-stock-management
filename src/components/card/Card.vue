@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 md:p-8 rounded-xl border border-(--border) bg-(--surface) shadow-sm overflow-auto"
+    <div class="p-3 md:p-6 rounded-(--radius) border-0.5 border-(--border) bg-(--card) shadow-xs scrollbar-thumb-transparent overflow-auto"
     :class="props.w? `w=${props.w}`: `w-full`">
         <slot/>
     </div>

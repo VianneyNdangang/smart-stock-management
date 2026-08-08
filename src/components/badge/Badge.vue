@@ -1,6 +1,6 @@
 <template>
   <span
-    class=" flex justify-center items-center rounded-full px-3 py-1 text-xs font-medium"
+    class="rounded px-3 py-1 text-xs text-gray-200 font-semibold"
     :class="variants[props.type], `min-w-${props.w}`"
   >
     {{ props.message }}
@@ -15,9 +15,9 @@ const props = defineProps<{
 }>();
 
 const variants = {
-  danger: "bg-[var(--badge-danger-soft)] text-[var(--danger)]",
-  success: "bg-[var(--badge-success-soft)] text-[var(--success)]",
-  primary: "bg-[var(--badge-primary-soft)] text-[var(--primary)]",
-  warning: "bg-[var(--badge-warning-soft)] text-[var(--warning)]",
+  danger: "bg-(--danger) ",
+  success: "bg-(--success) ",
+  primary: "bg-(--primary) ",
+  warning: "bg-(--warning) ",
 } as const;
 </script>

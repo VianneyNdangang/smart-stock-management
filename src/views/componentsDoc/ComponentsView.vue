@@ -55,6 +55,19 @@
             label="Password"
             name="password"
           />
+                    <Input
+            type="date"
+            placeholder="Password"
+            label="Password"
+            name="password"
+          />
+
+                    <Input
+            type="image"
+            placeholder="Password"
+            label="Password"
+            name="password"
+          />
         </div>
       </div>
       <div>
@@ -230,7 +243,7 @@
     </Card>
     
     <Card>
-    <Chart/>
+    <!-- <LineChart/> -->
     </Card>
     
   </div>
@@ -248,11 +261,11 @@ import { IconCheck, IconX } from "@tabler/icons-vue";
 import { ref } from "vue";
 import { useToastStore } from "@/store/toastStore";
 import Textarea from "../../components/texterea/Textarea.vue";
-import Chart from "@/components/charts/Chart.vue";
 import Card from "@/components/card/Card.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import Spiner from "@/components/spiner/Spiner.vue";
 import Combobox from "@/components/combobox/Combobox.vue";
+// import LineChart from "@/components/charts/LineChart.vue";
 
 const toast = useToastStore();
 const isDrawerTop = ref(false);

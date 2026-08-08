@@ -12,7 +12,7 @@
 
             <form @submit.prevent="onSubmit()" class="mt-4 w-full">
               <section>
-                <p class="text-xs text-(--btt-bg) font-semibold mt-5">
+                <p class="text-xs text-(--secondary) font-semibold mt-5">
                   Security
                 </p>
                 <div

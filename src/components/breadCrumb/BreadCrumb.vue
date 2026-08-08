@@ -1,16 +1,3 @@
-<script setup lang="ts">
-import { RouterLink, useRoute } from "vue-router";
-import { IconChevronRight } from "@tabler/icons-vue";
-import type { menuType } from "../menu/MenuLabel.vue";
-
-const route = useRoute();
-
-console.log("routerouteroute", route.path)
-defineProps<{
-  items: menuType[];
-}>();
-</script>
-
 <template>
   <nav class="flex items-center text-sm">
     <template
@@ -20,7 +7,7 @@ defineProps<{
       <RouterLink
         v-if="item.path"
         :to="item.path"
-        class="text-(--text-third) hover:text-(--btt-bg) transition-colors"
+        class="text-(--text-muted) hover:text-(--secondary) transition-colors"
       >
         {{ item.label }}
       </RouterLink>
@@ -34,8 +21,20 @@ defineProps<{
 
       <IconChevronRight
         v-if="index < items.length - 1"
-        class="mx-2 size-4 text-(--text-third)"
+        class="mx-2 size-4 text-(--text-muted)"
       />
     </template>
   </nav>
 </template>
+
+<script setup lang="ts">
+import { RouterLink } from "vue-router";
+import { IconChevronRight } from "@tabler/icons-vue";
+import type { menuType } from "../menu/MenuLabel.vue";
+
+// const route = useRoute();
+
+defineProps<{
+  items: menuType[];
+}>();
+</script>

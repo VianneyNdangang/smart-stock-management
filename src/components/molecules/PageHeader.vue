@@ -1,6 +1,6 @@
 <template>
-<Card>
-    <section class="flex justify-center md:justify-between items-center flex-col md:flex-row">
+<!-- <Card> -->
+    <section class="flex justify-center md:justify-between items-center flex-col md:flex-row py-5">
         <div class=" flex gat-3 flex-col w-full ">
             <h1 class="text-3xl font-bold text-(--text-primary)">{{ props?.title }}</h1>
             <p class="text-md text-(--text-secondary)">{{ props.subtitle }}</p>
@@ -15,12 +15,12 @@
            
         </div>
     </section>
-</Card>
+<!-- </Card> -->
 </template>
 
 <script setup lang="ts">
 import Button from '../button/Button.vue';
-import Card from '../card/Card.vue';
+// import Card from '../card/Card.vue';
 import Input from '../input/Input.vue';
 
 const props = defineProps<

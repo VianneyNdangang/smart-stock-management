@@ -3,10 +3,10 @@
     @click="uiStore.handleClose()"
     :to="props.item.path"
     v-if="props.item?.children?.length === 0"
-    class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--btt-bg) hover:text-white transition"
+    class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--secondary) hover:text-white transition"
     :class="
       route.name === props.item.name
-        ? `bg-(--btt-bg)/20 border-l-4 border-(--btt-bg) text-(--btt-bg)`
+        ? `bg-(--secondary)/20 border-l-4 border-(--secondary) text-(--secondary)`
         : `text-(--text-primary)`
     "
   >
@@ -17,13 +17,13 @@
   </RouterLink>
   <details v-else class="group [&_summary::-webkit-details-marker]:hidden">
     <summary
-      class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-[#b18332] hover:text-gray-200 text-(--text-primary)"
+      class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-(--hover) text-(--text-primary)"
     >
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 text-(--text-primary)">
         <VueIcon
           v-if="props.item.icon"
           :name="props.item.icon"
-          class="size-5 dark:text-white"
+          class="size-5"
         />
         <p v-if="uiStore.isSidebar">{{ props.item.label }}</p>
       </div>
@@ -51,16 +51,17 @@
       <RouterLink
         @click="uiStore.handleClose()"
         :to="p.path"
-        class="flex rounded items-center gap-2 px-3 py-1 mb-1 text-sm transition hover:bg-(--btt-bg) hover:text-white"
+        class="flex rounded items-center gap-2 px-3 py-1 mb-1 text-sm transition hover:bg-(--secondary) hover:text-white"
         :class="
           route.name === p.name
-            ? `bg-(--btt-bg)/20 border-l-4 border-(--btt-bg) text-(--btt-bg)`
+            ? `bg-(--secondary)/20 border-l-4 border-(--secondary) text-(--secondary)`
             : `text-(--text-primary)`
         "
       >
         <VueIcon :name="p.icon" class="size-5" />
         <p v-if="uiStore.isSidebar">{{ p.label }}</p>
       </RouterLink>
+
     </div>
   </details>
 </template>

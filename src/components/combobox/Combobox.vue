@@ -14,7 +14,7 @@
     <div class="relative">
       <!-- Input -->
       <div
-        class="flex items-center rounded border bg-(--bg) py-2 px-3 transition-all duration-200"
+        class="flex items-center rounded border bg-(--background) py-2 px-3 transition-all duration-200"
         :class="[
           error ? 'border-(--danger)' : 'border-(--border)',
         ]"
@@ -26,7 +26,7 @@
           type="text"
           autocomplete="off"
           :placeholder="placeholder ?? 'Sélectionner'"
-          class="flex-1 bg-transparent outline-none text-(--text-secondary) placeholder:text-(--text-third)"
+          class="flex-1 bg-transparent outline-none text-(--text-secondary) placeholder:text-(--text-muted)"
           @focus="open = true"
           @keydown.down.prevent="next"
           @keydown.up.prevent="previous"
@@ -57,11 +57,11 @@
       >
         <ul
           v-if="open"
-          class="absolute z-50 mt-2 w-full rounded border border-(--border) bg-(--bg) shadow-xl overflow-hidden max-h-60 overflow-y-auto"
+          class="absolute z-50 mt-2 w-full rounded border border-(--border) bg-(--background) shadow-xl overflow-hidden max-h-60 overflow-y-auto"
         >
           <li
             v-if="filteredOptions.length === 0"
-            class="px-3 py-2 text-(--text-third)"
+            class="px-3 py-2 text-(--text-muted)"
           >
             Aucun résultat
           </li>
@@ -74,7 +74,7 @@
             class="cursor-pointer px-3 py-2 transition-colors hover:bg-(--hover)"
             :class="[
               active === index
-                ? 'bg-(--btt-bg)/10 text-(--btt-bg)'
+                ? 'bg-(--secondary)/10 text-(--secondary)'
                 : 'hover:bg-(--hover)'
             ]"
           >

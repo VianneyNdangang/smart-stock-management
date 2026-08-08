@@ -10,20 +10,20 @@
       "
       :new="newCategory"
     />
-    <div class="flex justify-center items-center flex-col md:flex-row gap-5">
+    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5">
       <DataSommary
         title="Total categories"
-        :value="categories.length"
+        :value="pagination?.total"
         state="primary"
       />
       <DataSommary
         title="Total categories Level 1"
-        :value="categories_l1.length"
+        :value="categories?.length"
         state="warning"
       />
       <DataSommary
         title="Total categories Level 2"
-        :value="categories.filter((u: any) => u.level === 2).length"
+        :value="categories?.filter((u: any) => u.level === 2)?.length"
         state="warning"
       />
       <!-- <DataSommary title="Total Foot Workers" :value="categories.filter((u: any)=>u.role === 'FootWorker').length" state="success" /> -->
@@ -31,17 +31,18 @@
     <div>
       <!-- <LoadingView v-if="" /> -->
       <div class="flex flex-col md:flex-row gap-5">
+
         <DataTable
           title="Categories: Level 1"
-          :records="categories_l1"
+          :records="categories"
           :headers="header"
-          :loading="loading"
-        />
-        <DataTable
-          title="Categories: Level 2"
-          :records="categories_l2"
-          :headers="header"
-          :loading="loading"
+          :total="pagination?.total"
+          :loading="store.loading"
+          :totalPages="pagination?.totalPages"
+          :page="pagination?.page"
+          :hasNext="pagination?.hasNext"
+          :hasPrev="pagination?.hasPrev"
+          @changePage="handlePageChange"
         />
       </div>
     </div>
@@ -60,7 +61,6 @@
   <DeleteData
     :action="() => handleDelete"
     :id="categoryDelete?.id"
-    :name="categoryDelete?.categoryName"
     message="Cette action supprimera définitivement cet catégorie ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
     title="Supprimer la catégorie"
     :isOpen="isDeleteCat"
@@ -73,7 +73,7 @@
   />
 </template>
 <script setup lang="ts">
-import { ref, onMounted, h, computed } from "vue";
+import { ref, onMounted, h } from "vue";
 import PageHeader from "@/components/molecules/PageHeader.vue";
 import { IconBinaryTree2, IconEdit, IconListDetailsFilled, IconTrash } from "@tabler/icons-vue";
 import type { TTableheaders } from "@/components/dataTable/DataTable.vue";
@@ -102,7 +102,7 @@ const header: TTableheaders[] = [
       h(FormateDate, {
         date: record.createdAt || "-",
       }),
-    width: "28",
+    width: "12%",
   },
   {
     textAlign: "left",
@@ -110,7 +110,7 @@ const header: TTableheaders[] = [
     name: "Category Name",
     render: (record: any) =>
       record?.categoryName ? record?.categoryName : "-",
-    width: "28",
+    width: "20%",
   },
   {
     textAlign: "left",
@@ -118,7 +118,7 @@ const header: TTableheaders[] = [
     name: "category Manager",
     render: (record: any) =>
       record?.categoryManagerName ? record?.categoryManagerName : "-",
-    width: "28",
+    width: "20%",
   },
   {
     textAlign: "right",
@@ -162,7 +162,7 @@ const header: TTableheaders[] = [
           },
         }),
       ]),
-    width: "28",
+    width: "auto",
   },
 ];
 
@@ -173,26 +173,36 @@ const categoryDetail = ref();
 const products = ref();
 const store = usecategoriesStore();
 const { categories } = storeToRefs(store);
+const { pagination } = storeToRefs(store)
 const loading = ref(false);
 
-const categories_l1 = computed(() =>
-  categories.value.filter((cat: any) => cat.level === 1),
-);
+// const categories_l1 = computed(() =>
+//   categories.value.filter((cat: any) => cat.level === 1),
+// );
 
-const categories_l2 = computed(() => {
-  if (!selectedCat.value) {
-    return [];
-  }
+// const categories_l2 = computed(() => {
+//   if (!selectedCat.value) {
+//     return [];
+//   }
 
-  return categories.value.filter(
-    (cat) => cat.parentId === selectedCat.value.id,
-  );
-});
+//   return categories.value.filter(
+//     (cat) => cat.parentId === selectedCat.value.id,
+//   );
+// });
+
+
+const handlePageChange = async (page: number) => {
+  await store.fetchCategories(page);
+};
+
 
 const handleDelete = async () => {
   loading.value = false;
   try {
     await store.deleteCategory(selectedCat.value.id);
+    // categories.value = categories.value.filter((cat)=>cat.id != selectedCat.value.id)
+    store.fetchCategories();
+    selectedCat.value = null;
     isDeleteCat.value = false;
   } catch (error) {
   } finally {

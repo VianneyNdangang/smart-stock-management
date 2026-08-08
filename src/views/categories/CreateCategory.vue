@@ -23,7 +23,7 @@
             </div>
             <form @submit.prevent="onSubmit()" class="mt-4 w-full">
               <section>
-                <!-- <p class="text-xs text-(--btt-bg) font-semibold">Informations</p> -->
+                <!-- <p class="text-xs text-(--secondary) font-semibold">Informations</p> -->
                 <div class="flex flex-col justify-center items-center gap-2">
                   <Combobox
                     v-if="isLevel2"
@@ -35,7 +35,7 @@
                     :error="errors.parentId"
                   />
                   <Input
-                    placeholder="Username"
+                    placeholder="Category Name"
                     type="text"
                     name="categoryName"
                     label="category Name"
@@ -43,9 +43,9 @@
                     :error="errors.categoryName"
                   />
                   <Textarea
-                    placeholder="Username"
+                    placeholder="Description"
                     type="text"
-                    name="description"
+                    name="Description"
                     label="Description"
                     v-model="description"
                     :error="errors.description"

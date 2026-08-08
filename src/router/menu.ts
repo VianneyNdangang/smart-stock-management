@@ -122,10 +122,10 @@ export const MenuList = [
         children: []
     },
     {
-        label: "Promotions",
-        path: "/promotions",
+        label: "Campaigns",
+        path: "/campaigns",
         icon: IconTags,
-        name: "promotions",
+        name: "campaigns",
         // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),  
         children: []
     },

@@ -1,67 +1,171 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-body {
-  min-height: 100vh;
-  background: var(--bg);
-}
-
-.dark body {
-  @apply bg-gray-950 text-gray-400;
-}
+/* ============================
+   LIGHT THEME
+============================ */
 
 :root {
-  /* light theme*/
-  --bg: #f4f4f4;
+  /* Layout */
+  --background: #f8fafc;
   --surface: #ffffff;
-  --border: #e2e8f0;
-  --hover: #dadfe4;
+  --card: #ffffff;
+  --popover: #ffffff;
 
+  /* Text */
   --text-primary: #0f172a;
-  --text-secondary: #2b4160;
-  --text-third: #64748b;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
 
-  --danger: #ef4444;
+  /* Borders */
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
+
+  /* Brand */
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+  --primary-foreground: #ffffff;
+
+  /* Secondary */
+  --secondary: #d4af37;
+  --secondary-hover: #c29b1b;
+  --secondary-foreground: #ffffff;
+
+  /* States */
   --success: #22c55e;
-  --primary: #2563eb;
   --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
 
-  --badge-danger-soft: #fee2e2;
-  --badge-success-soft: #dcfce7;
-  --badge-primary-soft: #dbeafe;
-  --badge-warning-soft: #fef3c7;
+  /* Hover */
+  --hover: #f1f5f9;
+  --muted: #f8fafc;
 
-  /*Button*/
-  --btt-bg: #c79e46;
-  --btt-hover: #ad8136;
-  --bttg-bg: #fcf2e1;
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-hover: #f1f5f9;
+  --sidebar-border: #e2e8f0;
 
-  /* input */
-  --input-bg: #f4f4f4;
-
-  /*Skeleton*/
-  --skeleton-bg: var(--hover);
+  /* Radius */
+  --radius: 0.5rem;
 }
-/* dark theme */
+
+/* ============================
+   DARK THEME
+============================ */
+
 .dark {
-  --bg: #0f172a;
-  --surface: #1e293b;
-  --border: #435266;
-  --hover: #343e4c;
+  --background: #0f1115;
+  --surface: #171a21;
+  --card: #1e222b;
+  --popover: #1e222b;
 
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-third: #768498;
+  --text-primary: #f5f7fa;
+  --text-secondary: #a3aab8;
+  --text-muted: #768498;
 
-  --badge-danger-soft: #7f1d1d;
-  --badge-success-soft: #14532d;
-  --badge-primary-soft: #1e3a8a;
-  --badge-warning-soft: #78350f;
-  
-  --bttg-bg: #c7a46839;
+  --border: #343a46;
+  --input: #2a2f3a;
+  --ring: #3b82f6;
 
-  --input-bg: #2d3e58;
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-foreground: #ffffff;
 
-  --skeleton-bg: #334155;
+  --secondary: #d4af37;
+  --secondary-hover: #b9931d;
+  --secondary-foreground: #000000;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #60a5fa;
+
+  --hover: #2a2f3a;
+  --muted: #171a21;
+
+  --sidebar: #111827;
+  --sidebar-hover: #1f2937;
+  --sidebar-border: #343a46;
 }
+
+/* ============================
+   BASE
+============================ */
+
+@layer base {
+
+  *,
+  *::before,
+  *::after {
+    border-color: var(--border);
+    font-variant-numeric: tabular-nums;
+  }
+
+  html {
+    font-family: Manrope, sans-serif;
+    scroll-behavior: smooth;
+    font-size: 14px;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--text-primary);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 40%, transparent);
+    color: var(--text-primary);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--muted);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 9999px;
+  }
+
+  input,
+  textarea,
+  select {
+    background: var(--surface);
+    color: var(--text-primary);
+    border-color: var(--border);
+  }
+
+  input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--background) inset;
+    -webkit-text-fill-color: var(--text-primary);
+  }
+
+  .hide-password-toggle::-ms-reveal,
+  .hide-password-toggle::-ms-clear {
+    display: none;
+  }
+}
+
+/* @theme {
+  --animate-scale-fade-in: scaleFadeIn 0.4s ease-out;
+
+  @keyframes scaleFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+} */

@@ -5,13 +5,13 @@
   >
     <div class="flex justify-between py-4 w-full">
       <div class="cursor-pointer flex justify-center items-center md:hidden">
-        <IconMenu2 size="40" @click="() => (isMenu = true)" />
+        <IconMenu2 size="35" @click="() => (isMenu = true)" />
       </div>
       <div>
         <h1 class="font-bold text-2xl capitalize flex">
-          Welcome <p class="text-(--btt-bg) mx-1">{{ connectedUser?.userName }}</p> !
+          Welcome <p class="text-(--secondary) mx-1">{{ connectedUser?.userName }}</p> !
         </h1>
-        <p class="class text-sm text-gray-500">{{ connectedUser?.role }}</p>
+        <p class="class text-md font-semibold text-(--secondary) ">{{ connectedUser?.role }}</p>
       </div>
       <div class="flex gap-2 justify-center items-center">
       <div class="hidden md:flex gap-2 items-center justify-center">
@@ -51,6 +51,7 @@
           <h2 class="text-xl font-bold">Menu</h2>
           <div>
             <button
+              name="closeSidebar"
               @click="uiStore.handleChange()"
               class="cursor-pointer flex justify-center items-center p-2"
             >
@@ -83,11 +84,11 @@
       </div>
       
       <div class="pt-5 flex flex-col gap-3 border-t border-(--border) h-full">
-        <p><p>First Name:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-third)">{{ connectedUser?.firstName }}</p></p>
-        <p ><p>Last Name:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-third)">{{ connectedUser?.lastName }}</p></p>
-        <p ><p>Email:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-third)">{{ connectedUser?.email }}</p></p>
-        <p ><p>Phone Number:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-third)">{{ connectedUser?.phone }}</p></p>
-        <p ><p>Role:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-third)">{{ connectedUser?.role }}</p></p>
+        <p><p>First Name:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-muted)">{{ connectedUser?.firstName }}</p></p>
+        <p ><p>Last Name:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-muted)">{{ connectedUser?.lastName }}</p></p>
+        <p ><p>Email:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-muted)">{{ connectedUser?.email }}</p></p>
+        <p ><p>Phone Number:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-muted)">{{ connectedUser?.phone }}</p></p>
+        <p ><p>Role:</p> <p class="rounded p-1 w-full flex justify-end border border-(--border) text-(--text-muted)">{{ connectedUser?.role }}</p></p>
       </div>
       <div class="flex flex-col gap-2 items-center justify-end h-full">
         <Button label="Update Profile" type="button" variant="primary" w="full" :click="() =>{isProfile = false; isUpdate = true;}"/>

@@ -20,6 +20,7 @@ const store = useToastStore();
       <Toast
         v-for="toast in store.toasts"
         :key="toast.id"
+        :id="toast.id"
         :title="toast.title"
         :description="toast.description"
         :type="toast.type"

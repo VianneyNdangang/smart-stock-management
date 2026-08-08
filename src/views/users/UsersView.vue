@@ -6,11 +6,12 @@
       :refresh="async() => {await userStore.fetchUsers()}"
       :new="newUser"
     />
-    <div class="flex justify-center items-center flex-col md:flex-row gap-5">
-      <DataSommary title="Total Users" :value="users.length" state="success" />
-      <DataSommary title="Total Administrators" :value="users.filter((u: any)=>u.role === 'admin').length" state="success" />
-      <DataSommary title="Total Category Managers" :value="users.filter((u: any)=>u.role === 'CategoryManager').length" state="success" />
-      <DataSommary title="Total Foot Workers" :value="users.filter((u: any)=>u.role === 'FootWorker').length" state="success" />
+    
+    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5">
+      <DataSommary title="Total Users" :value="users?.length" state="success" />
+      <DataSommary title="Total Administrators" :value="users?.filter((u: any)=>u.role === 'admin').length" state="success" />
+      <DataSommary title="Total Category Managers" :value="users?.filter((u: any)=>u.role === 'CategoryManager').length" state="success" />
+      <DataSommary title="Total Foot Workers" :value="users?.filter((u: any)=>u.role === 'FootWorker').length" state="success" />
     </div>
     <div>
       <!-- <LoadingView v-if="" /> -->
@@ -19,17 +20,18 @@
           title="Users"
           :records="users"
           :headers="header"
-          :loading="loading"
-          v-if="users"
+          :total="pagination?.total"
+          :loading="userStore.loading"
+          :totalPages="pagination?.totalPages"
+          :page="pagination?.page"
+          :hasNext="pagination?.hasNext"
+          :hasPrev="pagination?.hasPrev"
+          @changePage="handlePageChange"
         />
-        <!-- <CategoriesSidebarView
-        :record="['Admin', 'Category Manager', 'Food Workers']"
-      /> -->
       </div>
     </div>
   </div>
   <CreateUser
-    v-if="isCreateUser"
     :user = "selectedUser"
     :isOpen="isCreateUser"
     @close="()=>{isCreateUser = false; selectedUser = null}"
@@ -61,7 +63,8 @@ import DeleteData from "../delateData/DeleteData.vue";
 import Profile from "@/components/profile/Profile.vue";
 
 const isCreateUser = ref(false);
-const isDeleteData = ref(false)
+const isDeleteData = ref(false);
+
 const newUser = {
   label: "New User",
   action: () => (isCreateUser.value = true),
@@ -70,39 +73,38 @@ const newUser = {
 const header: TTableheaders[] = [
   {
     textAlign: "left",
-    accessor: "",
-    name: "",
-    render: (record: any) => h("div", { class: "flex justify-end gap-2" }, [
-        h(Profile, {
-          src: record.profileUrl,
-          h: '10'
-        }),
-      ]),
-    width: "28",
-  },
-  {
-    textAlign: "left",
     accessor: "userName",
     name: "User Name",
-    render: (record: any) => (record?.userName ? record?.userName : "-"),
-    width: "28",
+    render: (record: any) => 
+      h("div", { class: "flex justify-start gap-2 items-center" }, [
+        h(Profile, {
+          src: record.profileUrl,
+          h: "10"
+          ,
+        }),
+        h("p", {
+          class: "text-(--text-primary)",
+        },
+      (record?.userName ? record?.userName : "-")),
+      ]),
+    width: "15%",
   },
   {
     textAlign: "left",
     accessor: "lastName",
     name: "Last Name",
     render: (record: any) => (record?.lastName ? record?.lastName : "-"),
-    width: "28",
+    width: "12%",
   },
   {
     textAlign: "left",
     accessor: "email",
     name: "E-mail",
     render: (record: any) => (record?.email ? record?.email : "-"),
-    width: "auto",
+    width: "20%",
   },
   {
-    textAlign: "center",
+    textAlign: "left",
     accessor: "role",
     name: "Role",
     render: (record: any) =>
@@ -111,14 +113,14 @@ const header: TTableheaders[] = [
             type: "primary",
             message: record.role || "-"
           }),
-    width: "28",
+    width: "12%",
   },
   {
     textAlign: "left",
     accessor: "phone",
     name: "Phone",
     render: (record: any) => (record?.phone ? record?.phone : "-"),
-    width: "auto",
+    width: "12%",
   },
   {
     textAlign: "right",
@@ -144,14 +146,17 @@ const header: TTableheaders[] = [
           }
         }),
       ]),
-    width: "28",
+    width: "auto",
   },
 ];
 const selectedUser = ref();
 const userStore = useUserStore();
 const { users } = storeToRefs(userStore);
-const {loading} = storeToRefs(userStore)
+const {pagination} = storeToRefs(userStore)
 
+const handlePageChange = async (page: number) => {
+  await userStore.fetchUsers(page);
+};
 const handleDelete = async () => {
   await userStore.deleteUser(selectedUser.value.id);
 };

@@ -13,5 +13,5 @@ const formatDate = (value: string) => {
 </script>
 
 <template>
-  <span>{{ formatDate(props.date) }}</span>
+  <span class="text-(--secondary) font-semibold">{{ formatDate(props.date) }}</span>
 </template>

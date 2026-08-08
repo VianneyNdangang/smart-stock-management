@@ -2,24 +2,37 @@
   <Card>
     <!-- <TableSkeleton />  -->
 
-    <div class="w-full flex items-end justify-between border-b border-(--dorder) pb-2">
-<p
-      class="text-lg font-semibold text-(--text-secondary) w-full"
+    <div
+      class="w-full flex items-end justify-between border-b border-(--dorder) pb-2"
     >
-      List of {{ totalRecords }} {{ title }}.
-    </p>
-    <div class="flex items-center justify-end gap-2 w-full">
-      <div class=" transition-all duration-300"
-      :class="isFilter? `w-80`: `w-0`"
-      >
-        <Input name="filter" placeholder="Search . . ." type="text" v-if="isFilter" v-model="filter" />
+      <p class="text-lg font-semibold text-(--text-secondary) w-full">
+        List of {{ totalRecords }} {{ title }}.
+      </p>
+      <div class="flex items-center justify-end gap-2 w-full">
+        <div
+          class="transition-all duration-300"
+          :class="isFilter ? `w-80` : `w-0`"
+        >
+          <Input
+            name="filter"
+            placeholder="Search . . ."
+            type="text"
+            v-if="isFilter"
+            v-model="filter"
+          />
+        </div>
+
+        <Button
+          :icon="IconSearch"
+          label="Filter"
+          :click="handleChange"
+          variant="ghost"
+          type="button"
+        />
       </div>
-      
-    <Button :icon="IconSearch" label="Filter" :click="handleChange" variant="ghost" type="button"/>
-    </div>
     </div>
     <div
-      v-if="props.records.length === 0"
+      v-if="props.records?.length === 0"
       class="flex items-center justify-center w-full min-h-80"
     >
       <Spiner v-if="loading" size="lg" />
@@ -30,94 +43,99 @@
       />
     </div>
     <!-- <div class="w-full flex justify-center flex-col"> -->
-      <div v-else class="h-full overflow-auto max-h-100">
-        <table class="w-full">
-          <thead class="h-10 text-(--text-secondary)">
-            <tr>
-              <th
-                v-for="header in props.headers"
-                :key="header.accessor"
-                :class="`whitespace-nowrap text-${header?.textAlign} px-3 py-4 max-w-${header?.width || 'auto'} border-b border-(--border)`"
-              >
-                {{ header?.name }}
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr
-              v-for="item in paginatedRecords"
-              :key="item.id"
-              class="hover:bg-(--hover) h-10"
+    <div
+      v-else
+      class=" overflow-auto "
+      :class="maxH ? `h-${maxH}` : `full`"
+    >
+      <table class="w-full table-fixed">
+        <thead class="text-(--text-secondary)">
+          <tr>
+            <th
+              v-for="header in props.headers"
+              :key="header.accessor"
+              :class="`whitespace-nowrap text-${header?.textAlign} p-4 border-b-3 border-(--border)`"
+              :style="{ width: header?.width || 'auto' }"
             >
-              <td
-                v-for="header in props.headers"
-                :key="header.accessor"
-                :class="`px-3 py-2 border-b text-${header?.textAlign} text-(--text-third) border-(--border)`"
-              >
-                <component
-                  v-if="isVNode(header?.render(item))"
-                  :is="header?.render(item)"
-                />
+              {{ header?.name }}
+            </th>
+          </tr>
+        </thead>
 
-                <template v-else>
-                  {{ header?.render(item) }}
-                </template>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!-- Pagination -->
-        
-      </div>
-    <!-- </div> --><div class="flex items-center justify-between mt-5">
-          <p class="text-sm text-(--text-third)">
-            Page {{ currentPage }} sur {{ totalPages }}
-          </p>
-
-          <div class="flex gap-2">
-            <Button
-              :click="
-                () => {
-                  changePage(currentPage - 1);
-                }
-              "
-              label="Previous"
-              type="button"
-              variant="ghost"
-              :disabled="currentPage === 1"
-            />
-
-            <!-- </Button> -->
-
-            <button
-              v-for="page in pages"
-              :key="page"
-              @click="changePage(page)"
-              :class="[
-                'px-3 py-1 rounded border',
-                page === currentPage
-                  ? 'bg-(--primary) text-white'
-                  : 'border-(--border)',
-              ]"
+        <tbody>
+          <tr
+            v-for="item in displayedRecords"
+            :key="item.id"
+            class="hover:bg-(--hover) h-10"
+          >
+            <td
+              v-for="header in props.headers"
+              :key="header.accessor"
+              :class="`px-4 py-2 border-b text-${header?.textAlign} text-(--text-muted) border-(--border)`"
             >
-              {{ page }}
-            </button>
+              <component
+                v-if="isVNode(header?.render(item))"
+                :is="header?.render(item)"
+              />
 
-            <Button
-              :click="
-                () => {
-                  changePage(currentPage + 1);
-                }
-              "
-              label="Next"
-              type="button"
-              variant="ghost"
-              :disabled="currentPage === totalPages"
-            />
-          </div>
+              <template v-else>
+                {{ header?.render(item) }}
+              </template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+    </div>
+    <!-- </div> -->
+    <div class="flex items-center justify-between mt-5">
+      <p class="text-sm text-(--text-muted)">
+        Page {{ currentPage }} sur {{ totalPages }}
+      </p>
+
+      <div class="flex gap-2" v-if="totalPages > 1 && records?.length > 1">
+        <Button
+          :click="
+            () => {
+              changePage(props?.page - 1);
+            }
+          "
+          :icon="ChChevronLeft"
+          type="button"
+          variant="ghost"
+          :disabled="!props.hasPrev"
+        />
+        <div class="flex gap-2 overflow-auto">
+          <button
+            v-for="(page, index) in pages"
+            :key="`${page}-${index}`"
+            :disabled="page === '...'"
+            @click="typeof page === 'number' && changePage(page)"
+            :class="[
+              'px-3 py-1 rounded border',
+              page === currentPage
+                ? 'bg-(--background) text-(--secondary) border-(--warning)'
+                : 'border-(--border)',
+              page === '...' && 'cursor-default border-none',
+            ]"
+          >
+            {{ page }}
+          </button>
         </div>
+        <Button
+          :click="
+            () => {
+              changePage(currentPage + 1);
+            }
+          "
+          :icon="ChChevronRight"
+          type="button"
+          variant="ghost"
+          :disabled="!props.hasNext"
+        />
+      </div>
+    </div>
   </Card>
 </template>
 
@@ -127,88 +145,117 @@ import { isVNode } from "vue";
 import Card from "../card/Card.vue";
 import Button from "../button/Button.vue";
 import EmptyState from "../empty/EmptyState.vue";
-// import TableSkeleton from "../skeleton/TableSkeleton.vue";
 import Spiner from "../spiner/Spiner.vue";
 import Input from "../input/Input.vue";
 import { IconSearch } from "@tabler/icons-vue";
+import { ChChevronLeft, ChChevronRight } from "@kalimahapps/vue-icons";
 
 export type TTableheaders = {
-  textAlign: "left" | "right" | "center";
+  textAlign: "left" | "center" | "right";
   accessor: string;
   name: string;
   render: (param: any) => any;
-  width?: "28" | "32" | "36" | "38" | "40" | "44" | "auto";
+  width: '10%' | '12%' | '15%' | '20%' | '25%' | '30%' | 'auto' ;
 };
 
 export type TDatatableProps = {
   headers: TTableheaders[];
-  records: any[];
+  records?: any[];
   title: string;
   loading?: boolean;
-
-  itemsperPage?: number;
-  page?: number;
+  maxH?: string;
+  page: any;
+  total?: number;
+  totalPages: any;
+  hasNext?: boolean;
+  hasPrev?: boolean;
 };
+const props = withDefaults(defineProps<TDatatableProps>(), {
+  records: () => [],
+  loading: false,
+  total: 0,
+  page: 1,
+  totalPages: 1,
+  hasNext: false,
+  hasPrev: false,
+});
 
-const props = defineProps<TDatatableProps>();
-  const isFilter = ref(false)
-const handleChange = ()=>{
-  isFilter.value = !isFilter.value
-}
-const filter = ref("")
+const currentPage = computed(() => props.page);
+
+const isFilter = ref(false);
+const handleChange = () => {
+  isFilter.value = !isFilter.value;
+};
+const filter = ref("");
 
 const emit = defineEmits<{
   (e: "changePage", page: number): void;
 }>();
 
-const currentPage = ref(props.page || 1);
+const displayedRecords = computed(() => filteredRecords.value);
+const totalRecords = computed(() => props.total);
 
-const itemsPerPage = computed(() => props.itemsperPage || 20);
-
-const totalRecords = computed(() => filteredRecords.value.length);
-
-const totalPages = computed(() =>
-  Math.ceil(totalRecords.value / itemsPerPage.value),
-);
-const filteredRecords = computed(()=> {
-  if (!filter.value.trim()){
+const filteredRecords = computed(() => {
+  if (!filter.value.trim()) {
     return props.records;
   }
 
   const search = filter.value.toLowerCase();
 
-  return props.records.filter((record) =>
-props.headers.some((header) => {
-  const value = record[header.accessor];
+  return props.records?.filter((record) =>
+    props.headers.some((header) => {
+      const value = record[header.accessor];
 
-  return String(value ?? "")
-  .toLowerCase()
-  .includes(search);
-}))
-})
-const paginatedRecords = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value;
-
-  return filteredRecords.value.slice(start, start + itemsPerPage.value);
+      return String(value ?? "")
+        .toLowerCase()
+        .includes(search);
+    }),
+  );
 });
 
 // Génération des numéros de pages
 const pages = computed(() => {
-  return Array.from({ length: totalPages.value }, (_, i) => i + 1);
+  const total = props.totalPages;
+  const current = props.page;
+
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const result: (number | string)[] = [];
+
+  // Toujours afficher la première page
+  result.push(1);
+
+  // Ajouter "..." si on est loin du début
+  if (current > 4) {
+    result.push("...");
+  }
+
+  // Pages autour de la page courante
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  for (let i = start; i <= end; i++) {
+    result.push(i);
+  }
+
+  // Ajouter "..." si on est loin de la fin
+  if (current < total - 3) {
+    result.push("...");
+  }
+
+  // Toujours afficher la dernière page
+  result.push(total);
+
+  return result;
 });
 
 function changePage(page: number) {
-  if (page < 1 || page > totalPages.value) return;
-
-  currentPage.value = page;
-
   emit("changePage", page);
 }
 
 watch(filter, () => {
-  currentPage.value = 1;
-})
-
-// Filtre
-
+  emit("changePage", 1);
+});
 </script>

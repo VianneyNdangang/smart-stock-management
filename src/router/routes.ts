@@ -3,12 +3,15 @@ import DashboardView from "@/views/dashboard/DashboardView.vue";
 import UsersView from "@/views/users/UsersView.vue";
 import NotFoundView from "@/views/security/NotFoundView.vue";
 import ProductsView from "@/views/products/ProductsView.vue";
-import PromotionsView from "@/views/promotions/PromotionsView.vue";
 import CategoriesView from "@/views/categories/CategoriesView.vue";
 import LoginView from "@/views/security/LoginView.vue";
 import ComponentsView from "@/views/componentsDoc/ComponentsView.vue";
 import AlertsView from "@/views/alerts/AlertsView.vue";
 import SalesView from "@/views/sales/SalesView.vue";
+import StockExitsView from "@/views/stock/StockExitsView.vue";
+import ProductDetail from "@/views/products/ProductDetail.vue";
+import StockEntriesView from "@/views/stock/StockEntriesView.vue";
+import CampaignsView from "@/views/promotions/CampaignsView.vue";
 
 
 const routes: RouteRecordRaw[] = [
@@ -45,12 +48,17 @@ const routes: RouteRecordRaw[] = [
       {
         path: "stock-entries",
         name: "stock_entries",
-        component: UsersView,
+        component: StockEntriesView,
       },
+      // {
+      //   path: "batches-detail/:id",
+      //   name: "batch_detail",
+      //   component: StockEntriesView,
+      // },
       {
         path: "stock-exits",
         name: "stock_exits",
-        component: UsersView,
+        component: StockExitsView,
       },
       {
         path: "operation-entries",
@@ -78,16 +86,21 @@ const routes: RouteRecordRaw[] = [
         component: ProductsView,
       },
       {
-        path: "promotions",
-        name: "promotions",
-        component: PromotionsView,
+        path: "campaigns",
+        name: "campaigns",
+        component: CampaignsView,
       },
       // TransitsView
       {
         path: "transits",
         name: "transits",
-        component: PromotionsView,
+        component: CampaignsView,
       },
+      {
+        path: `product-detail/:id`,
+        name: "detail_product",
+        component: ProductDetail,
+      }
     ],
   },
 

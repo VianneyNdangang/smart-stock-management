@@ -1,28 +1,25 @@
 import { defineStore } from "pinia";
 import { apiClient } from "@/store/api.ts";
-import { ref } from "vue";
-import { useToastStore } from "./toastStore";
+import { computed, ref } from "vue";
+import useFetchData from "@/hooks/request";
 
 export const useUserStore = defineStore("staff", () => {
-  const users = ref<any[]>([]);
-  const loading = ref(false);
-  const messaError = ref();
-  const toast = useToastStore();
-
-  const fetchUsers = async (id?: any) => {
-    try {
-      loading.value = true;
-      const items = await apiClient({
-        method: "GET",
-        url: id ? `/staff/${id}` : `/staff`,
-      }).then((response) => response.data);
-      users.value = items;
-    } catch (error) {
-      messaError.value = error;
-    } finally {
-      loading.value = false;
-    }
-  };
+  
+   const page = ref(1);
+    const { data, fetchData, pagination, loading } = useFetchData({
+      limit: 20,
+      page,
+      url: "staff",
+    });
+  
+    const users = computed(() => data.value);
+  
+    const fetchUsers = async (newPage?: number) => {
+      if (newPage) {
+        page.value = newPage;
+      }
+      await fetchData();
+    };
 
   const createUser = async (newUser: any, id?: string) => {
     const data = {
@@ -47,17 +44,7 @@ export const useUserStore = defineStore("staff", () => {
   };
 
   const deleteUser = async (id: string) => {
-    try {
-      await apiClient.delete(`/staff/${id}`);
-      users.value = users.value.filter((user: any) => user.id != id);
-      toast.show("Supprimé", "success", "L'utilisateur a ete supprimé");
-    } catch (error) {
-      toast.show(
-        "Erreur",
-        "danger",
-        "Une erreure est survenue lors de la suppression",
-      );
-    }
+     return await apiClient.delete(`/staff/${id}`);
   };
 
   return {
@@ -66,5 +53,6 @@ export const useUserStore = defineStore("staff", () => {
     loading,
     createUser,
     deleteUser,
+    pagination,
   };
 });

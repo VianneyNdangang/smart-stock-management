@@ -1,20 +1,17 @@
 <template>
-<Card>
-    <div class="border-l-5 rounded-md p-2" :class="props.state === 'danger'? `border-(--danger)`:props.state === 'success'? `border-(--success)`:props.state === 'primary'?`border-(--primary)`:`border-(--warning)`">
-        <p class="text-lg font-semibold overflow-auto">{{ props.title }}</p>
-        <p class="text-5xl font-semibold">{{ props.value }}</p>
-        <p>{{ props.description }}</p>
+    <div class=" rounded-md px-5 flex flex-col text-right" :class="props.state === 'danger'? `texte-(--danger)`:props.state === 'success'? `text-(--success)`:props.state === 'primary'?`text-(--primary)`:`text-(--warning)`">
+        <p class="text-sm font-semibold text-(--text-muted) overflow-auto">{{ props.title }}</p>
+        <p class="text-6xl font-bold">{{ props.value }}</p>
+        <!-- <p class="text-xs font-semibold">{{ props.title }}</p> -->
         <div class="w-full rounded-full"
        ></div>
     </div>
-</Card>
 </template>
 <script setup lang="ts">
-import Card from '../card/Card.vue';
 
 const props = defineProps<{
     title: string,
-    value: string | number,
+    value: any,
     description?:string,
     state?: 'danger'| 'success' | 'primary' |'warning',
 }>()

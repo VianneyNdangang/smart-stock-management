@@ -19,7 +19,7 @@
         ]"
       >
         <span
-          :class="model ? 'text-(--text-secodary)' : 'text-(--text-third)'"
+          :class="model ? 'text-(--text-secodary)' : 'text-(--text-muted)'"
         >
           {{ selectedLabel }}
         </span>
@@ -41,7 +41,7 @@
       >
         <ul
           v-if="open"
-          class="absolute z-50 mt-2 w-full rounded border border-(--border) bg-(--bg) shadow-xl overflow-hidden"
+          class="absolute z-50 mt-2 w-full rounded border border-(--border) bg-(--background) shadow-xl overflow-hidden"
         >
           <li
             v-for="option in options"
@@ -49,7 +49,7 @@
             @click="select(option)"
             class="cursor-pointer px-3 py-2 transition-colors hover:bg-(--hover)"
             :class="{
-              'bg-(--btt-bg)/10 text-(--btt-bg)': model === option.value
+              'bg-(--secondary)/10 text-(--secondary)': model === option.value
             }"
           >
             {{ option.label }}
