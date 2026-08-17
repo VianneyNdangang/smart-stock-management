@@ -10,7 +10,7 @@ export const useCampaignsStore = defineStore("campaigns", () => {
   const { data, fetchData, pagination, loading } = useFetchData({
     limit: 50,
     page,
-    url: "campaign",
+    url: "campaigns",
   });
 
   const campaigns = computed(() => data.value);
@@ -25,7 +25,7 @@ export const useCampaignsStore = defineStore("campaigns", () => {
   const createCampaigns = async (newcampaigns: any, id?: string) => {
     return await apiClient({
       method: id ? "PATCH" : "POST",
-      url: id ? `/campaign/${id}` : `/campaign`,
+      url: id ? `/campaigns/${id}` : `/campaigns`,
       data: newcampaigns,
     });
   };

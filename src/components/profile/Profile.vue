@@ -1,7 +1,7 @@
 <template>
 <img :src="props.src" alt="Profil" :class="`rounded-full w-auto h-${props.h}`" v-if="props.src"/>
-<IconUserFilled size="40" v-else 
-        class="cursor-pointer flex justify-center items-center p-3 bg-gray-200 rounded-full text-gray-700 dark:bg-gray-700 dark:text-gray-300"/>
+<IconUserFilled size="30" v-else 
+        class="cursor-pointer flex justify-center items-center p-2 rounded-full text-(--secondary) bg-(--background) border border-(--secondary)"/>
 </template>
 
 <script setup lang="ts">

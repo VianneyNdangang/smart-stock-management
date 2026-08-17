@@ -22,22 +22,6 @@ export const useProfileStore = defineStore("profile", () => {
     } finally{}
   };
 
-  const updateProfile = async (data: any) => {
-    try {
-      const response = await apiClient.patch(`/profile`, data);
-      connectedUser.value = response.data;
-      toast.show(
-        "Operation Effectuée",
-        "success",
-        "Votre Profile a ete mis a jours",
-      );
-    } catch (error) {}
-    // toast.show(
-    //   "Operation Effectuée",
-    //   "danger",
-    //   "Votre Profile a ete mis a jours",
-    // );
-  };
   const loginUser = async (credentials: any) => {
     loading.value=true
     try {
@@ -65,7 +49,6 @@ export const useProfileStore = defineStore("profile", () => {
     connectedUser,
     loginUser,
     fetchProfile,
-    updateProfile,
     loading,
   };
 });

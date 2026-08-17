@@ -1,8 +1,8 @@
 <template>
-  <div class="flex flex-col gap-5">
-    <section>
+  <div class="flex flex-col gap-3">
+    <section class="flex flex-col gap-3">
       <Card>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
           <!-- Images -->
           <div>
             <!-- Image principale -->
@@ -10,7 +10,7 @@
               class="border border-(--border) rounded-xl overflow-hidden bg-(--surface)"
             >
               <img
-                :src="selectedImage || '/logo.jpg'"
+                :src="selectedImage || '/images/glotelho.webp'"
                 :alt="product?.productName"
                 class="w-full h-112 object-cover"
               />
@@ -18,11 +18,11 @@
 
             <!-- Galerie -->
             <div
-              v-if="product?.imageUrls?.length"
+              v-if="product?.images?.length > 0"
               class="flex gap-3 mt-4 overflow-x-auto"
             >
               <img
-                v-for="(image, index) in product.imageUrls"
+                v-for="(image, index) in product.images"
                 :key="index"
                 :src="image"
                 class="w-24 h-24 rounded-lg border border-(--border) object-cover cursor-pointer hover:border-(--warning) transition"
@@ -32,10 +32,10 @@
           </div>
 
           <!-- Informations -->
-          <div class="space-y-5">
+          <div class="space-y-3">
             <div>
               <Badge
-                :type="product?.perishable ? 'danger' : 'success'"
+                :type="product?.perishable ? 'warning' : 'success'"
                 :message="product?.perishable ? 'Perishable' : 'Non Perishable'"
               />
               <h1 class="text-3xl font-bold mt-3 text-(--text-primary)">
@@ -46,33 +46,43 @@
                 {{ product?.description || "No description available." }}
               </p>
             </div>
+            <div class="rounded border border-(--border) p-3">
+              <p class="text-sm text-(--text-secondary)">Unit</p>
+              <p class="font-bold text-xl">
+                {{ product?.units }}
+              </p>
+            </div>
 
-            <div class="grid grid-cols-2 gap-4">
-              <div class="rounded border border-(--border) p-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded border border-(--border) p-3">
                 <p class="text-sm text-(--text-secondary)">Category</p>
                 <p class="font-medium">
-                  {{ product?.category?.categoryName || product?.categoryId }}
+                  {{ product?.category?.categoryName }}
                 </p>
               </div>
 
-              <div class="rounded border border-(--border) p-4">
+              <div class="rounded border border-(--border) p-3">
                 <p class="text-sm text-(--text-secondary)">Brand</p>
                 <p class="font-medium">
-                  {{ product?.brand?.brandName || product?.brandId }}
+                  {{ product?.brand?.brandName }}
                 </p>
               </div>
 
-              <div class="rounded border border-(--border) p-4">
+              <div class="rounded border border-(--border) p-3">
                 <p class="text-sm text-(--text-secondary)">Created</p>
-                <FormateDate :date="product?.createdAt || '-'" />
+                <FormateDate :date="product?.createdAt" />
+              </div>
+              <div class="rounded border border-(--border) p-3">
+                <p class="text-sm text-(--text-secondary)">Update Date</p>
+                <FormateDate :date="product?.updateAt || ''" />
               </div>
             </div>
           </div>
         </div>
       </Card>
-      <div class="flex gap-5 flex-col md:flex-row">
+      <div class="flex gap-3 flex-col md:flex-row">
         <!-- Description -->
-        <Card class="mt-6">
+        <Card>
           <h2 class="text-xl font-semibold mb-4 text-(--text-primary)">
             Description
           </h2>
@@ -83,22 +93,14 @@
         </Card>
 
         <!-- Specifications -->
-        <Card class="mt-6">
+        <Card>
           <h2 class="text-xl font-semibold mb-4 text-(--text-primary)">
             Specifications
           </h2>
 
-          <div
-            v-if="product?.specifications?.length"
-            class="grid md:grid-cols-2 gap-4"
-          >
-            <div
-              v-for="(spec, index) in product.specifications"
-              :key="index"
-              class="flex justify-between border-b border-(--border) py-2"
-            >
-              <span class="font-medium">{{ spec.name }}</span>
-              <span>{{ spec.value }}</span>
+          <div v-if="product?.specification" class="grid md:grid-cols-2 gap-3">
+            <div class="flex justify-between border-b border-(--border) py-2">
+              <span class="font-medium">{{ product.specification }}</span>
             </div>
           </div>
 
@@ -108,44 +110,48 @@
         </Card>
       </div>
     </section>
-    <section class="flex flex-col md:flex-row gap-5">
-      <LineChart
-        title="Evolution des ventes par mois"
-        :data="monthlySalesData"
-      />
-      <DoughnutChart
-        title="Quantite en stock par magasin"
-        :data="stockByWarehouseData"
-      />
-    </section>
-    <section class="flex flex-col md:flex-row gap-5">
-      <BarChart
-        title="Evolution des ventes par magasin"
-        :data="salesByWarehouseData"
-      />
-    </section>
-    <section class="flex flex-col gap-2">
-      <h1 class="text-lg font-bold text-(--text-primary)">
-        Produits similaires
-      </h1>
-      <p class="text-sm text-(--text-secondary)">
-        Liste des produits similaires à ce produit dans la même catégorie.
-      </p>
-      <div class="flex flex-col md:flex-row gap-5">
-        <DataTable
-          title="similar products"
-          :records="products"
-          :headers="header"
-          :total="pagination?.total"
-          :loading="loading"
-          :totalPages="pagination?.totalPages"
-          :page="pagination?.page"
-          :hasNext="pagination?.hasNext"
-          :hasPrev="pagination?.hasPrev"
-          @changePage="handlePageChange"
-          maxH="100"
-        />
+    <section class="flex flex-col md:flex-row gap-3">
+      <div class="flex flex-col gap-3 w-full md:w-6/3">
+        <div
+          class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-3"
+        >
+          <DataSommary title="Total categories" :value="5000" state="primary" />
+          <DataSommary
+            title="Total categories Level 1"
+            :value="2000"
+            state="warning"
+          />
+          <DataSommary
+            title="Total categories Level 2"
+            :value="3000"
+            state="warning"
+          />
+          <!-- <DataSommary title="Total Foot Workers" :value="categories.filter((u: any)=>u.role === 'FootWorker').length" state="success" /> -->
+        </div>
+        <Card>
+          <LineChart
+            title="Evolution des ventes par mois"
+            :data="monthlySalesData"
+          />
+        </Card>
       </div>
+
+      <Card>
+        <DoughnutChart
+          title="Quantite en stock par magasin"
+          :data="stockByWarehouseData"
+        />
+      </Card>
+    </section>
+    <section class="flex flex-col md:flex-row gap-3">
+      <Card>
+        <div class="class h-100">
+          <BarChart
+            title="Evolution des ventes par magasin"
+            :data="salesByWarehouseData"
+          />
+        </div>
+      </Card>
     </section>
   </div>
 </template>
@@ -155,47 +161,25 @@ import Card from "@/components/card/Card.vue";
 import BarChart from "@/components/charts/BarChart.vue";
 import DoughnutChart from "@/components/charts/DoughnutChart.vue";
 import LineChart from "@/components/charts/LineChart.vue";
-import DataTable, {
-  type TTableheaders,
-} from "@/components/dataTable/DataTable.vue";
+import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
-import ProductProfile from "@/components/profile/ProductProfile.vue";
-// import {getSearch } from "@/helpers/utils";
-import useFetchData from "@/hooks/request";
 import { apiClient } from "@/store/api";
 import { useToastStore } from "@/store/toastStore";
-import { IconListDetailsFilled } from "@tabler/icons-vue";
-import { computed, h, onMounted, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 const product = ref();
 const toast = useToastStore();
-const products = computed(() => data.value);
-const stocks = ref();
-const page = ref(1);
+const stocks = ref([]);
 const selectedImage = ref<string>("");
-const filters = ref<any>();
-const { data, fetchData, pagination, loading } = useFetchData({
-  limit: 25,
-  url: "products",
-  page,
-  filters,
-});
-// stocks.value = computed(async () => {
-//   return (await apiClient.get(`/stock/product/${product.value?.id}`)).data;
-// });
 
-// console.log("stocks", stocks);
-
-const handleChangeProduct = async (id: string) => {
+const loadProduct = async (id: string) => {
   try {
     product.value = (await apiClient.get(`products/${id}`)).data;
-    filters.value = {
-      categoryId: product.value?.categoryId,
-    };
-    fetchData();
-    selectedImage.value = product.value?.imageUrls?.[0];
+    stocks.value = (await apiClient.get(`/stock/product/${id}`)).data;
+    selectedImage.value = product.value?.images?.[0];
+    scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
     toast.show(
       "Operation echouee",
@@ -204,33 +188,31 @@ const handleChangeProduct = async (id: string) => {
     );
   }
 };
-onMounted(async() => {
-  handleChangeProduct(route.params.id as string);
-  try {
-    const response = await apiClient.get(`/stock/product/${route.params.id}`, {
-    // params: {
-      // page: 1,
-      // ...getSearch({
-      //   date: '2026',
-      //  }),
-      // filters: JSON.stringify(
-      //   'date=2026',
-      // )
-    // },
-  });
-  stocks.value = response.data;
-  // const 
-  } catch (error) {
-    
-  }
-  
 
+watch(
+  ()=> route.params.id,
+  async(newId)=>{
+    if (!newId) return;
+    await loadProduct(newId as string);
+  },
+  {
+    immediate: true,
+
+  }
+);
+
+const stockByWarehouseData = computed(() => {
+  const data = {
+    labels: [] as string[],
+    values: [] as number[],
+  };
+  stocks.value?.forEach((element: any) => {
+    data.labels.push(element.warehouseName);
+    data.values.push(element.totalUnits);
+  });
+  return data;
 });
 
-const handlePageChange = async (pag: number) => {
-  page.value = pag;
-  fetchData();
-};
 const monthlySalesData = {
   labels: [
     "Jan",
@@ -249,24 +231,8 @@ const monthlySalesData = {
 
   values: [
     12500, 15800, 14300, 18700, 22400, 20100, 24500, 26800, 23900, 28100, 31500,
-    35200,
+    32500,
   ],
-};
-const stockByWarehouseData = {
-  labels: [
-    "Yaoundé Centre",
-    "Douala Bonamoussadi",
-    "Bafoussam",
-    "Garoua",
-    "Bamenda",
-    "Kribi",
-    "Bertoua",
-    "Ebolowa",
-    "Ngaoundéré",
-    "Limbé",
-  ],
-
-  values: [420, 365, 510, 280, 190, 340, 460, 150, 230, 395],
 };
 
 const salesByWarehouseData = {
@@ -285,52 +251,4 @@ const salesByWarehouseData = {
 
   values: [852, 1045, 637, 489, 713, 368, 421, 294, 556, 478],
 };
-
-const header: TTableheaders[] = [
-  {
-    textAlign: "left",
-    accessor: "productName",
-    name: "",
-    render: (record: any) =>
-      h("div", { class: "flex justify-start gap-2 items-center" }, [
-        h(ProductProfile, {
-          src: record.imageUrl,
-          h: "10",
-        }),
-        h(
-          "p",
-          {
-            class: "text-(--text-primary)",
-          },
-          record?.productName ? record?.productName : "-",
-        ),
-      ]),
-    width: "auto",
-  },
-  {
-    textAlign: "right",
-    accessor: "actions",
-    name: "",
-    render: (record: any) =>
-      h("div", { class: "flex justify-end gap-2" }, [
-        h(IconListDetailsFilled, {
-          size: 18,
-          class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
-          onClick: () => {
-            handleChangeProduct(record?.id);
-            scrollTo({ top: 0, behavior: "smooth" });
-          },
-        }),
-      ]),
-    width: "auto",
-  },
-];
 </script>
-
-
-
-
-
-
-
-

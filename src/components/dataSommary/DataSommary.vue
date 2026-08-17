@@ -1,19 +1,40 @@
 <template>
-    <div class=" rounded-md px-5 flex flex-col text-right" :class="props.state === 'danger'? `texte-(--danger)`:props.state === 'success'? `text-(--success)`:props.state === 'primary'?`text-(--primary)`:`text-(--warning)`">
-        <p class="text-sm font-semibold text-(--text-muted) overflow-auto">{{ props.title }}</p>
-        <p class="text-6xl font-bold">{{ props.value }}</p>
-        <!-- <p class="text-xs font-semibold">{{ props.title }}</p> -->
-        <div class="w-full rounded-full"
-       ></div>
+  <Card>
+    <div class="flex gap-2 items-center justify-start whitespace-nowrap">
+      <div
+        class="p-3 rounded-lg border h-full"
+        :class="
+          props.state === 'danger'
+            ? `text-(--danger) bg-(--danger)/10 border-(--danger)/40`
+            : props.state === 'success'
+              ? `text-(--success) bg-(--success)/10 border-(--success)/40`
+              : props.state === 'primary'
+                ? `text-(--primary) bg-(--primary)/10  border-(--primary)/40`
+                : `text-(--warning) bg-(--warning)/10  border-(--warning)/40`
+        "
+      >
+        <VueIcon v-if="props.icon" :name="props.icon" class="size-5" />
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-(--text-primary) overflow-auto">
+          {{ props.title }}
+        </p>
+        <p class="text-3xl font-semibold text-(--text-muted)">
+          {{ props.value }}
+        </p>
+      </div>
     </div>
+  </Card>
 </template>
 <script setup lang="ts">
+import VueIcon from "@kalimahapps/vue-icons/VueIcon";
+import Card from "../card/Card.vue";
 
 const props = defineProps<{
-    title: string,
-    value: any,
-    description?:string,
-    state?: 'danger'| 'success' | 'primary' |'warning',
-}>()
-
+  icon?: any;
+  title: string;
+  value: any;
+  description?: string;
+  state?: "danger" | "success" | "primary" | "warning";
+}>();
 </script>

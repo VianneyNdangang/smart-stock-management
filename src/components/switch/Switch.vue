@@ -13,9 +13,10 @@ const model = defineModel<boolean>({
 
 <template>
   <button
+  name="switch"
     type="button"
     @click="model = !model"
-    class="relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-300 "
+    class="relative inline-flex h-6 w-14 items-center border border-(--border) rounded-full transition-colors duration-300 "
     :class="model ? 'bg-(--secondary)' : 'bg-(--background)'"
   >
     <span

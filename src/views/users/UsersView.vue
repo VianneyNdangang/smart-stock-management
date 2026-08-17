@@ -1,21 +1,25 @@
 ﻿<template>
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-3">
     <PageHeader
-      title="Users"
-      subtitle="Manage user accounts, permissions, and access le"
+      :title="t('menu.users')"
+      :subtitle="t('users.subtitle')"
       :refresh="async() => {await userStore.fetchUsers()}"
       :new="newUser"
+      :loading="userStore.loading"
     />
     
-    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5">
-      <DataSommary title="Total Users" :value="users?.length" state="success" />
-      <DataSommary title="Total Administrators" :value="users?.filter((u: any)=>u.role === 'admin').length" state="success" />
-      <DataSommary title="Total Category Managers" :value="users?.filter((u: any)=>u.role === 'CategoryManager').length" state="success" />
-      <DataSommary title="Total Foot Workers" :value="users?.filter((u: any)=>u.role === 'FootWorker').length" state="success" />
+    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-3">
+      <DataSommary :title="t('users.summary.total')" :value="users?.length" state="primary" :icon="IconUsers"/>
+      <DataSommary :title="t('users.summary.active')" :value="users?.filter((u: any)=>u.role === 'FootWorker').length" state="success" :icon="IconUserCheck"/>
+      <DataSommary :title="t('users.summary.administrators')" :value="users?.filter((u: any)=>u.role === 'admin').length" state="warning" :icon="IconSettings" />
+      <DataSommary :title="t('users.summary.categoryManagers')" :value="users?.filter((u: any)=>u.role === 'CategoryManager').length" state="warning" :icon="IconUserCog"/>
+      <DataSommary :title="t('users.summary.footWorkers')" :value="users?.filter((u: any)=>u.role === 'FootWorker').length" state="warning" :icon="IconWalk"/>
     </div>
     <div>
-      <!-- <LoadingView v-if="" /> -->
       <div class="flex">
+        <!-- <Card v-if="userStore.loading">
+          
+        </Card> -->
         <DataTable
           title="Users"
           :records="users"
@@ -26,8 +30,8 @@
           :page="pagination?.page"
           :hasNext="pagination?.hasNext"
           :hasPrev="pagination?.hasPrev"
-          @changePage="handlePageChange"
-        />
+          :changePage="handlePageChange"
+        ><UsersTableSkeleton/></DataTable>
       </div>
     </div>
   </div>
@@ -50,10 +54,7 @@
 import { ref, onMounted, h } from "vue";
 import { useUserStore } from "@/store/userStore";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconEdit, IconTrash } from "@tabler/icons-vue";
-// import LoadingView from "@/components/molecules/LoadingView.vue";
-// import CategoriesSidebarView from "@/components/CategoriesSidebarView.vue";
-import type { TTableheaders } from "@/components/dataTable/DataTable.vue";
+import { IconEdit, IconSettings, IconTrash, IconUserCheck, IconUserCog, IconUserPlus, IconUsers, IconWalk } from "@tabler/icons-vue";
 import DataTable from "@/components/dataTable/DataTable.vue";
 import CreateUser from "./CreateUser.vue";
 import Badge from "@/components/badge/Badge.vue";
@@ -61,20 +62,25 @@ import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import { storeToRefs } from "pinia";
 import DeleteData from "../delateData/DeleteData.vue";
 import Profile from "@/components/profile/Profile.vue";
+import type { TTableheaders } from "@/components/dataTable/type.ts";
+import UsersTableSkeleton from "@/components/skeleton/UsersTableSkeleton.vue";
 
 const isCreateUser = ref(false);
 const isDeleteData = ref(false);
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const newUser = {
-  label: "New User",
+  label: t('users.new'),
   action: () => (isCreateUser.value = true),
+  icon: IconUserPlus
 };
 
 const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "userName",
-    name: "User Name",
+    name: () => t('users.columns.userName'),
     render: (record: any) => 
       h("div", { class: "flex justify-start gap-2 items-center" }, [
         h(Profile, {
@@ -83,7 +89,7 @@ const header: TTableheaders[] = [
           ,
         }),
         h("p", {
-          class: "text-(--text-primary)",
+          class: "text-(--text-primary) text-md font-bold",
         },
       (record?.userName ? record?.userName : "-")),
       ]),
@@ -91,55 +97,63 @@ const header: TTableheaders[] = [
   },
   {
     textAlign: "left",
+    accessor: "firstName",
+    name: () => t('users.columns.firstName'),
+    render: (record: any) => (record?.firstName ? record?.firstName : "-"),
+    width: "auto",
+  },
+  {
+    textAlign: "left",
     accessor: "lastName",
-    name: "Last Name",
+    name: () => t('users.columns.lastName'),
     render: (record: any) => (record?.lastName ? record?.lastName : "-"),
-    width: "12%",
+    width: "auto",
   },
   {
     textAlign: "left",
     accessor: "email",
-    name: "E-mail",
+    name: () => t('users.columns.email'),
     render: (record: any) => (record?.email ? record?.email : "-"),
-    width: "20%",
+    width: "auto",
   },
   {
     textAlign: "left",
     accessor: "role",
-    name: "Role",
+    name: () => t('users.columns.role'),
     render: (record: any) =>
       // record?.role
          h(Badge, {
             type: "primary",
             message: record.role || "-"
           }),
-    width: "12%",
+    width: "auto",
   },
   {
     textAlign: "left",
     accessor: "phone",
-    name: "Phone",
+    name: () => t('users.columns.phone'),
     render: (record: any) => (record?.phone ? record?.phone : "-"),
-    width: "12%",
+    width: "auto",
   },
   {
     textAlign: "right",
     accessor: "actions",
-    name: "Actions",
+    name: () => t('users.columns.actions'),
     render: (record: any) =>
       h("div", { class: "flex justify-end gap-2" }, [
         h(IconEdit, {
           size: 18,
-          class: "cursor-pointer text-slate-900 hover:text-blue-700",
+          class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
           onClick: ()=>{
             selectedUser.value = record;
             isCreateUser.value = true;
+            console.log("selectedUserselectedUserselectedUser",selectedUser.value)
           }
          
         }),
         h(IconTrash, {
           size: 18,
-          class: "cursor-pointer text-red-500 hover:text-red-700",
+          class: "cursor-pointer text-(--danger) hover:text-red-700",
           onClick: ()=>{
             selectedUser.value = record;
             isDeleteData.value = true;

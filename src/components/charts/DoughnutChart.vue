@@ -1,20 +1,11 @@
 <template>
-  <Card>
-    <div class="w-full h-full">
-      <canvas ref="chartRef"></canvas>
-    </div>
-  </Card>
+  <div class="relative h-100 w-full">
+    <canvas ref="chartRef"></canvas>
+  </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  title?: string;
-  data: {
-    labels: string[];
-    values: number[];
-  };
-}>();
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import {
   Chart,
   DoughnutController,
@@ -23,9 +14,22 @@ import {
   Legend,
   Title,
 } from "chart.js";
-import Card from "../card/Card.vue";
 
-Chart.register(DoughnutController, ArcElement, Tooltip, Legend, Title);
+const props = defineProps<{
+  title?: string;
+  data: {
+    labels: string[];
+    values: number[];
+  };
+}>();
+
+Chart.register(
+  DoughnutController,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Title
+);
 
 const chartRef = ref<HTMLCanvasElement | null>(null);
 
@@ -35,17 +39,21 @@ onMounted(() => {
   if (!chartRef.value) return;
 
   const ctx = chartRef.value.getContext("2d");
+
   if (!ctx) return;
-  let delayed: boolean;
+
+  let delayed = false;
+
   chart = new Chart(ctx, {
     type: "doughnut",
 
     data: {
-      labels: props.data?.labels,
+      labels: props.data.labels,
 
       datasets: [
         {
-          data: props.data?.values,
+          data: props.data.values,
+
           backgroundColor: [
             "#4A3812",
             "#5F4817",
@@ -58,11 +66,11 @@ onMounted(() => {
             "#E3CCA0",
             "#F2E8D2",
           ],
+
           borderWidth: 0,
           spacing: 0,
           borderRadius: 0,
           weight: 2,
-
           hoverOffset: 15,
         },
       ],
@@ -72,24 +80,38 @@ onMounted(() => {
       responsive: true,
       maintainAspectRatio: false,
       cutout: "60%",
-       animation: {
-      onComplete: () => {
-        delayed = true;
+
+      animation: {
+        onComplete: () => {
+          delayed = true;
+        },
+
+        delay: (context) => {
+          let delay = 0;
+
+          if (
+            context.type === "data" &&
+            context.mode === "default" &&
+            !delayed
+          ) {
+            delay =
+              context.dataIndex * 300 +
+              context.datasetIndex * 100;
+          }
+
+          return delay;
+        },
       },
-      delay: (context) => {
-        let delay = 0;
-        if (context.type === 'data' && context.mode === 'default' && !delayed) {
-          delay = context.dataIndex * 300 + context.datasetIndex * 100;
-        }
-        return delay;
-      },},
+
       plugins: {
         legend: {
           position: "center",
         },
+
         title: {
           display: true,
           text: props.title,
+
           font: {
             size: 20,
             weight: "bold",
@@ -103,6 +125,23 @@ onMounted(() => {
     },
   });
 });
+
+
+watch(
+  () => props.data,
+  (newData) => {
+    if (!chart) return;
+
+    chart.data.labels = newData.labels;
+    chart.data.datasets[0].data = newData.values;
+
+    chart.update();
+  },
+  {
+    deep: true,
+  }
+);
+
 
 onUnmounted(() => {
   chart?.destroy();

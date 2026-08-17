@@ -9,6 +9,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
 
     /* Linting */
     "noUnusedLocals": true,

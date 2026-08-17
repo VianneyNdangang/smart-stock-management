@@ -2,7 +2,7 @@
   <div v-if="isOpen">
     <Modal>
       <Card w="xl">
-        <div class="max-w-sm max-h-md md:max-h-2xl md:min-w-xl p-5">
+        <div class="max-h-md md:max-h-2xl md:min-w-xl p-5">
           <h1 class="text-2xl font-bold text-(--text-secondary)">
             {{ props.category ? `Modify Category` : `New Category` }}
           </h1>
@@ -54,6 +54,7 @@
               </section>
               <div class="flex justify-end items-center gap-3 w-full mt-8">
                 <Button
+                  name="cancel"
                   variant="secondary"
                   type="button"
                   label="Cancel"
@@ -66,6 +67,7 @@
                   "
                 />
                 <Button
+                  name="creat"
                   variant="primary"
                   type="submit"
                   :label="props.category ? `Modify` : `Creat`"

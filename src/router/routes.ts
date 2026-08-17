@@ -1,4 +1,4 @@
-import {type RouteRecordRaw } from "vue-router";
+import { type RouteRecordRaw } from "vue-router";
 import DashboardView from "@/views/dashboard/DashboardView.vue";
 import UsersView from "@/views/users/UsersView.vue";
 import NotFoundView from "@/views/security/NotFoundView.vue";
@@ -8,11 +8,12 @@ import LoginView from "@/views/security/LoginView.vue";
 import ComponentsView from "@/views/componentsDoc/ComponentsView.vue";
 import AlertsView from "@/views/alerts/AlertsView.vue";
 import SalesView from "@/views/sales/SalesView.vue";
-import StockExitsView from "@/views/stock/StockExitsView.vue";
 import ProductDetail from "@/views/products/ProductDetail.vue";
 import StockEntriesView from "@/views/stock/StockEntriesView.vue";
 import CampaignsView from "@/views/promotions/CampaignsView.vue";
-
+import CategoryDetail from "@/views/categories/CategoryDetail.vue";
+import ForbiddenView from "@/views/security/ForbiddenView.vue";
+import WarehouseView from "@/views/stock/WarehouseView.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -23,97 +24,175 @@ const routes: RouteRecordRaw[] = [
       {
         path: "components",
         name: "components",
-        component: ComponentsView, 
+        component: ComponentsView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager", "FootWorker"],
+        },
       },
       {
         path: "",
         name: "dashboard",
         component: DashboardView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
       },
       {
         path: "users",
         name: "users",
         component: UsersView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
       },
       {
         path: "alerts",
         name: "alerts",
         component: AlertsView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
       },
       {
         path: "sales",
         name: "sales",
         component: SalesView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
       },
       {
         path: "stock-entries",
         name: "stock_entries",
         component: StockEntriesView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager", "FootWorker"],
+        },
       },
-      // {
-      //   path: "batches-detail/:id",
-      //   name: "batch_detail",
-      //   component: StockEntriesView,
-      // },
       {
-        path: "stock-exits",
-        name: "stock_exits",
-        component: StockExitsView,
+        path: "batches-detail/:id",
+        name: "batch_detail",
+        component: StockEntriesView,
+         meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager", "FootWorker"],
+        },
+      },
+      {
+        path: "warehouse",
+        name: "warehouse",
+        component: WarehouseView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
       },
       {
         path: "operation-entries",
         name: "operation_entries",
         component: UsersView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager", "FootWorker"],
+        },
       },
       {
         path: "operation-exits",
         name: "operation_exits",
         component: UsersView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager", "FootWorker"],
+        },
       },
-      {
-        path: "settings",
-        name: "settings",
-        component: UsersView,
-      },
+      // {
+      //   path: "settings",
+      //   name: "settings",
+      //   component: UsersView,
+      //   meta: {
+      //     requiresAuth: true,
+      //     roles: ["admin", "CategoryManager"],
+      //   },
+      // },
       {
         path: "categories",
         name: "categories",
         component: CategoriesView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
+      },
+      {
+        path: "category-dateil/:id",
+        name: "category_detail",
+        component: CategoryDetail,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
       },
       {
         path: "products",
         name: "products",
         component: ProductsView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager", "FootWorker"],
+        },
       },
       {
         path: "campaigns",
         name: "campaigns",
         component: CampaignsView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
       },
-      // TransitsView
       {
         path: "transits",
         name: "transits",
         component: CampaignsView,
+        meta: {
+          requiresAuth: true,
+          roles:  ["admin","CategoryManager"],
+        },
       },
       {
         path: `product-detail/:id`,
-        name: "detail_product",
+        name: "product_detail",
         component: ProductDetail,
-      }
+        meta: {
+          requiresAuth: true,
+          roles:  ["admin","CategoryManager", "FootWorker"],
+        },
+      },
     ],
   },
-
   {
     path: "/login",
     name: "login",
     component: LoginView,
+    meta: { hideNavigation: true },
   },
-
   {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: NotFoundView,
+    meta: { hideNavigation: true },
+  },
+  {
+    path: "/403",
+    name: "forbidden",
+    component: ForbiddenView,
+    meta: { hideNavigation: true },
   },
 ];
 export default routes;

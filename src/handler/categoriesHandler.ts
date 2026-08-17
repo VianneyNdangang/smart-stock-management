@@ -14,3 +14,10 @@ ctx.addIssue({
 })
   }
 });
+
+export const filterCategorySchema = z.object({
+  level:  z.string().optional(),
+  productId: z.string().optional(),
+  isActif: z.string().optional(),
+  limit: z.number().optional(),
+});

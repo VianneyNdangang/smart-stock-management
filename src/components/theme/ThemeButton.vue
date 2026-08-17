@@ -1,7 +1,7 @@
 <template>
-  <div @click="handelChange(darkMode)">
+  <div @click="themeStore.toggleTheme">
     <Switch
-      v-model="darkMode"
+      :model="isDark"
       :activeIcon="IconMoonStars"
       :inactiveIcon="IconSunHigh"
     />
@@ -10,17 +10,9 @@
 <script setup lang="ts">
 import { useThemeStore } from "@/store/themeStore";
 import Switch from "../switch/Switch.vue";
-import { ref } from "vue";
 import { IconMoonStars, IconSunHigh } from "@tabler/icons-vue";
+import { storeToRefs } from "pinia";
 
 const themeStore = useThemeStore();
-const darkMode = ref(false);
-
-const handelChange = (mode: boolean) => {
-  if (themeStore.isDark && !mode) {
-    themeStore.toggleTheme();
-  } else if (!themeStore.isDark && mode) {
-    themeStore.toggleTheme();
-  }
-};
+const isDark = storeToRefs(themeStore);
 </script>

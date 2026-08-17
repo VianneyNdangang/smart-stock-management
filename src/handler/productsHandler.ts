@@ -31,3 +31,11 @@ export const createProductSchema = z.object({
 //   }
 // })
 ;
+
+export const filterProductSchema = z.object({
+  perishable:  z.string().optional(),
+  productName: z.string().optional(),
+  isActif: z.string().optional(),
+  limit: z.number().optional(),
+  outOfStock:  z.string().optional(),
+});

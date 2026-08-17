@@ -1,55 +1,76 @@
 import { apiClient } from "@/store/api";
 import type { AxiosResponse } from "axios";
-import { onMounted, ref, type Ref } from "vue";
+import { onMounted, ref, unref, type Ref } from "vue";
 import { getSearch } from "@/helpers/utils";
 
 export type TPagination = {
-  page?: Ref<number>;
-  limit?: number;
-  filters?: Ref<any>;
+  page?: Ref<number> | number;
+  limit?: Ref<number> | number;
+  filters?: Ref<any> | any;
   totalPages?: number;
   total?: number;
   hasNext?: boolean;
   hasPrev?: boolean;
-  totalPerishables?: number
+  totalPerishables?: number;
   url?: string;
 };
+
+export type TPaginationState = {
+  page?: number;
+  limit?: number;
+  url?: string;
+  totalPages?: number;
+  total?: number;
+  hasNext?: boolean;
+  hasPrev?: boolean;
+  totalPerishables?: number;
+};
+
 const useFetchData = (props: TPagination) => {
   const data = ref<any[]>([]);
   const loading = ref(false);
 
-  const pagination = ref<TPagination>({
-  page: props.page,
-  limit: props.limit ?? 20,
-  url: props.url,
-});
+  const pagination = ref<TPaginationState>({
+    page: unref(props.page),
+    limit: unref(props.limit),
+    url: props.url,
+  });
+
 
   const fetchData = async () => {
     try {
       loading.value = true;
+
+      const pageParam = unref(props.page);
+      const limitParam = unref(props.limit);
+      const filtersParam = unref(props.filters);
+
+      const search = getSearch(filtersParam);
+
+      const params = {
+        page: pageParam,
+        limit: limitParam,
+        filter: JSON.stringify(search),
+      };
+
       const response: AxiosResponse = await apiClient({
         url: props.url,
         method: "GET",
-        params: {
-          page: props.page?.value,
-          limit: props.limit,
-          ...getSearch(props.filters?.value),
-        },
+        params,
       });
+
       data.value = response.data.items;
 
-
       pagination.value = {
-      ...pagination.value,
-      page: response.data.page,
-      limit: response.data.limit,
-      totalPages: response.data.totalPages,
-      hasNext: response.data.hasNext,
-      hasPrev: response.data.hasPrev,
-      total: response.data.total,
-      totalPerishables: response.data.totalPerishables
-    };
-
+        ...pagination.value,
+        page: response.data.page,
+        limit: response.data.limit,
+        totalPages: response.data.totalPages,
+        hasNext: response.data.hasNext,
+        hasPrev: response.data.hasPrev,
+        total: response.data.total,
+        totalPerishables: response.data.totalPerishables,
+      };
     } finally {
       loading.value = false;
     }
@@ -59,7 +80,12 @@ const useFetchData = (props: TPagination) => {
     fetchData();
   });
 
-  return { fetchData, data, loading, pagination };
+  return {
+    fetchData,
+    data,
+    loading,
+    pagination,
+  };
 };
 
 export default useFetchData;

@@ -3,9 +3,9 @@
     <Modal>
       <Card w="xl">
         <div class="max-w-sm max-h-md md:max-h-2xl md:max-w-2xl p-5">
-          <h1 class="text-2xl font-bold text-(--text-secondary)">
-            {{ props.product ? `Modify product` : `New product` }}
-          </h1>
+                <h1 class="text-2xl font-bold text-(--text-secondary)">
+                  {{ props.product ? t('products.modify') : t('products.new') }}
+                </h1>
           <div class="flex flex-col items-center justify-center w-full">
             <!-- <div class="mt-4 text-sm text-slate-600 w-full dark:text-gray-300">
         <p>Veuillez vous connecter pour continuer.</p>
@@ -18,18 +18,18 @@
                   class="flex flex-col justify-center items-center gap-0 md:gap-2"
                 >
                   <Input
-                    placeholder="Product Name"
+                    placeholder=""
                     type="text"
                     name="productName"
-                    label="Product Name"
+                    :label="t('products.form.productName')"
                     v-model="productName"
                     :error="errors.productName"
                   />
                   <Combobox
                     v-model="categoryId"
                     name="parentId"
-                    label="Category Level 1"
-                    placeholder="Sélectionner une categorie"
+                    :label="t('products.form.categoryLevel1')"
+                    placeholder=""
                     :options="categoriesOptions"
                     :error="errors.categoryId"
                   />
@@ -38,10 +38,10 @@
               <section>
                 <div class="flex justify-between items-center gap-0 md:gap-2 my-2">
                   <p v-if="!perishable" class="text-lg font-semibold">
-                    Switch if the product is perishable
+                    {{ t('products.form.perishableSwitch') }}
                   </p>
                   <p v-if="perishable" class="text-lg font-semibold text-(--success)">
-                    Perishable Product
+                    {{ t('products.form.perishable') }}
                   </p>
                   <Switch v-model="perishable" />
                 </div>
@@ -54,7 +54,7 @@
                 :model="imageUrl"
                 type="image"
                 name="image"
-                label="Photo de profil"
+                :label="t('products.form.photo')"
                 :error="errors.imageUrl"
               />
                 </div>
@@ -64,16 +64,16 @@
                   class="flex flex-col justify-center items-center gap-1 md:gap-3 mb-2"
                 >
                   <Textarea
-                    placeholder="Specification"
+                    placeholder=""
                     name="specification"
-                    label="Specification"
+                    :label="t('products.form.specification')"
                     v-model="specification"
                     :error="errors.specification"
                   />
                   <Textarea
-                    placeholder="description"
+                    placeholder=""
                     name="description"
-                    label="Description"
+                    :label="t('products.form.description')"
                     v-model="description"
                     :error="errors.description"
                   />
@@ -81,9 +81,10 @@
               </section>
               <div class="flex justify-end items-center gap-3 w-full mt-8">
                 <Button
+                 name="cancel"
                   variant="secondary"
                   type="button"
-                  label="Cancel"
+                  :label="t('common.cancel')"
                   w="40"
                   :click="
                     () => {
@@ -93,9 +94,10 @@
                   "
                 />
                 <Button
+                 name="creat"
                   variant="primary"
                   type="submit"
-                  :label="props.product ? `Modify` : `Creat`"
+                  :label="props.product ? t('products.modify') : t('products.new')"
                   w="40"
                   :loading="store.loading"
                 />
@@ -123,6 +125,7 @@ import Combobox from "@/components/combobox/Combobox.vue";
 import { usecategoriesStore } from "@/store/categoryStore";
 import { storeToRefs } from "pinia";
 import { computed, onMounted } from "vue";
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   product?: any;
@@ -164,6 +167,7 @@ const categoriesOptions = computed(() =>
   })),
 );
 const toast = useToastStore();
+const { t } = useI18n();
 const onSubmit = handleSubmit(async (values) => {
   try {
     await store.createProducts(values, props?.product?.id);
@@ -172,17 +176,15 @@ const onSubmit = handleSubmit(async (values) => {
     resetForm();
     if (props.product.id) {
       toast.show(
-        "Operation effectuée avec succes",
+        t('products.modifiedSuccess', { name: props.product.productName }),
         "success",
-        "Le produit " +
-          props.product.productName +
-          " a ete modifié avec succes",
+        "",
       );
     } else {
       toast.show(
-        "Operation effectuée avec succes",
+        t('products.createdSuccess', { name: values.productName }),
         "success",
-        "Le produit " + values.productName + " a ete créé avec succes",
+        "",
       );
     }
   } catch (error) {

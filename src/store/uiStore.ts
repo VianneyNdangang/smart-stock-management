@@ -11,14 +11,8 @@ export const useUiStore = defineStore("sidebar", () => {
     isSidebar.value = !isSidebar.value;
     saveState();
   };
-  const handleClose = () => {
-    isSidebar.value = false;
-    localStorage.setItem("sidebar", "close");
-  };
-
   return {
     isSidebar,
     handleChange,
-    handleClose,
   };
 });

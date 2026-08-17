@@ -1,45 +1,46 @@
 <template>
   <div
-    class="flex flex-col gap-5 transition-all duration-300"
-    :class="rSidebarStore.isSidebar ? `ml-20` : ``"
+    class="flex flex-col gap-3 transition-all duration-300"
   >
     <PageHeader
-      title="Products"
-      subtitle="Manage your product catalog, pricing, and inventory information."
+      :title="t('menu.products')"
+      :subtitle="t('products.subtitle')"
       :refresh="
         async () => {
           await productStore.fetchProducts();
         }
       "
       :new="newProduct"
+      :loading="productStore.loading"
     />
-    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5">
+    <div
+      class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-3"
+    >
       <DataSommary
-        title="Total Products"
+        :title="t('products.summary.total')"
         :value="pagination?.total"
         state="primary"
       />
       <DataSommary
-        title="Non Perishable Products"
+        :title="t('products.summary.nonPerishable')"
         :value="(pagination?.total ?? 0) - (pagination?.totalPerishables ?? 0)"
         state="success"
       />
       <DataSommary
-        title="Perishable Products"
+        :title="t('products.summary.perishable')"
         :value="pagination?.totalPerishables"
         state="warning"
       />
     </div>
+    <FilterBar
+      searchEndPoint="products"
+      searchProperty="productName"
+      routeName="product_detail"
+    >
+      <ProductsFilter />
+    </FilterBar>
     <div>
-      <div class="flex flex-col gap-5">
-        <!-- <DataTable
-  :records="products"
-  :page="store.products.page"
-  :total="store.products.total"
-  :total-pages="store.products.totalPages"
-  :has-next="store.products.hasNext"
-  :has-prev="store.products.hasPrev"
-/> -->
+      <div class="flex flex-col">
         <DataTable
           title="products"
           :records="products"
@@ -50,39 +51,28 @@
           :page="pagination?.page"
           :hasNext="pagination?.hasNext"
           :hasPrev="pagination?.hasPrev"
-          @changePage="handlePageChange"
-        />
-        <!-- <Button
-          variant="secondary"
-          label="Sidebare"
-          :click="rSidebarStore.handleOpen"
-          type="button"
-        /> -->
-        <!-- <DataTable
-          title="products"
-          :records="perishableProducts"
-          :headers="header"
-          :loading="productStore.loading"
-          :page="pagination?.totalPages"
-          :hasNext="pagination?.hasNext"
-          :hasPrev="pagination?.hasPrev"
-          @changePage="productStore.fetchProducts"
-        /> -->
+          :changePage="handlePageChange"
+        >
+          <ProductsTableSkeleton />
+        </DataTable>
       </div>
     </div>
   </div>
 
   <CreateProduct
-  :product="selectedProduct"
-  :isOpen="isCreateProduct"
-  @close="()=>isCreateProduct = false"
+    :product="selectedProduct"
+    :isOpen="isCreateProduct"
+    @close="
+      () => {
+        isCreateProduct = false;
+        selectedProduct = null;
+      }
+    "
   />
   <DeleteData
-    :name="selectedProduct?.productName"
-    :id="selectedProduct?.id"
     :loading="isLoading"
     message="Cette action supprimera définitivement cet utilisateur ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
-    :title="`Supprimer le produit ${selectedProduct?.productName ?? ''}`"
+    title="Supprission de produit"
     :isOpen="isDeleteData"
     @close="
       () => {
@@ -104,111 +94,145 @@
   </RightSideBare>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, h, onUnmounted } from "vue";
+import { ref, onMounted, h } from "vue";
+import { useI18n } from 'vue-i18n'
 import { useproductStore } from "@/store/productsStore";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconEdit, IconListDetailsFilled, IconTrash } from "@tabler/icons-vue";
-import type { TTableheaders } from "@/components/dataTable/DataTable.vue";
+import { IconEdit, IconEye, IconPackageImport } from "@tabler/icons-vue";
 import DataTable from "@/components/dataTable/DataTable.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import { storeToRefs } from "pinia";
 import DeleteData from "../delateData/DeleteData.vue";
 import RightSideBare from "@/components/sideBar/RightSideBare.vue";
-// import Button from "@/components/button/Button.vue";
-import { useRSidebarStore } from "@/store/rSideBareStore.ts";
 import { useToastStore } from "@/store/toastStore.ts";
 import CreateProduct from "./CreateProduct.vue";
 import { useRouter } from "vue-router";
 import ProductProfile from "@/components/profile/ProductProfile.vue";
+import type { TTableheaders } from "@/components/dataTable/type.ts";
+import Badge from "@/components/badge/Badge.vue";
+import ProductsTableSkeleton from "@/components/skeleton/ProductsTableSkeleton.vue";
+import FilterBar from "@/components/filterBar/FilterBar.vue";
+import ProductsFilter from "./ProductsFilter.vue";
 
 const productStore = useproductStore();
-const rSidebarStore = useRSidebarStore();
 const toast = useToastStore();
 const router = useRouter();
-
 
 onMounted(async () => {
   await productStore.fetchProducts();
   isLoading.value = productStore.loading;
 });
-onUnmounted(() => {
-  rSidebarStore.isSidebar = false;
-});
+
 const { products } = storeToRefs(productStore);
-const { pagination } = storeToRefs(productStore)
+const { pagination } = storeToRefs(productStore);
 const isLoading = ref<boolean>(false);
 const selectedProduct = ref();
 
 const isCreateProduct = ref(false);
 const isDeleteData = ref(false);
 
+const { t } = useI18n()
+
 const newProduct = {
-  label: "New Product",
+  label: t('products.new'),
   action: () => (isCreateProduct.value = true),
+  icon: IconPackageImport,
 };
+
 
 const handlePageChange = async (page: number) => {
   await productStore.fetchProducts(page);
 };
 
-
 const header: TTableheaders[] = [
-   {
+  {
     textAlign: "left",
     accessor: "productName",
-    name: "Product Name",
-    render: (record: any) => 
-      h("div", { class: "flex justify-start gap-2 items-center" }, [
+    name: () => t('products.columns.productName'),
+    render: (record: any) =>
+      h("div", { class: "flex justify-start gap-2 items-center w-full" }, [
         h(ProductProfile, {
-          src: record.imageUrl,
-          h: "10"
-          ,
+          src: record.images[0],
         }),
-        h("p", {
-          class: "text-(--text-primary) font-semibold",
-        },
-      (record?.productName ? record?.productName : "-")),
+        h(
+          "p",
+          {
+            class: "text-(--text-primary) text-md font-bold",
+          },
+          record?.productName ? record?.productName : "-",
+        ),
       ]),
+    width: "20%",
+  },
+  {
+   textAlign: "left",
+   accessor: "units",
+  name: () => t('products.columns.units'),
+    render: (record: any) =>
+      h(
+        Badge,{
+          type:'primary',
+          message: record?.units || '-',
+        }
+      ),
+    width: "auto",
+  },
+  {
+    textAlign: "left",
+    accessor: "productBrandName",
+    name: () => t('products.columns.brand'),
+    render: (record: any) =>
+      record?.brand.productBrandName ? record?.brand?.productBrandName : "-",
+    width: "auto",
+  },
+  {
+    textAlign: "left",
+    accessor: "catedoryName",
+    name: () => t('products.columns.category'),
+    render: (record: any) =>
+      record?.category.categoryName ? record?.category?.categoryName : "-",
+    width: "auto",
+  },
+  {
+    textAlign: "left",
+    accessor: "perishable",
+    name: () => t('products.columns.variant'),
+    render: (record: any) =>
+      h(Badge, {
+        type: record.perishable ? "warning" : "success",
+        message: record.perishable ? "Perishable" : "Non Perishable",
+      }),
     width: "auto",
   },
   {
     textAlign: "left",
     accessor: "createdAt",
-    name: "Created At",
+    name: () => t('products.columns.createdAt'),
     render: (record: any) =>
-      // record?.role
       h(FormateDate, {
         date: record.createdAt || "-",
       }),
-    width: "12%",
+    width: "auto",
   },
   {
     textAlign: "left",
-    accessor: "specification",
-    name: "Specification",
-    render: (record: any) =>
-      record?.specification ? record?.specification : "-",
-    width: "20%",
-  },
-  {
-    textAlign: "left",
-    accessor: "description",
-    name: "Description",
-    render: (record: any) => (record?.description ? record?.description : "-"),
+    accessor: "creator",
+    name: () => t('products.columns.creator'),
+    render: (record: any) => record.creator?.userName? record.creator?.userName: "-",
     width: "auto",
   },
   {
     textAlign: "right",
     accessor: "actions",
-    name: "Actions",
+    name: () => t('products.columns.actions'),
     render: (record: any) =>
       h("div", { class: "flex justify-end gap-2" }, [
-        h(IconListDetailsFilled, {
+        h(IconEye, {
           size: 18,
           class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
           onClick: () => {
-            router.push({ name: 'detail_product', params: { id: record?.id } })
+            router.push({ name: "product_detail", params: { id: record?.id } });
           },
         }),
         h(IconEdit, {
@@ -219,16 +243,8 @@ const header: TTableheaders[] = [
             isCreateProduct.value = true;
           },
         }),
-        h(IconTrash, {
-          size: 18,
-          class: "cursor-pointer text-(--danger) hover:text-red-700",
-          onClick: () => {
-            selectedProduct.value = record;
-            isDeleteData.value = true;
-          },
-        }),
       ]),
-    width: "20%",
+    width: "auto",
   },
 ];
 

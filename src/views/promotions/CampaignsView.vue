@@ -12,8 +12,9 @@
         }
       "
       :new="newcampaign"
+      :loading="campaignStore.loading"
     />
-    <div class="flex justify-center items-center flex-col md:flex-row gap-5">
+    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5">
       <DataSommary
         title="Total campaigns"
         :value="campaigns.length"
@@ -27,7 +28,7 @@
       <DataSommary
         title="Non Active campaigns"
         :value="noncampaigns.length"
-        state="danger"
+        state="warning"
       />
     </div>
     <div>
@@ -36,6 +37,7 @@
         <DataTable
           title="Categories: Level 1"
           :records="campaigns"
+          deleteUrl="/campaign"
           :headers="header"
           :total="pagination?.total"
           :loading="campaignStore.loading"
@@ -43,27 +45,9 @@
           :page="pagination?.page"
           :hasNext="pagination?.hasNext"
           :hasPrev="pagination?.hasPrev"
-          @changePage="handlePageChange"
+          :changePage="handlePageChange"
         />
 
-        <!-- <DataTable
-          title="campaigns"
-          :records="campaigns"
-          :headers="header"
-          :loading="campaignStore.loading"
-        /> -->
-        <!-- <Button
-          variant="secondary"
-          label="Sidebare"
-          :click="rSidebarStore.handleOpen"
-          type="button"
-        />
-        <DataTable
-          title="campaigns"
-          :records="perishablecampaigns"
-          :headers="header"
-          :loading="campaignStore.loading"
-        /> -->
       </div>
     </div>
   </div>
@@ -101,10 +85,10 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, h, computed, onUnmounted } from "vue";
+import { useI18n } from 'vue-i18n'
 import { useCampaignsStore } from "@/store/campaignsStore";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconEdit, IconListDetailsFilled, IconTrash } from "@tabler/icons-vue";
-import type { TTableheaders } from "@/components/dataTable/DataTable.vue";
+import { IconEdit, IconListDetailsFilled, IconSpeakerphone, IconTrash } from "@tabler/icons-vue";
 import DataTable from "@/components/dataTable/DataTable.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
@@ -116,6 +100,7 @@ import { useRSidebarStore } from "@/store/rSideBareStore.ts";
 import { useToastStore } from "@/store/toastStore.ts";
 // import Createcampaign from "./Createcampaign.vue";
 import { useRouter } from "vue-router";
+import type { TTableheaders } from "@/components/dataTable/type.ts";
 
 const campaignStore = useCampaignsStore();
 const rSidebarStore = useRSidebarStore();
@@ -146,16 +131,19 @@ const handlePageChange = async (page: number) => {
 const isCreatecampaign = ref(false);
 const isDeleteData = ref(false);
 
+const { t } = useI18n()
+
 const newcampaign = {
-  label: "New campaign",
+  label: t('users.new'),
   action: () => (isCreatecampaign.value = true),
+  icon: IconSpeakerphone
 };
 
 const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "createdAt",
-    name: "Created At",
+    name: () => t('campaigns.columns.createdAt'),
     render: (record: any) =>
       // record?.role
       h(FormateDate, {
@@ -166,14 +154,14 @@ const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "campaignName",
-    name: "campaign Name",
+    name: () => t('campaigns.columns.campaignName'),
     render: (record: any) => (record?.campaignName ? record?.campaignName : "-"),
     width: "20%",
   },
   {
     textAlign: "left",
     accessor: "specification",
-    name: "Specification",
+    name: () => t('campaigns.columns.specification'),
     render: (record: any) =>
       record?.specification ? record?.specification : "-",
     width: "25%",
@@ -181,14 +169,14 @@ const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "description",
-    name: "Description",
+    name: () => t('campaigns.columns.description'),
     render: (record: any) => (record?.description ? record?.description : "-"),
     width: "25%",
   },
   {
     textAlign: "right",
     accessor: "actions",
-    name: "Actions",
+    name: () => t('campaigns.columns.actions'),
     render: (record: any) =>
       h("div", { class: "flex justify-end gap-2" }, [
         h(IconListDetailsFilled, {

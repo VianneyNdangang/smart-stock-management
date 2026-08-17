@@ -3,10 +3,9 @@
 </script>
 
 <template>
-    <div class="min-h-screen flex items-center justify-center">
-    <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h1 class="text-xl font-semibold text-slate-900">404 - Page non trouvée</h1>
-        <p class="mt-2 text-sm text-slate-600">La page que vous recherchez n’existe pas.</p>
-    </div>
+    <div class="min-h-screen flex flex-col items-center justify-center">
+        <div class=" text-[250px] font-bold text-(--text-primary) flex leading-none">4<p class="text-(--secondary) italic">0</p>4</div>
+        <h1 class="text-7xl font-semibold leading-none">Page not found</h1>
+        <p class="mt-2 text-lg text-(--text-secondary) ">The page you are looking for does not exist.</p>
     </div>
 </template>

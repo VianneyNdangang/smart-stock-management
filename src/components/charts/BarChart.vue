@@ -1,20 +1,12 @@
 <template>
-  <Card>
-    <div class="w-full h-96">
-      <canvas ref="chartRef"></canvas>
-    </div>
-  </Card>
+  <div class="w-full h-100 md:h-full">
+    <canvas ref="chartRef"></canvas>
+  </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-    title: string,
-    data:{
-        labels: string[],
-        values: number[]
-    }
-}>()
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
+
 import {
   Chart,
   BarController,
@@ -25,7 +17,14 @@ import {
   Legend,
   Title,
 } from "chart.js";
-import Card from "../card/Card.vue";
+
+const props = defineProps<{
+  title: string;
+  data: {
+    labels: string[];
+    values: number[];
+  };
+}>();
 
 Chart.register(
   BarController,
@@ -41,23 +40,27 @@ const chartRef = ref<HTMLCanvasElement | null>(null);
 
 let chart: Chart | null = null;
 
-onMounted(() => {
+
+
+//  Création du graphique
+const createChart = () => {
   if (!chartRef.value) return;
 
   const ctx = chartRef.value.getContext("2d");
+
   if (!ctx) return;
 
   chart = new Chart(ctx, {
     type: "bar",
 
     data: {
-      labels:props.data?.labels,
+      labels: props.data.labels,
 
       datasets: [
         {
           label: "Ventes",
 
-          data: props.data?.values,
+          data: props.data.values,
 
           backgroundColor: "#c79e46",
 
@@ -69,13 +72,18 @@ onMounted(() => {
     },
 
     options: {
+      indexAxis: "y",
+
       responsive: true,
+
       maintainAspectRatio: false,
 
       plugins: {
         title: {
           display: true,
+
           text: props.title,
+
           font: {
             size: 18,
           },
@@ -88,6 +96,8 @@ onMounted(() => {
 
       scales: {
         x: {
+          beginAtZero: true,
+
           grid: {
             display: false,
           },
@@ -99,9 +109,42 @@ onMounted(() => {
       },
     },
   });
+};
+
+
+//  Mise à jour des données
+ 
+const updateChart = () => {
+  if (!chart) return;
+
+  chart.data.labels = props.data.labels;
+
+  chart.data.datasets[0].data = props.data.values;
+
+  chart.update();
+};
+
+
+onMounted(() => {
+  createChart();
 });
+
+
+//  Surveille les changements des données
+ 
+watch(
+  () => props.data,
+  () => {
+    updateChart();
+  },
+  {
+    deep: true,
+  }
+);
+
 
 onUnmounted(() => {
   chart?.destroy();
+  chart = null;
 });
 </script>

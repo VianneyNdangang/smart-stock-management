@@ -8,29 +8,20 @@
       {{ label }}
     </label>
 
-    <input
-    v-if="type !== 'password' && type !== 'image'"
-    v-model="model"
-    :type="props.type"
-    :name="props.name"
-    :placeholder="props.placeholder"
-    class="w-full rounded border bg-(--input-bg) focus:border-(--border) text-sm py-1 md:py-2 px-3 placeholder:text-(--text-muted) focus:outline-none"
-    :class="props.error ? 'border-(--danger)' : 'border-(--border)'"
-  />
-
-    <!-- Text, Email, Number -->
-    <!-- <input
-      v-if="type !== 'password' && type !== 'image'"
-      v-model="model"
-      :id="name"
-      :type="type"
-      :name="name"
-      :placeholder="placeholder"
-      :accept="accept"
-      class="w-full rounded border bg-(--input-bg) px-3 py-2 transition"
-      :class="error ? 'border-(--danger)' : 'border-(--border)'"
-    /> -->
-
+    <div
+      v-if="type !== 'password' && type !== 'image' && type != 'date'"
+      class="flex w-full rounded border  focus:border-(--border) justify-center h-9.5 items-center"
+      :class="props.error ? 'border-(--danger)' : 'border-(--border)'"
+    >
+     <VueIcon v-if="props.icon" :name="props?.icon" class=" text-(--text-muted) pl-2" />
+      <input
+        v-model="model"
+        :type="props.type"
+        :name="props.name"
+        :placeholder="props.placeholder"
+        class="w-full bg-transparent text-sm py-1 md:py-2 px-3 placeholder:text-sm placeholder:text-(--text-muted) focus:outline-none"
+      />
+    </div>
 
     <!--Date-->
 
@@ -40,18 +31,18 @@
       v-model="model"
       type="date"
       :name="name"
-      class="w-full rounded border py-2 px-3 transition-all duration-200 outline-none bg-(--background) text-(--text-secondary)"
+      class="w-full rounded border py-2 px-3 transition-all placeholder:text-sm h-9.5 duration-200 outline-none text-(--text-secondary)"
       :class="[
         error
           ? 'border-(--danger)'
-          : 'border-(--border) focus:border-(--secondary)'
+          : 'border-(--border) focus:border-(--secondary)',
       ]"
     />
 
     <!-- Password -->
     <div
       v-else-if="type === 'password'"
-      class="flex w-full items-center rounded border bg-(--input-bg)"
+      class="flex w-full items-center rounded border h-9.5"
       :class="error ? 'border-(--danger)' : 'border-(--border)'"
     >
       <input
@@ -59,28 +50,20 @@
         :type="showPassword ? 'text' : 'password'"
         :name="name"
         :placeholder="placeholder"
-        class="flex-1 bg-transparent text-sm px-3 py-1 md:py-2 focus:outline-none"
+        class="flex-1 bg-transparent text-sm px-3 placeholder:text-sm py-1 md:py-2 focus:outline-none"
       />
 
-      <button
-        type="button"
-        class="px-3"
-        @click="showPassword = !showPassword"
-      >
+      <button name="visible" type="button" class="px-3" @click="showPassword = !showPassword">
         <AkEyeOpen v-if="!showPassword" />
         <AkEyeClosed v-else />
       </button>
     </div>
 
     <!-- Image -->
-   <div
-   v-if="type ==='image'"
-      class="relative rounded border transition-all duration-200 overflow-hidden"
-      :class="[
-        error
-          ? 'border-(--danger)'
-          : 'border-(--border)'
-      ]"
+    <div
+      v-if="type === 'image'"
+      class="relative rounded border transition-all duration-200 h-9.5 overflow-hidden"
+      :class="[error ? 'border-(--danger)' : 'border-(--border)']"
     >
       <label
         :for="name"
@@ -100,25 +83,20 @@
             📷
           </div>
 
-          <span class="text-sm text-(--text-muted)">
-            Choisir une image
-          </span>
+          <span class="text-sm text-(--text-muted)"> Choisir une image </span>
         </template>
 
         <input
           :id="name"
           type="file"
           accept="image/*"
-          class="hidden"
+          class="hidden placeholder:text-sm"
           @change="handleFile"
         />
       </label>
     </div>
 
-    <p
-      v-if="error"
-      class="text-xs text-(--danger)"
-    >
+    <p v-if="error" class="text-xs text-(--danger)">
       {{ error }}
     </p>
   </div>
@@ -127,6 +105,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { AkEyeClosed, AkEyeOpen } from "@kalimahapps/vue-icons";
+import VueIcon from "@kalimahapps/vue-icons/VueIcon";
 
 const showPassword = ref(false);
 
@@ -139,6 +118,7 @@ const props = defineProps<{
   placeholder?: string;
   error?: string;
   accept?: string;
+  icon?: any
 }>();
 
 // const onFileChange = (event: Event) => {

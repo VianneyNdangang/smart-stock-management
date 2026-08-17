@@ -12,10 +12,10 @@ export const deleteToken = () =>{
 export const loginSchema = z.object({
   email: z
     .string()
-    // .email()
+    .email('Adresse email invalide')
     .min(1,"The Email is required"),
 
   password: z
     .string()
-    .min(5, "Le mot de passe doit contenir au moins 5 caractères"),
+    .min(8, "Le mot de passe doit contenir au moins 8 caractères"),
 });

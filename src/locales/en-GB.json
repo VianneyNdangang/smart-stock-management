@@ -1,0 +1,225 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel"
+  },
+  "datatable": {
+    "title": "Items",
+    "listOf": "List of",
+    "noData": "No data found",
+    "filterPlaceholder": "Search...",
+    "selectAll": "Select all",
+    "filter": "Filter",
+    "deleteConfirmation": "You are about to delete {count} items. This action cannot be undone. Continue?",
+    "deleteTitle": "Delete selected items?"
+    ,"columns": {
+      "id": "ID",
+      "names": "Names",
+      "categories": "Categories",
+      "generations": "Generations",
+      "images": "Images",
+      "actions": "Actions"
+    }
+  },
+  "pagination": {
+    "next": "Next",
+    "prev": "Previous",
+    "page": "Page"
+  },
+  "navbar": {
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "menu": "Menu",
+    "profile": "Profile",
+    "updateProfile": "Update Profile",
+    "logout": "Log Out",
+    "language": "Language"
+  }
+  ,
+  "form": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "userName": "User Name",
+    "email": "Email",
+    "phone": "Phone number",
+    "password": "Password",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "update": "Update",
+    "updatePassword": "Update Password",
+    "create": "Create"
+  }
+  ,
+  "form_extra": {
+    "delete": "Delete",
+    "photo": "Profile Photo",
+    "role": "Role"
+  }
+  ,
+  "auth": {
+    "login": "Login",
+    "welcome": "Welcome Back!",
+    "signin": "Sign in to continue managing your inventory."
+  }
+    ,
+    "roles": {
+      "admin": "Administrator",
+      "categoryManager": "Category Manager",
+      "footWorker": "Foot Worker"
+    },
+    "menu": {
+      "components": "Components",
+      "dashboard": "Dashboard",
+      "users": "Users",
+      "alerts": "Alerts",
+      "sales": "Sales",
+      "stock": "Stock",
+      "stock_entries": "Stock entries",
+      "warehouse": "Warehouses",
+      "operations": "Operations",
+      "operation_entries": "Operation entries",
+      "operation_exits": "Operation exits",
+      "categories": "Categories",
+      "products": "Products",
+      "campaigns": "Campaigns",
+      "transits": "Transits",
+      "settings": "Settings"
+    }
+    ,
+    "products": {
+      "subtitle": "Manage your product catalog, pricing, and inventory information.",
+      "summary": {
+        "total": "Total Products",
+        "nonPerishable": "Non Perishable Products",
+        "perishable": "Perishable Products"
+      },
+      "new": "New Product",
+      "modify": "Modify Product",
+      "createdSuccess": "Product {name} created successfully",
+      "modifiedSuccess": "Product {name} modified successfully",
+      "form": {
+        "productName": "Product Name",
+        "categoryLevel1": "Category Level 1",
+        "specification": "Specification",
+        "description": "Description",
+        "photo": "Product Photo",
+        "perishableSwitch": "Switch if the product is perishable",
+        "perishable": "Perishable Product",
+        "createButton": "Create",
+        "modifyButton": "Modify"
+      },
+      "columns": {
+        "productName": "Product Name",
+        "units": "Units",
+        "brand": "Brand name",
+        "category": "Category",
+        "variant": "Variant",
+        "progress": "Progress",
+        "createdAt": "Created At",
+        "creator": "Created by",
+        "actions": "Actions"
+      }
+    }
+  ,
+  "card": {
+    "products": "Products",
+    "stock": "Stock",
+    "status": "Status",
+    "createdAt": "Created at"
+  },
+  "campaigns": {
+    "subtitle": "Manage your campaign catalog, pricing, and inventory information.",
+    "summary": {
+      "total": "Total campaigns",
+      "active": "Active campaigns",
+      "nonActive": "Non Active campaigns"
+    },
+    "columns": {
+      "createdAt": "Created At",
+      "campaignName": "Campaign Name",
+      "specification": "Specification",
+      "description": "Description",
+      "actions": "Actions"
+    }
+  },
+  "stock": {
+    "subtitle": "Manage stock entries and inventory",
+    "summary": {
+      "batches": "Batches"
+    },
+    "columns": {
+      "batchName": "Batch Name",
+      "productName": "Products",
+      "units": "Units",
+      "price": "Price",
+      "stockValue": "Value of stock",
+      "barcode": "Barcode",
+      "progress": "Progress",
+      "createdAt": "Created At",
+      "expiredDate": "Expiration date",
+      "actions": "Actions"
+    }
+  },
+  "warehouse": {
+  "subtitle": "Manage your warehouses, locations, capacity, and inventory information.",
+  "summary": {
+    "total": "Total Warehouses",
+    "active": "Active Warehouses",
+    "inactive": "Inactive Warehouses"
+  },
+  "new": "New Warehouse",
+  "modify": "Modify Warehouse",
+  "createdSuccess": "Warehouse {name} created successfully",
+  "modifiedSuccess": "Warehouse {name} modified successfully",
+  "form": {
+  "warehouseName": "Warehouse Name",
+  "location": "Location",
+  "address": "Address",
+  "city": "City",
+  "country": "Country",
+  "description": "Description",
+  "capacity": "Storage Capacity",
+  "manager": "Warehouse Manager",
+  "status": "Status",
+  "active": "Active",
+  "inactive": "Inactive",
+  "createButton": "Create",
+  "modifyButton": "Modify"
+}
+},
+  "tooltip": {
+    "details": "Details",
+    "modify": "Modify"
+  }
+  ,
+  "users": {
+    "subtitle": "Manage user accounts, permissions, and access",
+    "summary": {
+      "total": "Total Users",
+      "active": "Active Users",
+      "administrators": "Administrators",
+      "categoryManagers": "Category Managers",
+      "footWorkers": "Foot Workers"
+    },
+    "columns": {
+      "userName": "User Name",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "E-mail",
+      "role": "Role",
+      "phone": "Phone",
+      "actions": "Actions"
+    }
+    ,
+    "new": "New User",
+    "modify": "Modify User",
+    "createdSuccess": "User {name} created successfully",
+    "modifiedSuccess": "User {name} modified successfully"
+  }
+}

@@ -14,33 +14,35 @@
 
             <form @submit.prevent="onSubmit()" class="mt-4 w-full">
               <section>
-                <p class="text-xs text-(--secondary) font-semibold">Personnal</p>
+                <p class="text-xs text-(--secondary) font-semibold">
+                  Personnal
+                </p>
                 <div
                   class="flex flex-col md:flex-row justify-center items-center gap-0 md:gap-2"
                 >
                   <Input
-                    placeholder="Username"
+                    :placeholder="t('form.userName')"
                     type="text"
                     name="firstName"
-                    label="First Name"
+                    :label="t('form.firstName')"
                     v-model="firstName"
                     :error="errors.firstName"
                   />
                   <Input
-                    placeholder="Username"
+                    :placeholder="t('form.userName')"
                     type="text"
                     name="lastName"
-                    label="Last Name"
+                    :label="t('form.lastName')"
                     v-model="lastName"
                     :error="errors.lastName"
                   />
                 </div>
                 <div>
                   <Input
-                    placeholder="User Name"
+                    :placeholder="t('form.userName')"
                     type="text"
                     name="userName"
-                    label="User Name"
+                    :label="t('form.userName')"
                     v-model="userName"
                     :error="errors.userName"
                   />
@@ -54,18 +56,18 @@
                   class="flex flex-col md:flex-row justify-center items-center gap-0 md:gap-2"
                 >
                   <Input
-                    placeholder="example@gmail.com"
+                    :placeholder="t('form.email')"
                     type="email"
                     name="email"
-                    label="Email"
+                    :label="t('form.email')"
                     v-model="email"
                     :error="errors.email"
                   />
                   <Input
-                    placeholder="+237 6..."
+                    :placeholder="t('form.phone')"
                     type="text"
                     name="phone"
-                    label="Phone number"
+                    :label="t('form.phone')"
                     v-model="phone"
                     :error="errors.phone"
                   />
@@ -88,25 +90,12 @@
               <div
                 class="flex flex-col md:flex-row justify-between items-center gap-3 w-full mt-8"
               >
-                <div class="w-full flex justify-center items-center">
-                  <Button
-                    variant="ghost"
-                    type="button"
-                    label="Update Password"
-                    w="full"
-                    :click="
-                      () => {
-                        isPass = true;
-                      }
-                    "
-                  />
-                </div>
-
                 <div class="flex justify-end items-center gap-3 w-full">
                   <Button
+                    name="cancel"
                     variant="secondary"
                     type="button"
-                    label="Cancel"
+                    :label="t('form.cancel')"
                     :click="
                       () => {
                         emit('close');
@@ -115,14 +104,29 @@
                     "
                   />
                   <Button
+                    name="update"
                     variant="primary"
                     type="submit"
-                    label="Update"
+                    :label="t('form.update')"
                     :loading="loading"
                   />
                 </div>
               </div>
             </form>
+            <div class="w-full flex justify-center items-center">
+              <Button
+                name="update"
+                variant="ghost"
+                type="button"
+                :label="t('form.updatePassword')"
+                w="full"
+                :click="
+                  () => {
+                    isPass = true;
+                  }
+                "
+              />
+            </div>
           </div>
         </div>
       </Card>
@@ -140,15 +144,18 @@ import Card from "@/components/card/Card.vue";
 import { useProfileStore } from "@/store/profilStore";
 import { updateProfileSchema } from "@/handler/profileHanler";
 import { ref, watch } from "vue";
+import { useI18n } from 'vue-i18n'
 import UpdatePwd from "./UpdatePwd.vue";
 import { storeToRefs } from "pinia";
+import { apiClient } from "@/store/api.ts";
+import { useToastStore } from "@/store/toastStore.ts";
 
 const props = defineProps<{
   isOpen: boolean;
 }>();
 
 const store = useProfileStore();
-const {connectedUser} = storeToRefs(store);
+const { connectedUser } = storeToRefs(store);
 
 const emit = defineEmits<{
   (e: "close"): void;
@@ -170,7 +177,7 @@ watch(
       },
     });
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const [userName] = defineField("userName");
@@ -180,17 +187,30 @@ const [email] = defineField("email");
 const [phone] = defineField("phone");
 // const [image] = defineField("image");
 
-const loading = ref(false)
+const toast = useToastStore();
+const loading = ref(false);
 const onSubmit = handleSubmit(async (values) => {
-  loading.value = true
+  loading.value = true;
   try {
-    await store.updateProfile(values);
-    emit('close')
+    const response = await apiClient.patch(`/profile`, values);
+    connectedUser.value = response.data;
+    emit("close");
+    toast.show(
+      "Operation Effectuée",
+      "success",
+      "Votre Profile a ete mis a jours",
+    );
   } catch (error) {
-
-  }finally{loading.value=false}
-
+    toast.show(
+      "Echec de l'operation",
+      "danger",
+      "Votre Profile n'a pas ete mis a jours",
+    );
+  } finally {
+    loading.value = false;
+  }
 });
 
 const isPass = ref(false);
+const { t } = useI18n();
 </script>

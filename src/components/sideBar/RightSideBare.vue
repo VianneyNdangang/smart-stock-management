@@ -9,6 +9,7 @@
 >
 
     <button
+    name="close"
       v-if="store.isSidebar"
       @click="store.handleClose()"
       class="cursor-pointer w-fit"

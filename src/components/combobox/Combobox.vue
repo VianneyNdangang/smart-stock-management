@@ -14,7 +14,7 @@
     <div class="relative">
       <!-- Input -->
       <div
-        class="flex items-center rounded border bg-(--background) py-2 px-3 transition-all duration-200"
+        class="flex items-center rounded border h-9.5 bg-(--background) py-2 px-3 transition-all duration-200"
         :class="[
           error ? 'border-(--danger)' : 'border-(--border)',
         ]"
@@ -25,7 +25,7 @@
           :name="name"
           type="text"
           autocomplete="off"
-          :placeholder="placeholder ?? 'Sélectionner'"
+          :placeholder="placeholder"
           class="flex-1 bg-transparent outline-none text-(--text-secondary) placeholder:text-(--text-muted)"
           @focus="open = true"
           @keydown.down.prevent="next"
@@ -35,6 +35,7 @@
         />
 
         <button
+          name="dropdown"
           type="button"
           @click="toggle"
           class="cursor-pointer"

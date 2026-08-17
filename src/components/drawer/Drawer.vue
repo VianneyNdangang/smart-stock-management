@@ -38,12 +38,16 @@
                   : props.w?`right-0 top-0 h-full w-${props.w}`: 'right-0 top-0 h-full w-80',
           ]"
         >
-          <button
-            @click="emit('close')"
-            class="absolute top-4 right-4 rounded p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
-            <IconX class="size-5" />
-          </button>
+        <div  class="absolute top-4 right-4">
+          <Button
+          name="close"
+            type="button"
+            variant="ghost"
+            :click="()=>emit('close')"
+            :icon="IconX"
+            />
+        </div>
+          
 
           <div class="h-full overflow-y-auto">
             <slot/>
@@ -56,6 +60,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { IconX } from "@tabler/icons-vue";
+import Button from "../button/Button.vue";
 
 const props = defineProps<{
   isOpen: boolean;

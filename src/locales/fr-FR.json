@@ -1,0 +1,225 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Annuler"
+  },
+  "datatable": {
+    "title": "Éléments",
+    "listOf": "Liste de",
+    "noData": "Aucune donnée",
+    "filterPlaceholder": "Rechercher...",
+    "selectAll": "Tout sélectionner",
+    "filter": "Filtrer",
+    "deleteConfirmation": "Vous êtes sur le point de supprimer {count} éléments. Cette action est irréversible. Voulez-vous continuer ?",
+    "deleteTitle": "Supprimer les éléments sélectionnés ?"
+    ,"columns": {
+      "id": "ID",
+      "names": "Noms",
+      "categories": "Catégories",
+      "generations": "Générations",
+      "images": "Images",
+      "actions": "Actions"
+    }
+  },
+  "pagination": {
+    "next": "Suivant",
+    "prev": "Précédent",
+    "page": "Page"
+  },
+  "navbar": {
+    "greeting": {
+      "morning": "Bonjour",
+      "afternoon": "Bon après-midi",
+      "evening": "Bonsoir"
+    },
+    "menu": "Menu",
+    "profile": "Profil",
+    "updateProfile": "Mettre à jour le profil",
+    "logout": "Se déconnecter",
+    "language": "Langue"
+  }
+  ,
+  "form": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "userName": "Nom d'utilisateur",
+    "email": "Email",
+    "phone": "Téléphone",
+    "password": "Mot de passe",
+    "oldPassword": "Ancien mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "cancel": "Annuler",
+    "submit": "Envoyer",
+    "update": "Mettre à jour",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "create": "Créer"
+  }
+  ,
+  "form_extra": {
+    "delete": "Supprimer",
+    "photo": "Photo de profil",
+    "role": "Rôle"
+  }
+  ,
+  "auth": {
+    "login": "Se connecter",
+    "welcome": "Bienvenue",
+    "signin": "Connectez-vous pour continuer à gérer votre inventaire."
+  }
+  ,
+  "roles": {
+    "admin": "Administrateur",
+    "categoryManager": "Gestionnaire de catégories",
+    "footWorker": "Ouvrier"
+  },
+  "menu": {
+    "components": "Composants",
+    "dashboard": "Tableau de bord",
+    "users": "Utilisateurs",
+    "alerts": "Alertes",
+    "sales": "Ventes",
+    "stock": "Stock",
+    "stock_entries": "Entrées de stock",
+    "warehouse": "Entrepôts",
+    "operations": "Opérations",
+    "operation_entries": "Entrées d'opération",
+    "operation_exits": "Sorties d'opération",
+    "categories": "Catégories",
+    "products": "Produits",
+    "campaigns": "Campagnes",
+    "transits": "Transits",
+    "settings": "Paramètres"
+  }
+  ,
+  "products": {
+    "subtitle": "Gérez votre catalogue de produits, tarifs et informations de stock.",
+    "summary": {
+      "total": "Total des produits",
+      "nonPerishable": "Produits non périssables",
+      "perishable": "Produits périssables"
+    },
+    "new": "Nouveau produit",
+    "modify": "Modifier le produit",
+    "createdSuccess": "Le produit {name} a été créé avec succès",
+    "modifiedSuccess": "Le produit {name} a été modifié avec succès",
+    "form": {
+      "productName": "Nom du produit",
+      "categoryLevel1": "Catégorie niveau 1",
+      "specification": "Spécification",
+      "description": "Description",
+      "photo": "Photo du produit",
+      "perishableSwitch": "Activer si le produit est périssable",
+      "perishable": "Produit périssable",
+      "createButton": "Créer",
+      "modifyButton": "Modifier"
+    },
+    "columns": {
+      "productName": "Nom du produit",
+      "units": "Unités",
+      "brand": "Marque",
+      "category": "Catégorie",
+      "variant": "Variante",
+      "progress": "Progression",
+      "createdAt": "Créé le",
+      "creator": "Créé par",
+      "actions": "Actions"
+    }
+  }
+  ,
+  "card": {
+    "products": "Produits",
+    "stock": "Stock",
+    "status": "Statut",
+    "createdAt": "Créé le"
+  },
+  "campaigns": {
+    "subtitle": "Gérez votre catalogue de campagnes, tarifs et informations de stock.",
+    "summary": {
+      "total": "Total des campagnes",
+      "active": "Campagnes actives",
+      "nonActive": "Campagnes inactives"
+    },
+    "columns": {
+      "createdAt": "Créé le",
+      "campaignName": "Nom de la campagne",
+      "specification": "Spécification",
+      "description": "Description",
+      "actions": "Actions"
+    }
+  },
+  "stock": {
+    "subtitle": "Gérez les entrées de stock et l'inventaire",
+    "summary": {
+      "batches": "Lots"
+    },
+    "columns": {
+      "batchName": "Nom du lot",
+      "productName": "Produits",
+      "units": "Unités",
+      "price": "Prix",
+      "stockValue": "Valeur du stock",
+      "barcode": "Code-barres",
+      "progress": "Progression",
+      "createdAt": "Créé le",
+      "expiredDate": "Date d'expiration",
+      "actions": "Actions"
+    }
+  },
+  "warehouse": {
+  "subtitle": "Gérez vos entrepôts, leurs emplacements, leur capacité et leurs informations de stock.",
+  "summary": {
+    "total": "Total des entrepôts",
+    "active": "Entrepôts actifs",
+    "inactive": "Entrepôts inactifs"
+  },
+  "new": "Nouvel entrepôt",
+  "modify": "Modifier l'entrepôt",
+  "createdSuccess": "L'entrepôt {name} a été créé avec succès",
+  "modifiedSuccess": "L'entrepôt {name} a été modifié avec succès",
+  "form": {
+    "warehouseName": "Nom de l'entrepôt",
+    "location": "Emplacement",
+    "address": "Adresse",
+    "city": "Ville",
+    "country": "Pays",
+    "description": "Description",
+    "capacity": "Capacité de stockage",
+    "manager": "Responsable de l'entrepôt",
+    "status": "Statut",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "createButton": "Créer",
+    "modifyButton": "Modifier"
+  }
+},
+  "tooltip": {
+    "details": "Détails",
+    "modify": "Modifier"
+  }
+  ,
+  "users": {
+    "subtitle": "Gérez les comptes utilisateurs, permissions et accès",
+    "summary": {
+      "total": "Total des utilisateurs",
+      "active": "Utilisateurs actifs",
+      "administrators": "Administrateurs",
+      "categoryManagers": "Gestionnaires de catégories",
+      "footWorkers": "Ouvriers"
+    },
+    "columns": {
+      "userName": "Nom d'utilisateur",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "role": "Rôle",
+      "phone": "Téléphone",
+      "actions": "Actions"
+    }
+    ,
+    "new": "Nouvel utilisateur",
+    "modify": "Modifier l'utilisateur",
+    "createdSuccess": "L'utilisateur {name} a été créé avec succès",
+    "modifiedSuccess": "L'utilisateur {name} a été modifié avec succès"
+  }
+}

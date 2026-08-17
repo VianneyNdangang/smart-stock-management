@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-3">
     <PageHeader
       title="Categories"
       subtitle="Organize products into categories for easier inventory management."
@@ -9,8 +9,11 @@
         }
       "
       :new="newCategory"
+      :loading="store.loading"
     />
-    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5">
+    <div
+      class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-3"
+    >
       <DataSommary
         title="Total categories"
         :value="pagination?.total"
@@ -28,21 +31,43 @@
       />
       <!-- <DataSommary title="Total Foot Workers" :value="categories.filter((u: any)=>u.role === 'FootWorker').length" state="success" /> -->
     </div>
+    <FilterBar
+      searchEndPoint="categories"
+      searchProperty="categoryName"
+      routeName="category_detail"
+    >
+      <CategoriesFilter />
+    </FilterBar>
     <div>
       <!-- <LoadingView v-if="" /> -->
-      <div class="flex flex-col md:flex-row gap-5">
+      <div class="flex flex-col gap-3">
+        <div
+          v-if="categories.length > 0"
+          class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 gap-3 w-full"
+        >
+          <div v-if="store.loading" v-for="i in 20" :key="i">
+            <CategoryCardSkeleton />
+          </div>
+          <div v-else v-for="category in categories">
+            <CategoryCard
+              :category="category"
+              :editeHandler="() => editeHandler(category)"
+            />
+          </div>
+        </div>
+        <div v-else class="w-full">
+          <EmptyState
+            title="No categories found"
+            message="There are no categories to display yet. Create a category to get started."
+          />
+        </div>
 
-        <DataTable
-          title="Categories: Level 1"
-          :records="categories"
-          :headers="header"
-          :total="pagination?.total"
-          :loading="store.loading"
+        <Pagination
+          @changePage="handlePageChange"
           :totalPages="pagination?.totalPages"
           :page="pagination?.page"
-          :hasNext="pagination?.hasNext"
+          :hasNext="pagination.hasNext"
           :hasPrev="pagination?.hasPrev"
-          @changePage="handlePageChange"
         />
       </div>
     </div>
@@ -64,6 +89,7 @@
     message="Cette action supprimera définitivement cet catégorie ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
     title="Supprimer la catégorie"
     :isOpen="isDeleteCat"
+    :loading="loading"
     @close="
       () => {
         isDeleteCat = false;
@@ -73,138 +99,65 @@
   />
 </template>
 <script setup lang="ts">
-import { ref, onMounted, h } from "vue";
+import { ref, onMounted } from "vue";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconBinaryTree2, IconEdit, IconListDetailsFilled, IconTrash } from "@tabler/icons-vue";
-import type { TTableheaders } from "@/components/dataTable/DataTable.vue";
-import DataTable from "@/components/dataTable/DataTable.vue";
+import { IconFolderPlus } from "@tabler/icons-vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import { usecategoriesStore } from "@/store/categoryStore";
-import FormateDate from "@/components/formateDate/FormateDate.vue";
 import CreateCategory from "./CreateCategory.vue";
 import DeleteData from "../delateData/DeleteData.vue";
 import { storeToRefs } from "pinia";
+import Pagination from "@/components/pagination/Pagination.vue";
+import { useToastStore } from "@/store/toastStore.ts";
+import CategoryCard from "@/components/card/CategoryCard.vue";
+import CategoryCardSkeleton from "@/components/skeleton/CategoryCardSkeleton.vue";
+import FilterBar from "@/components/filterBar/FilterBar.vue";
+import CategoriesFilter from "./CategoriesFilter.vue";
+import EmptyState from "@/components/empty/EmptyState.vue";
 
 const isCreateCat = ref(false);
 const isDeleteCat = ref(false);
 const newCategory = {
   label: "New Category",
   action: () => (isCreateCat.value = true),
+  icon: IconFolderPlus,
 };
-
-const header: TTableheaders[] = [
-  {
-    textAlign: "left",
-    accessor: "createdAt",
-    name: "Created At",
-    render: (record: any) =>
-      // record?.role
-      h(FormateDate, {
-        date: record.createdAt || "-",
-      }),
-    width: "12%",
-  },
-  {
-    textAlign: "left",
-    accessor: "categoryName",
-    name: "Category Name",
-    render: (record: any) =>
-      record?.categoryName ? record?.categoryName : "-",
-    width: "20%",
-  },
-  {
-    textAlign: "left",
-    accessor: "categoryManager",
-    name: "category Manager",
-    render: (record: any) =>
-      record?.categoryManagerName ? record?.categoryManagerName : "-",
-    width: "20%",
-  },
-  {
-    textAlign: "right",
-    accessor: "actions",
-    name: "Actions",
-    render: (record: any) =>
-      h("div", { class: "flex justify-end gap-2" }, [
-        h(IconListDetailsFilled, {
-          size: 18,
-          class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
-          onClick: () => {
-            categoryDetail.value = record
-          },
-        }),
-        h(IconBinaryTree2, {
-          // stroke: {1.75}
-          size: 18,
-          class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
-          onClick: () => {
-            if (record.level === 1) {
-              selectedCat.value = record;
-            } else {
-              products.value = record.products;
-            }
-          },
-        }),
-        h(IconEdit, {
-          size: 18,
-          class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
-          onClick: () => {
-            categoryEdit.value = record;
-            isCreateCat.value = true;
-          },
-        }),
-        h(IconTrash, {
-          size: 18,
-          class: "cursor-pointer text-(--danger) hover:text-red-700",
-          onClick: () => {
-            categoryDelete.value = record;
-            isDeleteCat.value = true;
-          },
-        }),
-      ]),
-    width: "auto",
-  },
-];
 
 const selectedCat = ref();
 const categoryDelete = ref();
 const categoryEdit = ref();
-const categoryDetail = ref();
-const products = ref();
+// const categoryDetail = ref();
 const store = usecategoriesStore();
+const toast = useToastStore();
 const { categories } = storeToRefs(store);
-const { pagination } = storeToRefs(store)
+const { pagination } = storeToRefs(store);
 const loading = ref(false);
-
-// const categories_l1 = computed(() =>
-//   categories.value.filter((cat: any) => cat.level === 1),
-// );
-
-// const categories_l2 = computed(() => {
-//   if (!selectedCat.value) {
-//     return [];
-//   }
-
-//   return categories.value.filter(
-//     (cat) => cat.parentId === selectedCat.value.id,
-//   );
-// });
-
 
 const handlePageChange = async (page: number) => {
   await store.fetchCategories(page);
 };
 
-
+const editeHandler = (item: any) => {
+  categoryEdit.value = item;
+  isCreateCat.value = true;
+};
 const handleDelete = async () => {
   loading.value = false;
   try {
     await store.deleteCategory(selectedCat.value.id);
-    // categories.value = categories.value.filter((cat)=>cat.id != selectedCat.value.id)
     store.fetchCategories();
     selectedCat.value = null;
-    isDeleteCat.value = false;
+    toast.show(
+      "Operation Effectuee",
+      "success",
+      "La categorie a ete supprimee avec success",
+    );
   } catch (error) {
+    toast.show(
+      "Operation Effectuee",
+      "danger",
+      "La categorie a ete supprimee avec success",
+    );
   } finally {
     loading.value = false;
   }

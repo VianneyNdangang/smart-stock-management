@@ -8,7 +8,6 @@ import { useRouter } from 'vue-router';
   headers: { 'Content-Type': 'application/json' }
 });
 
-// Optionnel : Injecter automatiquement un token d'authentification
 apiClient.interceptors.request.use((config: any) => {
   const token = localStorage.getItem(user_token);
   if (token) {

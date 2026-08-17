@@ -6,7 +6,7 @@
 
 :root {
   /* Layout */
-  --background: #f8fafc;
+  --background: #f9f9f9;
   --surface: #ffffff;
   --card: #ffffff;
   --popover: #ffffff;
@@ -30,6 +30,7 @@
   --secondary: #d4af37;
   --secondary-hover: #c29b1b;
   --secondary-foreground: #ffffff;
+  --secondary-ghost: #f8e39e;
 
   /* States */
   --success: #22c55e;
@@ -38,7 +39,7 @@
   --info: #3b82f6;
 
   /* Hover */
-  --hover: #f1f5f9;
+  --hover: #f7f7f7;
   --muted: #f8fafc;
 
   /* Sidebar */
@@ -48,6 +49,9 @@
 
   /* Radius */
   --radius: 0.5rem;
+
+  /*Skeleton*/
+  --skeleton: #e5e7eb;
 }
 
 /* ============================

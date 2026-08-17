@@ -1,148 +1,152 @@
+import { useProfileStore } from "@/store/profilStore";
 import {
   IconLayoutDashboard,
-  IconUsersGroup ,
+  IconUsersGroup,
   IconAlertCircle,
   IconShoppingCart,
   IconPackage,
   IconArrowBarToDown,
-  IconArrowBarToUp,
   IconClipboardList,
   IconFileImport,
   IconFileExport,
-  IconSettings,
+  //   IconSettings,
   IconPackages,
   IconFolders,
   IconTags,
   IconTruckDelivery,
   IconStack3Filled,
-} from '@tabler/icons-vue'
+  IconBuildingWarehouse,
+} from "@tabler/icons-vue";
+import { computed } from "vue";
 
-
-
-export const MenuList = [
+export const MenuList = computed(() => {
+const authStore = useProfileStore();
+  const role = authStore.connectedUser?.role;
+  return [
     {
-        label: "Components",
-        path: "/components",
-        icon: IconStack3Filled ,
-        name: "components",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
-        children: []
+      label: "menu.components",
+      path: "/components",
+      icon: IconStack3Filled,
+      name: "components",
+      allow: ["admin","CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Dashboard",
-        path: "/",
-        icon: IconLayoutDashboard ,
-        name: "dashboard",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
-        children: []
+      label: "menu.dashboard",
+      path: "/",
+      icon: IconLayoutDashboard,
+      name: "dashboard",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Users",
-        path: "/users",
-        icon: IconUsersGroup ,
-        name: "users",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
-        children: []
+      label: "menu.users",
+      path: "/users",
+      icon: IconUsersGroup,
+      name: "users",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Alerts",
-        path: "/alerts",
-        icon: IconAlertCircle,
-        name: "alerts",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
-        children: []
+      label: "menu.alerts",
+      path: "/alerts",
+      icon: IconAlertCircle,
+      name: "alerts",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Sales",
-        path: "/sales",
-        icon: IconShoppingCart,
-        name: "sales",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),  categoriesView.vue
-        children: []
+      label: "menu.sales",
+      path: "/sales",
+      icon: IconShoppingCart,
+      name: "sales",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Stock ",
-        path: "",
-        icon: IconPackage,
-        name: "stock",
-        children: [
-            {
-                label: "Stock entries",
-                path: "/stock-entries",
-                icon: IconArrowBarToDown,
-                name: "stock_entries",
-                // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
-            },
-            {
-                label: "Stock exits",
-                path: "/stock-exits",
-                icon: IconArrowBarToUp,
-                name: "stock_exits",
-                // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
-            },
-        ]
+      label: "menu.stock",
+      path: "",
+      icon: IconPackage,
+      name: "stock",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [
+        {
+          label: "menu.stock_entries",
+          path: "/stock-entries",
+          icon: IconArrowBarToDown,
+          name: "stock_entries",
+          allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+        },
+        {
+          label: "menu.warehouse",
+          path: "/warehouse",
+          icon: IconBuildingWarehouse,
+          name: "warehouse",
+          allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+        },
+      ],
     },
     {
-        label: "operations",
-        path: "",
-        icon: IconClipboardList,
-        name: "operations",
-        // allow: ['ADMIN', 'USER', 'MANAGER'].includes(auth?.role),
-        children: [
-            {
-                label: "Operation entries",
-                path: "/operation-entries",
-                icon: IconFileImport,
-                name: "operation_entries",
-                // allow: ['ADMIN', 'USER', 'MANAGER'].includes(auth?.role),
-            },
-            {
-                label: "Operations exits",
-                path: "/operation-exits",
-                icon: IconFileExport,
-                name: "operation_exits",
-                // allow: ['ADMIN', 'USER', 'MANAGER'].includes(auth?.role),
-            },
-        ]
+      label: "menu.operations",
+      path: "",
+      icon: IconClipboardList,
+      name: "operations",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [
+        {
+          label: "menu.operation_entries",
+          path: "/operation-entries",
+          icon: IconFileImport,
+          name: "operation_entries",
+          allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+        },
+        {
+          label: "menu.operation_exits",
+          path: "/operation-exits",
+          icon: IconFileExport,
+          name: "operation_exits",
+          allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+        },
+      ],
     },
     {
-        label: "Categories",
-        path: "/categories",
-        icon: IconFolders,
-        name: "categories",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),  
-        children: []
+      label: "menu.categories",
+      path: "/categories",
+      icon: IconFolders,
+      name: "categories",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Products",
-        path: "/products",
-        icon: IconPackages,
-        name: "products",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role), 
-        children: []
+      label: "menu.products",
+      path: "/products",
+      icon: IconPackages,
+      name: "products",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Campaigns",
-        path: "/campaigns",
-        icon: IconTags,
-        name: "campaigns",
-        // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),  
-        children: []
+      label: "menu.campaigns",
+      path: "/campaigns",
+      icon: IconTags,
+      name: "campaigns",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
     {
-        label: "Transits",
-        path: "/transits",
-        icon: IconTruckDelivery,
-        name: "transits",
-        // allow: ['ADMIN', 'USER', 'MANAGER'].includes(auth?.role),
-        children: []
-    },{
-        label: "Settings",
-        path: "/settings",
-        icon: IconSettings,
-        name: "settings",
-        // allow: ['ADMIN', 'USER', 'MANAGER'].includes(auth?.role),
-        children: []
+      label: "menu.transits",
+      path: "/transits",
+      icon: IconTruckDelivery,
+      name: "transits",
+      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+      children: [],
     },
-    
-]
+    // {
+    //     label: "menu.settings",
+    //     path: "/settings",
+    //     icon: IconSettings,
+    //     name: "settings",
+    //     children: []
+    // }
+  ];
+});

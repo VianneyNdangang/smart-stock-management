@@ -86,20 +86,12 @@ const showDetails = (pokemon: any) => {
     >
       <thead class="h-10">
         <tr>
-          <th class="whitespace-nowrap px-2 w-1/12 text-left border border-gray-300 ...">ID</th>
-          <th class="whitespace-nowrap px-2 w-1/8 text-left border border-gray-300 ...">Names</th>
-          <th class="whitespace-nowrap px-2 w-1/8 text-left border border-gray-300 ...">
-            Categories
-          </th>
-          <th class="whitespace-nowrap px-2 w-1/8 text-left border border-gray-300 ...">
-            Generations
-          </th>
-          <th class="whitespace-nowrap px-2 w-1/12 text-left border border-gray-300 ...">
-            Images
-          </th>
-          <th class="whitespace-nowrap px-2 w-1/12 text-left border border-gray-300 ...">
-            Actions
-          </th>
+          <th class="whitespace-nowrap px-2 w-1/12 text-left border border-gray-300 ...">{{ t('datatable.columns.id') }}</th>
+          <th class="whitespace-nowrap px-2 w-1/8 text-left border border-gray-300 ...">{{ t('datatable.columns.names') }}</th>
+          <th class="whitespace-nowrap px-2 w-1/8 text-left border border-gray-300 ...">{{ t('datatable.columns.categories') }}</th>
+          <th class="whitespace-nowrap px-2 w-1/8 text-left border border-gray-300 ...">{{ t('datatable.columns.generations') }}</th>
+          <th class="whitespace-nowrap px-2 w-1/12 text-left border border-gray-300 ...">{{ t('datatable.columns.images') }}</th>
+          <th class="whitespace-nowrap px-2 w-1/12 text-left border border-gray-300 ...">{{ t('datatable.columns.actions') }}</th>
         </tr>
       </thead>
       <tbody>

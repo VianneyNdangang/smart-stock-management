@@ -1,84 +1,56 @@
-// const isValidDate = (dateString: any) => {
-//   const regEx = /^\d{4}-\d{2}-\d{2}$/;
-//   if (!dateString.match(regEx)) return false; // Invalid format
-//   const d = new Date(dateString);
-//   const dNum = d.getTime();
-//   if (!dNum && dNum !== 0) return false; // NaN value, Invalid date
-//   return d.toISOString().slice(0, 10) === dateString;
-// };
-
-
-// export const getSearch = (filters: any) => {
-//   const search: any = {};
-//   const created: any = {
-//     start: null,
-//     end: null,
-//   };
-
-//   if (filters) {
-//     for (const prop in filters) {
-//       if (filters[prop]) {
-//         if (['start_date', 'end_date'].includes(prop)) {
-//           if (isValidDate(filters[prop])) {
-//             created.start = filters['start_date'];
-//             created.end = filters['end_date'];
-//             search['created'] = JSON.stringify(created);
-//           }
-//         } else {
-//           const field = prop;
-//           let value = filters[prop];
-//           // eslint-disable-next-line no-prototype-builtins
-//           if (filters[prop].hasOwnProperty('value')) {
-//             if (filters[prop].value !== '') {
-//               value = filters[prop].value;
-//               search[`${field}`] = `${value}`;
-//             }
-//           } else {
-//             value = filters[prop];
-//             search[`${field}`] = `${value}`;
-//           }
-//         }
-//       }
-//     }
-//     return search;
-//   }
-// };
+const isValidDate = (dateString: unknown): dateString is string => {
+  if (typeof dateString !== "string") return false;
+  const regEx = /^\d{4}-\d{2}-\d{2}$/;
+  if (!regEx.test(dateString)) return false;
+  const date = new Date(`${dateString}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return false;
+  return date.toISOString().slice(0, 10) === dateString;
+};
 
 export const getSearch = (filters: any) => {
-  const search: any = {};
-
+  const search: Record<string, string> = {};
   if (!filters) return search;
+  const created = {
+    start: null as string | null,
+    end: null as string | null,
+  };
 
   for (const prop in filters) {
-    if (filters[prop]) {
-
-      let value = filters[prop];
-
-      // Cas des selects
-      if (
-        typeof filters[prop] === "object" &&
-        filters[prop].hasOwnProperty("value")
-      ) {
-        value = filters[prop].value;
-      }
-
-      search[prop] = value;
+    let value = filters[prop];
+    if (value == null || value === "") {
+      continue;
     }
-  }
-
-  // Transformer les filtres en paramètre filter
-  if (Object.keys(search).length > 0) {
-    search.filter = Object.entries(search)
-      .map(([key, value]) => `${key}=${value}`)
-      .join(",");
-    
-    // supprimer les champs originaux
-    Object.keys(search).forEach((key) => {
-      if (key !== "filter") {
-        delete search[key];
+    if (value?.__v_isRef) {
+      value = value.value;
+    }
+    if (prop === "start_date" || prop === "end_date") {
+      if (isValidDate(value)) {
+        if (prop === "start_date") {
+          created.start = value;
+        }
+        if (prop === "end_date") {
+          created.end = value;
+        }
       }
-    });
+      continue;
+    }
+    if (
+      typeof value === "object" &&
+      value !== null &&
+      "value" in value
+    ) {
+      value = value.value;
+    }
+    if (value == null || value === "") {
+      continue;
+    }
+    if (typeof value === "object") {
+      continue;
+    }
+    search[prop] = String(value);
   }
-
+  if (created.start || created.end) {
+    search.created = JSON.stringify(created);
+  }
   return search;
 };

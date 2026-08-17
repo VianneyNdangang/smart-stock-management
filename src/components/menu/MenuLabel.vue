@@ -1,8 +1,9 @@
 <template>
-  <RouterLink
-    @click="uiStore.handleClose()"
+  <div v-if="item?.children?.length === 0">
+    
+     <RouterLink
+     v-if="item?.allow"
     :to="props.item.path"
-    v-if="props.item?.children?.length === 0"
     class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--secondary) hover:text-white transition"
     :class="
       route.name === props.item.name
@@ -10,22 +11,28 @@
         : `text-(--text-primary)`
     "
   >
+  
     <div class="flex items-center gap-2">
-      <VueIcon v-if="props.item.icon" :name="props.item.icon" class="size-5" />
-      <p v-if="uiStore.isSidebar">{{ props.item.label }}</p>
+      <!-- <Tooltip v-if="!uiStore.isSidebar" position="right" :text="item?.label"> <VueIcon v-if="props.item.icon" :name="props.item.icon" class="size-6" /></Tooltip> -->
+      <VueIcon v-if="props.item.icon" :name="props.item.icon" class="size-6" />
+    <p v-if="uiStore.isSidebar">{{ t(props.item.label) }}</p>
     </div>
+    
   </RouterLink>
-  <details v-else class="group [&_summary::-webkit-details-marker]:hidden">
+
+  </div>
+ 
+  <details v-else-if="item?.allow" class="group [&_summary::-webkit-details-marker]:hidden">
     <summary
       class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-(--hover) text-(--text-primary)"
     >
-      <div class="flex items-center gap-2 text-(--text-primary)">
+        <div class="flex items-center gap-2 text-(--text-primary)">
         <VueIcon
           v-if="props.item.icon"
           :name="props.item.icon"
-          class="size-5"
+          class="size-6"
         />
-        <p v-if="uiStore.isSidebar">{{ props.item.label }}</p>
+        <p v-if="uiStore.isSidebar">{{ t(props.item.label) }}</p>
       </div>
       <span class="shrink-0 transition duration-300 group-open:-rotate-180">
         <svg
@@ -49,7 +56,7 @@
       :class="uiStore.isSidebar ? `pl-8` : `pl-0`"
     >
       <RouterLink
-        @click="uiStore.handleClose()"
+        v-if="p.allow"
         :to="p.path"
         class="flex rounded items-center gap-2 px-3 py-1 mb-1 text-sm transition hover:bg-(--secondary) hover:text-white"
         :class="
@@ -58,8 +65,8 @@
             : `text-(--text-primary)`
         "
       >
-        <VueIcon :name="p.icon" class="size-5" />
-        <p v-if="uiStore.isSidebar">{{ p.label }}</p>
+        <VueIcon :name="p.icon" class="size-6" />
+        <p v-if="uiStore.isSidebar">{{ t(p.label) }}</p>
       </RouterLink>
 
     </div>
@@ -69,22 +76,26 @@
 import { useUiStore } from "@/store/uiStore";
 import VueIcon from "@kalimahapps/vue-icons/VueIcon";
 import { RouterLink, useRoute } from "vue-router";
+// Tooltip not used here
+import { useI18n } from 'vue-i18n'
 
 export type menuType = {
   label: string;
   path: string;
   icon: any;
   name: string;
+  allow: boolean
   children: {
     label: string;
     path: string;
     icon: any;
     name: string;
-    // allow: ['ADMIN', 'MANAGER'].includes(auth?.role),
+    allow: boolean
   }[];
 };
 
 const uiStore = useUiStore();
 const route = useRoute();
 const props = defineProps<{ item: menuType }>();
+const { t } = useI18n();
 </script>

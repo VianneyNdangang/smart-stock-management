@@ -1,177 +1,135 @@
 <template>
   <Card>
-    <!-- <TableSkeleton />  -->
+    <div class="overflow-auto">
+      <div class="min-w-0">
+      <div
+        class=" w-full flex items-end justify-between border-b border-(--dorder) pb-2"
+      >
+        <div class="min-w-sm">
+            <p class="text-lg font-semibold text-(--text-secondary) w-full">
+            {{ t('datatable.listOf') }} {{ totalRecords }} {{ titleLabel }}.
+          </p>
+          <div v-if="props.deleteUrl" class="flex gap-2 justify-start items-center">
+            <Checkbox
+              :model-value="props.records?.length === selectedIds.length"
+              :label="t('datatable.selectAll')"
+              :change="() => toggleAll()"
+            />
+            <IconTrash
+              v-if="selectedIds.length > 0"
+              class="text-(--danger)"
+              @click="isDeleteData = true"
+            />
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-2 w-full">
+          <div
+            class="transition-all duration-300"
+            :class="isFilter ? `w-80` : `w-0`"
+          >
+            <Input
+              name="filter"
+              :placeholder="t('datatable.filterPlaceholder')"
+              type="text"
+              v-if="isFilter"
+              v-model="filter"
+            />
+          </div>
 
-    <div
-      class="w-full flex items-end justify-between border-b border-(--dorder) pb-2"
-    >
-      <p class="text-lg font-semibold text-(--text-secondary) w-full">
-        List of {{ totalRecords }} {{ title }}.
-      </p>
-      <div class="flex items-center justify-end gap-2 w-full">
-        <div
-          class="transition-all duration-300"
-          :class="isFilter ? `w-80` : `w-0`"
-        >
-          <Input
-            name="filter"
-            placeholder="Search . . ."
-            type="text"
-            v-if="isFilter"
-            v-model="filter"
+          <Button
+          name="search"
+            :icon="IconSearch"
+            :label="t('datatable.filter')"
+            :click="handleChange"
+            variant="ghost"
+            type="button"
           />
         </div>
-
-        <Button
-          :icon="IconSearch"
-          label="Filter"
-          :click="handleChange"
-          variant="ghost"
-          type="button"
+      </div>
+      <div
+        v-if="props.records?.length === 0"
+        class="flex items-center justify-center w-full min-h-80"
+      >
+        <div v-if="props.loading" class="w-full">
+        <slot/>
+      </div>
+        <EmptyState
+          v-else
+          :title="t('datatable.noData')"
+          :message="t('datatable.noData')"
         />
       </div>
-    </div>
-    <div
-      v-if="props.records?.length === 0"
-      class="flex items-center justify-center w-full min-h-80"
-    >
-      <Spiner v-if="loading" size="lg" />
-      <EmptyState
-        v-else
-        title="Aucune Donnée"
-        message="Aucune donnée de ce tableau n'a été trouvé"
-      />
-    </div>
-    <!-- <div class="w-full flex justify-center flex-col"> -->
-    <div
-      v-else
-      class=" overflow-auto "
-      :class="maxH ? `h-${maxH}` : `full`"
-    >
-      <table class="w-full table-fixed">
-        <thead class="text-(--text-secondary)">
-          <tr>
-            <th
-              v-for="header in props.headers"
-              :key="header.accessor"
-              :class="`whitespace-nowrap text-${header?.textAlign} p-4 border-b-3 border-(--border)`"
-              :style="{ width: header?.width || 'auto' }"
-            >
-              {{ header?.name }}
-            </th>
-          </tr>
-        </thead>
+      <div v-else class="w-full flex justify-center flex-col overflow-auto">
+        <div class="w-full" :style="{ height: props.maxH ? `${props.maxH}px` : '100%' }">
+          <table class="min-w-full table-auto w-full">
+            <thead class=" sticky text-(--text-secondary) z-20">
+              <tr>
+                <th
+                  v-if="props.deleteUrl"
+                  class="border-b-3 border-(--border)"
+                  style="width: 1.5%"
+                ></th>
+                <th
+                  v-for="header in props.headers"
+                  :key="header.accessor"
+                  :class="`whitespace-nowrap text-${header?.textAlign} p-4 border-b-3 border-(--border) whitespace-nowrap`"
+                  :style="{ width: header?.width || 'auto' }"
+                >
+                  {{ headerLabel(header) }}
+                </th>
+              </tr>
+            </thead>
 
-        <tbody>
-          <tr
-            v-for="item in displayedRecords"
-            :key="item.id"
-            class="hover:bg-(--hover) h-10"
-          >
-            <td
-              v-for="header in props.headers"
-              :key="header.accessor"
-              :class="`px-4 py-2 border-b text-${header?.textAlign} text-(--text-muted) border-(--border)`"
-            >
-              <component
-                v-if="isVNode(header?.render(item))"
-                :is="header?.render(item)"
-              />
+            <tbody>
+              <tr
+                v-for="item in displayedRecords"
+                :key="item.id"
+                class="hover:bg-(--hover) h-10"
+              >
+                <td v-if="props.deleteUrl" class="border-b border-(--border) pl-4">
+                  <Checkbox
+                    :model-value="selectedIds.includes(item.id)"
+                    :change="() => toggleRecord(item.id)"
+                  />
+                </td>
+                <td
+                  v-for="header in props.headers"
+                  :key="header.accessor"
+                  :class="`px-4 py-2 border-b text-${header?.textAlign} text-(--text-muted) border-(--border)`"
+                >
+                  <component
+                    v-if="header?.render && isVNode(header.render(item))"
+                    :is="header.render(item)"
+                  />
 
-              <template v-else>
-                {{ header?.render(item) }}
-              </template>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                  <template v-else>
+                    {{ header?.render ? header.render(item) : (item[header.accessor] ?? '-') }}
+                  </template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <!-- Pagination -->
-    </div>
-    <!-- </div> -->
-    <div class="flex items-center justify-between mt-5">
-      <p class="text-sm text-(--text-muted)">
-        Page {{ currentPage }} sur {{ totalPages }}
-      </p>
 
-      <div class="flex gap-2" v-if="totalPages > 1 && records?.length > 1">
-        <Button
-          :click="
-            () => {
-              changePage(props?.page - 1);
-            }
-          "
-          :icon="ChChevronLeft"
-          type="button"
-          variant="ghost"
-          :disabled="!props.hasPrev"
-        />
-        <div class="flex gap-2 overflow-auto">
-          <button
-            v-for="(page, index) in pages"
-            :key="`${page}-${index}`"
-            :disabled="page === '...'"
-            @click="typeof page === 'number' && changePage(page)"
-            :class="[
-              'px-3 py-1 rounded border',
-              page === currentPage
-                ? 'bg-(--background) text-(--secondary) border-(--warning)'
-                : 'border-(--border)',
-              page === '...' && 'cursor-default border-none',
-            ]"
-          >
-            {{ page }}
-          </button>
-        </div>
-        <Button
-          :click="
-            () => {
-              changePage(currentPage + 1);
-            }
-          "
-          :icon="ChChevronRight"
-          type="button"
-          variant="ghost"
-          :disabled="!props.hasNext"
-        />
-      </div>
+       <Pagination
+        :totalPages="props.totalPages"
+        :hasNext="props.hasNext"
+        :hasPrev="props.hasPrev"
+        :page="props.page"
+        @changePage="props.changePage"
+      />
+    </div>
     </div>
   </Card>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { isVNode } from "vue";
-import Card from "../card/Card.vue";
-import Button from "../button/Button.vue";
-import EmptyState from "../empty/EmptyState.vue";
-import Spiner from "../spiner/Spiner.vue";
-import Input from "../input/Input.vue";
-import { IconSearch } from "@tabler/icons-vue";
-import { ChChevronLeft, ChChevronRight } from "@kalimahapps/vue-icons";
-
-export type TTableheaders = {
-  textAlign: "left" | "center" | "right";
-  accessor: string;
-  name: string;
-  render: (param: any) => any;
-  width: '10%' | '12%' | '15%' | '20%' | '25%' | '30%' | 'auto' ;
-};
-
-export type TDatatableProps = {
-  headers: TTableheaders[];
-  records?: any[];
-  title: string;
-  loading?: boolean;
-  maxH?: string;
-  page: any;
-  total?: number;
-  totalPages: any;
-  hasNext?: boolean;
-  hasPrev?: boolean;
-};
 const props = withDefaults(defineProps<TDatatableProps>(), {
   records: () => [],
+  deleteUrl: "",
   loading: false,
   total: 0,
   page: 1,
@@ -180,7 +138,45 @@ const props = withDefaults(defineProps<TDatatableProps>(), {
   hasPrev: false,
 });
 
-const currentPage = computed(() => props.page);
+import { computed, ref, isVNode } from "vue";
+import { useI18n } from 'vue-i18n'
+import Card from "../card/Card.vue";
+import Button from "../button/Button.vue";
+import EmptyState from "../empty/EmptyState.vue";
+import Input from "../input/Input.vue";
+import { IconSearch, IconTrash } from "@tabler/icons-vue";
+import Checkbox from "../checkbox/Checkbox.vue";
+import type { TDatatableProps } from "./type.ts";
+import Pagination from "../pagination/Pagination.vue";
+
+//Checkbox
+const selectedIds = ref<string[]>([]);
+
+const isDeleteData = ref(false);
+
+//tout cocher
+const toggleAll = () => {
+  if (selectedIds.value.length === props.records?.length) {
+    selectedIds.value = [];
+  } else {
+    props.records.forEach((record: any) => {
+      const index = selectedIds.value.indexOf(record?.id);
+      if (index === -1) {
+        selectedIds.value.push(record.id);
+      }
+    });
+  }
+};
+
+//Cocher individuellement
+const toggleRecord = (id: string) => {
+  const index = selectedIds.value.indexOf(id);
+  if (index === -1) {
+    selectedIds.value.push(id);
+  } else {
+    selectedIds.value.splice(index, 1);
+  }
+};
 
 const isFilter = ref(false);
 const handleChange = () => {
@@ -188,9 +184,27 @@ const handleChange = () => {
 };
 const filter = ref("");
 
-const emit = defineEmits<{
-  (e: "changePage", page: number): void;
-}>();
+const { t, te } = useI18n();
+
+const titleLabel = computed(() => {
+  try {
+    const key = props.title as string;
+    if (!key) return "";
+    return te(key) ? t(key) : key;
+  } catch (e) {
+    return props.title ?? "";
+  }
+});
+
+const headerLabel = (header: any) => {
+  try {
+    if (!header) return '';
+    if (typeof header.name === 'function') return header.name();
+    return header.name ?? '';
+  } catch (e) {
+    return header.name ?? '';
+  }
+}
 
 const displayedRecords = computed(() => filteredRecords.value);
 const totalRecords = computed(() => props.total);
@@ -213,49 +227,4 @@ const filteredRecords = computed(() => {
   );
 });
 
-// Génération des numéros de pages
-const pages = computed(() => {
-  const total = props.totalPages;
-  const current = props.page;
-
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  const result: (number | string)[] = [];
-
-  // Toujours afficher la première page
-  result.push(1);
-
-  // Ajouter "..." si on est loin du début
-  if (current > 4) {
-    result.push("...");
-  }
-
-  // Pages autour de la page courante
-  const start = Math.max(2, current - 1);
-  const end = Math.min(total - 1, current + 1);
-
-  for (let i = start; i <= end; i++) {
-    result.push(i);
-  }
-
-  // Ajouter "..." si on est loin de la fin
-  if (current < total - 3) {
-    result.push("...");
-  }
-
-  // Toujours afficher la dernière page
-  result.push(total);
-
-  return result;
-});
-
-function changePage(page: number) {
-  emit("changePage", page);
-}
-
-watch(filter, () => {
-  emit("changePage", 1);
-});
 </script>

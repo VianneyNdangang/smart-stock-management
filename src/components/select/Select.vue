@@ -11,9 +11,10 @@
     <div class="relative">
       <!-- Select -->
       <button
+        name="select"
         type="button"
         @click="toggle"
-        class="w-full rounded border py-2 px-3 text-left transition-all duration-200 focus:outline-none flex items-center justify-between"
+        class="w-full rounded border py-2 px-3 text-left h-9.5 transition-all duration-200 focus:outline-none flex items-center justify-between"
         :class="[
           error ? 'border-(--danger)' : 'border-(--border)',
         ]"
@@ -41,13 +42,13 @@
       >
         <ul
           v-if="open"
-          class="absolute z-50 mt-2 w-full rounded border border-(--border) bg-(--background) shadow-xl overflow-hidden"
+          class="absolute z-100 left-0 top-full mt-2 w-full rounded bg-(--card) shadow-md overflow-scroll"
         >
           <li
-            v-for="option in options"
-            :key="option.value"
+            v-for="(option, index) in options"
+            :key="index"
             @click="select(option)"
-            class="cursor-pointer px-3 py-2 transition-colors hover:bg-(--hover)"
+            class="cursor-pointer px-3 py-2 text-sm transition-colors hover:bg-(--hover)"
             :class="{
               'bg-(--secondary)/10 text-(--secondary)': model === option.value
             }"
@@ -72,7 +73,7 @@ import { computed, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import { ChChevronDown } from "@kalimahapps/vue-icons";
 
-const model = defineModel<string | number>();
+const model = defineModel<string | number | boolean>();
 
 const props = defineProps<{
   label?: string;
@@ -81,7 +82,7 @@ const props = defineProps<{
   error?: string;
   options: {
     label: string;
-    value: string | number;
+    value: string | number | boolean;
   }[];
 }>();
 
@@ -91,7 +92,7 @@ const toggle = () => {
   open.value = !open.value;
 };
 
-const select = (option: { label: string; value: string | number }) => {
+const select = (option: { label: string; value: string | number | boolean }) => {
   model.value = option.value;
   open.value = false;
 };
@@ -101,7 +102,7 @@ const selectedLabel = computed(() => {
     (o) => o.value === model.value
   );
 
-  return option?.label ?? props.placeholder ?? "Sélectionner";
+  return option?.label ?? props.placeholder;
 });
 
 const container = ref();
