@@ -141,7 +141,7 @@
                   variant="primary"
                   type="submit"
                   :label="props.user ? t('users.modify') : t('users.new')"
-                  w="40"
+                  w="46"
                   :loading="store.loading"
                 />
               </div>

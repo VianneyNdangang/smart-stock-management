@@ -93,7 +93,7 @@ const header: TTableheaders[] = [
         },
       (record?.userName ? record?.userName : "-")),
       ]),
-    width: "15%",
+    width: "20%",
   },
   {
     textAlign: "left",

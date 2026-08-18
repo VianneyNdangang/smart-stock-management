@@ -86,29 +86,29 @@ const authStore = useProfileStore();
         },
       ],
     },
-    {
-      label: "menu.operations",
-      path: "",
-      icon: IconClipboardList,
-      name: "operations",
-      allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
-      children: [
-        {
-          label: "menu.operation_entries",
-          path: "/operation-entries",
-          icon: IconFileImport,
-          name: "operation_entries",
-          allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
-        },
-        {
-          label: "menu.operation_exits",
-          path: "/operation-exits",
-          icon: IconFileExport,
-          name: "operation_exits",
-          allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
-        },
-      ],
-    },
+    // {
+    //   label: "menu.operations",
+    //   path: "",
+    //   icon: IconClipboardList,
+    //   name: "operations",
+    //   allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+    //   children: [
+    //     {
+    //       label: "menu.operation_entries",
+    //       path: "/operation-entries",
+    //       icon: IconFileImport,
+    //       name: "operation_entries",
+    //       allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+    //     },
+    //     {
+    //       label: "menu.operation_exits",
+    //       path: "/operation-exits",
+    //       icon: IconFileExport,
+    //       name: "operation_exits",
+    //       allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
+    //     },
+    //   ],
+    // },
     {
       label: "menu.categories",
       path: "/categories",

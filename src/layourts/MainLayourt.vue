@@ -19,7 +19,7 @@
           duration: 0.4,
         }"
       >
-        <main class="z-0 p-5">
+        <main class="z-0 p-3 md:p-5">
           <RouterView />
         </main>
         

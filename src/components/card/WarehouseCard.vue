@@ -1,14 +1,14 @@
 <template>
   <div
-  @click="
-                () => {
-                  router.push({
-                    name: 'warehouse_detail',
-                    params: { id: warehouse.id },
-                  });
-                }
-              "
-    class="group relative w-full overflow-hidden rounded-lg border border-(--border) bg-(--card) p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+    @click="
+      () => {
+        router.push({
+          name: 'warehouse_detail',
+          params: { id: warehouse.id },
+        });
+      }
+    "
+    class="group relative w-full overflow-hidden rounded-(--radius) border border-(--border) bg-(--card) p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
   >
     <!-- Header -->
     <div class="flex items-start justify-between gap-3">
@@ -22,9 +22,9 @@
         <div class="min-w-0">
           <h3
             class="truncate font-semibold text-(--text-primary)"
-            :title="warehouse.warehouseName"
+            :title="warehouse?.warehouseName"
           >
-            {{ warehouse.warehouseName }}
+            {{ warehouse?.warehouseName }}
           </h3>
 
           <div
@@ -32,7 +32,7 @@
           >
             <IconMapPin size="14" />
             <span class="truncate">
-              {{ warehouse.position }}
+              {{ warehouse?.position }}
             </span>
           </div>
         </div>
@@ -51,7 +51,7 @@
     <div class="my-4 h-px bg-(--border)" />
 
     <div class="grid grid-cols-2 gap-3">
-      <div class="rounded-md  p-3">
+      <div class="rounded-md p-3">
         <div class="mb-1 flex items-center gap-1.5 text-xs text-(--text-muted)">
           <IconMap size="14" />
           <span>Region</span>
@@ -59,18 +59,18 @@
 
         <p
           class="truncate text-sm font-medium text-(--text-primary)"
-          :title="warehouse.region"
+          :title="warehouse?.region"
         >
-          {{ warehouse.region }}
+          {{ warehouse?.region }}
         </p>
       </div>
 
-      <div class="rounded-md  p-3">
+      <div class="rounded-md p-3">
         <div class="mb-1 flex items-center gap-1.5 text-xs text-(--text-muted)">
           <IconCalendar size="14" />
           <span>Created</span>
         </div>
-        <FormateDate :date="warehouse.createdAt"/>
+        <FormateDate :date="warehouse?.createdAt" />
       </div>
     </div>
 
@@ -78,7 +78,7 @@
       <div
         class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-(--primary)/10 text-sm font-semibold text-(--primary)"
       >
-        {{ getInitials(warehouse.creator?.userName) }}
+        {{ getInitials(warehouse?.creator?.userName) }}
       </div>
 
       <div class="min-w-0">
@@ -86,9 +86,9 @@
 
         <p
           class="truncate text-sm font-medium text-(--text-primary)"
-          :title="warehouse.creator?.userName"
+          :title="warehouse?.creator?.userName"
         >
-          {{ warehouse.creator?.userName }}
+          {{ warehouse?.creator?.userName }}
         </p>
       </div>
     </div>
@@ -106,7 +106,7 @@ import {
 import FormateDate from "../formateDate/FormateDate.vue";
 import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 interface Warehouse {
   id: string;
   warehouseName: string;
@@ -122,7 +122,6 @@ interface Warehouse {
 const props = defineProps<{
   warehouse: Warehouse;
 }>();
-
 
 const getInitials = (name?: string) => {
   if (!name) return "?";

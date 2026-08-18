@@ -9,17 +9,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const defaultToken = localStorage.getItem(user_token);
-  const token = defaultToken ? defaultToken : null;
-  const authStore = useProfileStore();
+  const token = localStorage.getItem(user_token);
 
-  const allowedRoles = to.meta.roles as string[] | undefined;
-
-  if (
-    allowedRoles?.length &&
-    !allowedRoles.includes(authStore?.connectedUser?.role)
-  ) {
-    return { name: "forbidden" };
+  if (to.name === "login" && token) {
+    return { name: "dashboard" };
   }
 
   if (to.meta.requiresAuth && !token) {
@@ -31,9 +24,20 @@ router.beforeEach((to) => {
     };
   }
 
-  if (to.name === "login" && token) {
-    return { name: "dashboard" };
+  if (to.meta.roles) {
+    const authStore = useProfileStore();
+
+    const allowedRoles = to.meta.roles as string[];
+
+    if (
+      !authStore.connectedUser?.role ||
+      !allowedRoles.includes(authStore.connectedUser.role)
+    ) {
+      return { name: "forbidden" };
+    }
   }
+
+  return true;
 });
 
 export default router;

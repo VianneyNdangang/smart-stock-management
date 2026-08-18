@@ -3,10 +3,10 @@
     <div class="overflow-auto">
       <div class="min-w-0">
       <div
-        class=" w-full flex items-end justify-between border-b border-(--dorder) pb-2"
+        class=" w-full flex flex-col md:flex-row items-end justify-between border-b border-(--dorder) pb-2"
       >
         <div class="min-w-sm">
-            <p class="text-lg font-semibold text-(--text-secondary) w-full">
+          <p class="text-md md:text-lg font-semibold text-(--text-secondary) w-full">
             {{ t('datatable.listOf') }} {{ totalRecords }} {{ titleLabel }}.
           </p>
           <div v-if="props.deleteUrl" class="flex gap-2 justify-start items-center">

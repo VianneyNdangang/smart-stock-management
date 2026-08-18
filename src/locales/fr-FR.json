@@ -9,7 +9,7 @@
     "noData": "Aucune donnée",
     "filterPlaceholder": "Rechercher...",
     "selectAll": "Tout sélectionner",
-    "filter": "Filtrer",
+    "search": "Recherche",
     "deleteConfirmation": "Vous êtes sur le point de supprimer {count} éléments. Cette action est irréversible. Voulez-vous continuer ?",
     "deleteTitle": "Supprimer les éléments sélectionnés ?"
     ,"columns": {

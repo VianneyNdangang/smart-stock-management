@@ -5,7 +5,7 @@
         router.push({ name: 'category_detail', params: { id: category.id } });
       }
     "
-    class="group relative w-full overflow-hidden rounded-lg border border-(--border) bg-(--card) p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+    class="group relative w-full overflow-hidden rounded-(--radius) border border-(--border) bg-(--card) p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
   >
     <div class="flex flex-col">
       <div class="flex justify-between items-start">

@@ -9,7 +9,7 @@
     "noData": "No data found",
     "filterPlaceholder": "Search...",
     "selectAll": "Select all",
-    "filter": "Filter",
+    "search": "Search",
     "deleteConfirmation": "You are about to delete {count} items. This action cannot be undone. Continue?",
     "deleteTitle": "Delete selected items?"
     ,"columns": {

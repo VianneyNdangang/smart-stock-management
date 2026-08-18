@@ -18,7 +18,7 @@
           ]"
         />
         <Input type="text" name="level" label="Level" v-model="level" />
-        <ComboboxCopy
+        <Combobox
           endpoint="products"
           optionLabel="productName"
           optionValue="id"
@@ -60,7 +60,7 @@
 </template>
 <script setup lang="ts">
 import Button from "@/components/button/Button.vue";
-import ComboboxCopy from "@/components/combobox/ComboboxCopy.vue";
+import Combobox from "@/components/combobox/Combobox.vue";
 import Input from "@/components/input/Input.vue";
 import Select from "@/components/select/Select.vue";
 // import Tooltip from "@/components/tooltip/Tooltip.vue";

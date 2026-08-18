@@ -3,13 +3,13 @@
     <InputGroup
       v-model="searchQuery"
       :placeholder="t('datatable.filterPlaceholder')"
-      :label="t('datatable.filter')"
+      :label="t('datatable.search')"
       :icon="IconSearch"
       @input="onInput"
       :loading="loading"
       :click="
         () => {
-          if ((searchQuery === '')) {
+          if (searchQuery === '') {
             return;
           } else {
             handleSearch(query);

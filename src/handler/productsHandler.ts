@@ -8,7 +8,8 @@ export const createProductSchema = z.object({
   productName: z.string().min(1, "Le nom du produit est requis"),
   description: z.string().min(1, "La description de la categorie est requise"),
   specification: z.string(),
-  categoryId: z.string().min(1,'Erreur '),
+  categoryId: z.string().min(1,'La categorie est requise'),
+  brandId: z.string().min(1),
   imageUrl: z
     .instanceof(File, { message: "Veuillez sélectionner une image." })
     .refine((file) => file.size <= MAX_FILE_SIZE, {

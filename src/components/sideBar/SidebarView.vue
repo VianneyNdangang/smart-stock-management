@@ -12,9 +12,8 @@
           <p class=" font-rounded text-4xl font-bold leading-none">Glotelho</p>
           <p class=" font-rounded text-xs text-(--secondary) font-black">ECOMMERCE</p>
          </div>
-         
       </div>
-     
+     <div class="mb-4 h-0.5 w-full bg-(--text-primary)" />
       <div
         class="flex justify-between items-center"
         :class="uiStore.isSidebar ? `flex-row` : `flex-col`"

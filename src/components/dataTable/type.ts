@@ -13,10 +13,10 @@ export type TDatatableProps = {
   title: string;
   loading?: boolean;
   maxH?: string;
-  page: any;
+  page?: any;
   total?: number;
-  totalPages: any;
+  totalPages?: any;
   hasNext?: boolean;
   hasPrev?: boolean;
-   changePage: (param:number)=> any
+  changePage?: (param:number)=> any
 };
