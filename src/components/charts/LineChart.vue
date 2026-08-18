@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-100 w-full">
+  <div class="relative h-100" style="width:100%;">
     <canvas ref="chartRef"></canvas>
   </div>
 </template>
@@ -45,9 +45,6 @@ const chartRef = ref<HTMLCanvasElement | null>(null);
 let chart: Chart | null = null;
 
 
-/**
- * Détermine la couleur du graphique
- */
 const getColors = () => {
   const previous = props.data.values.at(-2) ?? 0;
   const last = props.data.values.at(-1) ?? 0;
@@ -80,6 +77,10 @@ const getColors = () => {
  * Crée le graphique
  */
 const createChart = () => {
+   if (chart) {
+    chart.destroy();
+    chart = null;
+  }
   if (!chartRef.value) return;
 
   const ctx = chartRef.value.getContext("2d");
@@ -130,9 +131,7 @@ const createChart = () => {
 
     options: {
       responsive: true,
-
       maintainAspectRatio: false,
-
       interaction: {
         intersect: false,
         mode: "index",

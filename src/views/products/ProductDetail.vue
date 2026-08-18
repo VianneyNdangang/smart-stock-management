@@ -110,39 +110,34 @@
         </Card>
       </div>
     </section>
-    <section class="flex flex-col md:flex-row gap-3">
-      <div class="flex flex-col gap-3 w-full md:w-6/3">
-        <div
-          class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-3"
-        >
-          <DataSommary title="Total categories" :value="5000" state="primary" />
-          <DataSommary
-            title="Total categories Level 1"
-            :value="2000"
-            state="warning"
-          />
-          <DataSommary
-            title="Total categories Level 2"
-            :value="3000"
-            state="warning"
-          />
-          <!-- <DataSommary title="Total Foot Workers" :value="categories.filter((u: any)=>u.role === 'FootWorker').length" state="success" /> -->
-        </div>
-        <Card>
-          <LineChart
-            title="Evolution des ventes par mois"
-            :data="monthlySalesData"
-          />
-        </Card>
-      </div>
+<section class="flex flex-col lg:flex-row gap-3 items-stretch">
+  <div class="flex flex-col gap-3 w-full lg:w-8/12 justify-between">
+    
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+        <DataSommary title="Total categories" :value="5000" state="primary" />
+        <DataSommary title="Total categories Level 1" :value="2000" state="warning" />
+        <DataSommary title="Total categories Level 2" :value="3000" state="warning" />
+    </div>
 
-      <Card>
-        <DoughnutChart
-          title="Quantite en stock par magasin"
-          :data="stockByWarehouseData"
-        />
-      </Card>
-    </section>
+    <Card>
+      <LineChart
+        title="Evolution des ventes par mois"
+        :data="monthlySalesData"
+      />
+    </Card>
+  </div>
+
+  <Card >
+    <div class="flex-1 flex flex-col justify-center items-center p-2">
+      <DoughnutChart
+        title="Quantite en stock par magasin"
+        :data="stockByWarehouseData"
+      />
+    </div>
+  </Card>
+</section>
+
+
     <section class="flex flex-col md:flex-row gap-3">
       <Card>
         <div class="class h-100">

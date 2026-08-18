@@ -41,9 +41,14 @@ const chartRef = ref<HTMLCanvasElement | null>(null);
 let chart: Chart | null = null;
 
 
-
-//  Création du graphique
+/**
+ * Création du graphique
+ */
 const createChart = () => {
+   if (chart) {
+    chart.destroy();
+    chart = null;
+  }
   if (!chartRef.value) return;
 
   const ctx = chartRef.value.getContext("2d");
@@ -111,9 +116,6 @@ const createChart = () => {
   });
 };
 
-
-//  Mise à jour des données
- 
 const updateChart = () => {
   if (!chart) return;
 
@@ -129,9 +131,6 @@ onMounted(() => {
   createChart();
 });
 
-
-//  Surveille les changements des données
- 
 watch(
   () => props.data,
   () => {

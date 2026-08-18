@@ -143,8 +143,10 @@
     "columns": {
       "createdAt": "Created At",
       "campaignName": "Campaign Name",
-      "specification": "Specification",
-      "description": "Description",
+        "type": "Type",
+      "endDate": "Ending date",
+      "totalProducts": "Total products",
+      "startDate": "Starting date",
       "actions": "Actions"
     }
   },

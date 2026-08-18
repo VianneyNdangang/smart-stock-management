@@ -1,37 +1,65 @@
 <template>
   <div v-if="item?.children?.length === 0">
-    
-     <RouterLink
-     v-if="item?.allow"
-    :to="props.item.path"
-    class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--secondary) hover:text-white transition"
-    :class="
-      route.name === props.item.name
-        ? `bg-(--secondary)/20 border-l-4 border-(--secondary) text-(--secondary)`
-        : `text-(--text-primary)`
-    "
-  >
-  
-    <div class="flex items-center gap-2">
-      <!-- <Tooltip v-if="!uiStore.isSidebar" position="right" :text="item?.label"> <VueIcon v-if="props.item.icon" :name="props.item.icon" class="size-6" /></Tooltip> -->
-      <VueIcon v-if="props.item.icon" :name="props.item.icon" class="size-6" />
-    <p v-if="uiStore.isSidebar">{{ t(props.item.label) }}</p>
-    </div>
-    
-  </RouterLink>
-
+    <RouterLink
+      v-if="item?.allow"
+      :to="props.item.path"
+      class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--secondary) hover:text-white transition"
+      :class="
+        route.name === props.item.name
+          ? `bg-(--secondary)/20 border-l-4 border-(--secondary) text-(--secondary)`
+          : `text-(--text-primary)`
+      "
+    >
+      <div class="flex items-center gap-2">
+        <Tooltip
+          v-if="!uiStore.isSidebar"
+          position="right"
+          :text="t(item?.label)"
+        >
+          <VueIcon
+            v-if="props.item.icon"
+            :name="props.item.icon"
+            class="size-6"
+        /></Tooltip>
+        <div v-else>
+          <VueIcon
+            v-if="props.item.icon"
+            :name="props.item.icon"
+            class="size-6"
+          />
+        </div>
+        <p v-if="uiStore.isSidebar">{{ t(props.item.label) }}</p>
+      </div>
+    </RouterLink>
   </div>
- 
-  <details v-else-if="item?.allow" class="group [&_summary::-webkit-details-marker]:hidden">
+
+  <details
+    v-else-if="item?.allow"
+    class="group [&_summary::-webkit-details-marker]:hidden"
+  >
     <summary
       class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-(--hover) text-(--text-primary)"
     >
-        <div class="flex items-center gap-2 text-(--text-primary)">
-        <VueIcon
-          v-if="props.item.icon"
-          :name="props.item.icon"
-          class="size-6"
-        />
+      <div class="flex items-center gap-2 text-(--text-primary)">
+        <Tooltip
+          v-if="!uiStore.isSidebar"
+          :text="t(item.label)"
+          position="right"
+        >
+          <VueIcon
+            v-if="props.item.icon"
+            :name="props.item.icon"
+            class="size-6"
+          />
+        </Tooltip>
+        <div v-else>
+          <VueIcon
+            v-if="props.item.icon"
+            :name="props.item.icon"
+            class="size-6"
+          />
+        </div>
+
         <p v-if="uiStore.isSidebar">{{ t(props.item.label) }}</p>
       </div>
       <span class="shrink-0 transition duration-300 group-open:-rotate-180">
@@ -65,10 +93,12 @@
             : `text-(--text-primary)`
         "
       >
-        <VueIcon :name="p.icon" class="size-6" />
+        <Tooltip v-if="!uiStore.isSidebar" :text="t(p.label)" position="right">
+          <VueIcon :name="p.icon" class="size-6" />
+        </Tooltip>
+        <div v-else><VueIcon :name="p.icon" class="size-6" /></div>
         <p v-if="uiStore.isSidebar">{{ t(p.label) }}</p>
       </RouterLink>
-
     </div>
   </details>
 </template>
@@ -76,21 +106,21 @@
 import { useUiStore } from "@/store/uiStore";
 import VueIcon from "@kalimahapps/vue-icons/VueIcon";
 import { RouterLink, useRoute } from "vue-router";
-// Tooltip not used here
-import { useI18n } from 'vue-i18n'
+import { useI18n } from "vue-i18n";
+import Tooltip from "../tooltip/Tooltip.vue";
 
 export type menuType = {
   label: string;
   path: string;
   icon: any;
   name: string;
-  allow: boolean
+  allow: boolean;
   children: {
     label: string;
     path: string;
     icon: any;
     name: string;
-    allow: boolean
+    allow: boolean;
   }[];
 };
 

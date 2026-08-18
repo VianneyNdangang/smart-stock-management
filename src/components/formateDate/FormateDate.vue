@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const props = defineProps<{date?:string}>()
+const props = withDefaults(defineProps<{ class?: string, date?:string}>(),
+{
+   class: "text-(--text-muted) text-sm"
+})
 const formatDate = (value?: string) => {
   if(value){
   return new Date(value).toLocaleDateString("fr-FR", {
@@ -13,5 +16,5 @@ const formatDate = (value?: string) => {
 </script>
 
 <template>
-  <span class="text-(--text-muted) text-sm whitespace-nowrap">{{ formatDate(props.date) }}</span>
+  <span class="whitespace-nowrap" :class="class">{{ formatDate(props.date) }}</span>
 </template>

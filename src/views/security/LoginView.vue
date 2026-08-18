@@ -1,9 +1,9 @@
 <template>
-  <div class="flex flex-col md:flex-row min-h-screen bg-gray-950 dark:bg-white">
+  <div class="flex flex-col md:flex-row min-h-screen bg-(--text-primary)">
     <section
       class="w-full h-scren flex flex-col justify-center text-center items-center p-4"
     >
-      <h1 class="text-white dark:text-gray-950 text-2xl md:text-3xl font-black">
+      <h1 class=" text-(--background) text-2xl md:text-3xl font-black">
         Smart Stock Management Systeme
       </h1>
       <LoginAnimation />

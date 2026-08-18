@@ -1,7 +1,6 @@
 <template>
   <div
-    class="flex flex-col gap-5 transition-all duration-300"
-    :class="rSidebarStore.isSidebar ? `ml-20` : ``"
+    class="flex flex-col gap-5"
   >
     <PageHeader
       title="campaigns"
@@ -37,7 +36,6 @@
         <DataTable
           title="Categories: Level 1"
           :records="campaigns"
-          deleteUrl="/campaign"
           :headers="header"
           :total="pagination?.total"
           :loading="campaignStore.loading"
@@ -52,65 +50,29 @@
     </div>
   </div>
 
-  <Createcampaign
+  <!-- <Createcampaign
   :campaign="selectedcampaign"
   :isOpen="isCreatecampaign"
   @close="()=>isCreatecampaign = false"
-  />
-  <DeleteData
-    :name="selectedcampaign?.campaignName"
-    :id="selectedcampaign?.id"
-    :loading="isLoading"
-    message="Cette action supprimera définitivement cet utilisateur ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
-    :title="`Supprimer le produit ${selectedcampaign?.campaignName ?? ''}`"
-    :isOpen="isDeleteData"
-    @close="
-      () => {
-        isDeleteData = false;
-        selectedcampaign = null;
-      }
-    "
-    :action="() => handleDelete"
-  />
-  <RightSideBare>
-    <div class="flex flex-col justify-center items-center">
-      <h1 class="text-lg text-(--text-primary)">
-        {{ selectedcampaign?.campaignName }}
-      </h1>
-      <div class="border rounded border-(--border)">
-        <img src="#" class="h-50 w-50" />
-      </div>
-    </div>
-  </RightSideBare>
+  /> -->
 </template>
 <script setup lang="ts">
-import { ref, onMounted, h, computed, onUnmounted } from "vue";
+import { ref, onMounted, h, computed } from "vue";
 import { useI18n } from 'vue-i18n'
 import { useCampaignsStore } from "@/store/campaignsStore";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconEdit, IconListDetailsFilled, IconSpeakerphone, IconTrash } from "@tabler/icons-vue";
+import { IconEdit, IconEye, IconSpeakerphone } from "@tabler/icons-vue";
 import DataTable from "@/components/dataTable/DataTable.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import { storeToRefs } from "pinia";
-import DeleteData from "../delateData/DeleteData.vue";
-import RightSideBare from "@/components/sideBar/RightSideBare.vue";
-// import Button from "@/components/button/Button.vue";
-import { useRSidebarStore } from "@/store/rSideBareStore.ts";
-import { useToastStore } from "@/store/toastStore.ts";
-// import Createcampaign from "./Createcampaign.vue";
 import { useRouter } from "vue-router";
 import type { TTableheaders } from "@/components/dataTable/type.ts";
 
 const campaignStore = useCampaignsStore();
-const rSidebarStore = useRSidebarStore();
-const toast = useToastStore();
 onMounted(async () => {
   await campaignStore.fetchCampaigns();
   isLoading.value = campaignStore.loading;
-});
-onUnmounted(() => {
-  rSidebarStore.isSidebar = false;
 });
 const { campaigns } = storeToRefs(campaignStore);
 const { pagination } = storeToRefs(campaignStore)
@@ -129,7 +91,6 @@ const handlePageChange = async (page: number) => {
 };
 
 const isCreatecampaign = ref(false);
-const isDeleteData = ref(false);
 
 const { t } = useI18n()
 
@@ -142,17 +103,6 @@ const newcampaign = {
 const header: TTableheaders[] = [
   {
     textAlign: "left",
-    accessor: "createdAt",
-    name: () => t('campaigns.columns.createdAt'),
-    render: (record: any) =>
-      // record?.role
-      h(FormateDate, {
-        date: record.createdAt || "-",
-      }),
-    width: "12%",
-  },
-  {
-    textAlign: "left",
     accessor: "campaignName",
     name: () => t('campaigns.columns.campaignName'),
     render: (record: any) => (record?.campaignName ? record?.campaignName : "-"),
@@ -160,18 +110,50 @@ const header: TTableheaders[] = [
   },
   {
     textAlign: "left",
-    accessor: "specification",
-    name: () => t('campaigns.columns.specification'),
+    accessor: "typeName",
+    name: () => t('campaigns.columns.type'),
     render: (record: any) =>
-      record?.specification ? record?.specification : "-",
-    width: "25%",
+      record?.type?.typeName ? record?.type?.typeName : "-",
+    width: "auto",
   },
   {
     textAlign: "left",
-    accessor: "description",
-    name: () => t('campaigns.columns.description'),
-    render: (record: any) => (record?.description ? record?.description : "-"),
-    width: "25%",
+    accessor: "totalProducts",
+    name: () => t('campaigns.columns.totalProducts'),
+    render: (record: any) => (record?.totalProducts ? record?.totalProducts : "-"),
+    width: "auto",
+  },
+   {
+    textAlign: "left",
+    accessor: "startDate",
+    name: () => t('campaigns.columns.startDate'),
+    render: (record: any) =>
+      h(FormateDate, {
+        class: 'text-(--success) font-semibold',
+        date: record.startDate || "-",
+      }),
+    width: "auto",
+  },
+   {
+    textAlign: "left",
+    accessor: "endDate",
+    name: () => t('campaigns.columns.endDate'),
+    render: (record: any) =>
+      h(FormateDate, {
+        class: 'text-(--warning) font-semibold',
+        date: record.endDate || "-",
+      }),
+    width: "auto",
+  },
+   {
+    textAlign: "left",
+    accessor: "createdAt",
+    name: () => t('campaigns.columns.createdAt'),
+    render: (record: any) =>
+      h(FormateDate, {
+        date: record.createdAt || "-",
+      }),
+    width: "auto",
   },
   {
     textAlign: "right",
@@ -179,8 +161,7 @@ const header: TTableheaders[] = [
     name: () => t('campaigns.columns.actions'),
     render: (record: any) =>
       h("div", { class: "flex justify-end gap-2" }, [
-        h(IconListDetailsFilled, {
-          // stroke: {1.75}
+        h(IconEye, {
           size: 18,
           class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
           onClick: () => {
@@ -195,39 +176,8 @@ const header: TTableheaders[] = [
             isCreatecampaign.value = true;
           },
         }),
-        h(IconTrash, {
-          size: 18,
-          class: "cursor-pointer text-(--danger) hover:text-red-700",
-          onClick: () => {
-            selectedcampaign.value = record;
-            isDeleteData.value = true;
-          },
-        }),
       ]),
     width: "auto",
   },
 ];
-
-const handleDelete = async () => {
-  isLoading.value = true;
-  try {
-    await campaignStore.deleteCampaigns(selectedcampaign.value.id);
-    isDeleteData.value = false;
-    toast.show(
-      "Opperation effectuer",
-      "success",
-      "Le produit " + selectedcampaign.value.campaignName + " a ete supprime",
-    );
-  } catch (error) {
-    toast.show(
-      "Echec de l'opperation",
-      "danger",
-      "Le produit " +
-        selectedcampaign.value.campaignName +
-        " n'a pas ete supprime",
-    );
-  } finally {
-    isLoading.value = false;
-  }
-};
 </script>

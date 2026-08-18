@@ -33,7 +33,7 @@
       </div>
     </section>
     <section
-      class="h-full w-full scrollbar-thumb-transparent overflow-scroll"
+      :class="!uiStore.isSidebar?`h-full w-full`:`h-full w-full scrollbar-thumb-transparent overflow-scroll`"
     >
       <MenuLabel v-for="item in menu" :item="item" :key="item.name" />
     </section>

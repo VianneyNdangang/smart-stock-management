@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import routes from "./routes";
 import { user_token } from "@/helpers/constant";
+import socket from "@/helpers/socket";
 // import { useProfileStore } from "@/store/profilStore";
 
 const router = createRouter({
@@ -12,6 +13,8 @@ router.beforeEach((to) => {
   const token = localStorage.getItem(user_token);
 
   if (to.name === "login" && token) {
+    socket.connect();
+    socket.on("connection", () => {});
     return { name: "dashboard" };
   }
 

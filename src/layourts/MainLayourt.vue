@@ -36,9 +36,10 @@ import { motion } from "motion-v";
 import NavbarView from "@/components/navbar/NavbarView.vue";
 import SidebarView from "@/components/sideBar/SidebarView.vue";
 import { useUiStore } from "@/store/uiStore";
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { useRSidebarStore } from "@/store/rSideBareStore";
 import ScrollButton from "@/components/scrollButton/ScrollButton.vue";
+import socket from "@/helpers/socket";
 const uiStore = useUiStore();
 const rSidebareStore = useRSidebarStore();
 
@@ -48,5 +49,17 @@ const layoutClass = computed(() => {
   if (uiStore.isSidebar) return "pl-0 md:pl-70";
 
   return "pl-0 md:pl-20";
+});
+
+onMounted(() => {
+  socket.connect();
+
+  socket.on("connect", () => {
+    console.log("Socket connecté :", socket.id);
+  });
+});
+
+onUnmounted(() => {
+  socket.off("connect");
 });
 </script>

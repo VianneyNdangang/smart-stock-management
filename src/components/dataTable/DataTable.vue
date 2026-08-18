@@ -39,7 +39,7 @@
           <Button
           name="search"
             :icon="IconSearch"
-            :label="t('datatable.filter')"
+            :label="t('datatable.search')"
             :click="handleChange"
             variant="ghost"
             type="button"

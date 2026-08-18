@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-100 w-full">
+  <div class="relative h-100 ">
     <canvas ref="chartRef"></canvas>
   </div>
 </template>
@@ -36,6 +36,10 @@ const chartRef = ref<HTMLCanvasElement | null>(null);
 let chart: Chart | null = null;
 
 onMounted(() => {
+   if (chart) {
+    chart.destroy();
+    chart = null;
+  }
   if (!chartRef.value) return;
 
   const ctx = chartRef.value.getContext("2d");
