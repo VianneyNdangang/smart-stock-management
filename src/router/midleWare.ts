@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import routes from "./routes";
 import { user_token } from "@/helpers/constant";
-import { useProfileStore } from "@/store/profilStore";
+// import { useProfileStore } from "@/store/profilStore";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,18 +24,18 @@ router.beforeEach((to) => {
     };
   }
 
-  if (to.meta.roles) {
-    const authStore = useProfileStore();
+  // if (to.meta.roles) {
+  //   const authStore = useProfileStore();
 
-    const allowedRoles = to.meta.roles as string[];
+  //   const allowedRoles = to.meta.roles as string[];
 
-    if (
-      !authStore.connectedUser?.role ||
-      !allowedRoles.includes(authStore.connectedUser.role)
-    ) {
-      return { name: "forbidden" };
-    }
-  }
+  //   if (
+  //     !authStore.connectedUser?.role ||
+  //     !allowedRoles.includes(authStore.connectedUser.role)
+  //   ) {
+  //     return { name: "forbidden" };
+  //   }
+  // }
 
   return true;
 });
