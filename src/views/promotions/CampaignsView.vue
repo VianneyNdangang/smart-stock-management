@@ -1,10 +1,11 @@
 <template>
   <div
-    class="flex flex-col gap-5"
+    class="flex flex-col gap-3 transition-all duration-300"
+    :class="rSidebarStore.isSidebar?`pl-20`:``"
   >
     <PageHeader
-      title="campaigns"
-      subtitle="Manage your campaign catalog, pricing, and inventory information."
+      :title="t(`menu.campaigns`)"
+      :subtitle="t('campaigns.subtitle')"
       :refresh="
         async () => {
           await campaignStore.fetchCampaigns();
@@ -13,28 +14,39 @@
       :new="newcampaign"
       :loading="campaignStore.loading"
     />
-    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5">
+    <div class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-3">
       <DataSommary
-        title="Total campaigns"
+        :title="t(`campaigns.summary.total`)"
         :value="campaigns.length"
         state="primary"
+        :icon="IconBrandCampaignmonitor"
       />
       <DataSommary
-        title="Active campaigns"
+        :title="t(`campaigns.summary.active`)"
         :value="activecampaigns.length"
         state="success"
+        :icon="IconPlanet"
       />
       <DataSommary
-        title="Non Active campaigns"
+        :title="t(`campaigns.summary.nonActive`)"
         :value="noncampaigns.length"
         state="warning"
+        :icon="IconPlanetOff"
       />
     </div>
+     <FilterBar
+      searchEndPoint="campaign"
+      searchProperty="campaignName"
+      routeName="campaign_detail"
+    >
+      <!-- <CampaignsFilter /> -->
+    </FilterBar>
+    <Button type="button" variant="ghost" name="RightSidebar" label="Filter" :click="()=>{rSidebarStore.handleOpen()}"/>
     <div>
-      <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-3">
 
         <DataTable
-          title="Categories: Level 1"
+          :title="t('menu.campaigns')"
           :records="campaigns"
           :headers="header"
           :total="pagination?.total"
@@ -55,25 +67,38 @@
   :isOpen="isCreatecampaign"
   @close="()=>isCreatecampaign = false"
   /> -->
+  <RightSideBare>
+    <CampaignsFilter/>
+  </RightSideBare>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, h, computed } from "vue";
+import { ref, onMounted, h, computed, onUnmounted } from "vue";
 import { useI18n } from 'vue-i18n'
 import { useCampaignsStore } from "@/store/campaignsStore";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconEdit, IconEye, IconSpeakerphone } from "@tabler/icons-vue";
+import { IconBrandCampaignmonitor, IconEdit, IconEye, IconPlanet, IconPlanetOff, IconSpeakerphone } from "@tabler/icons-vue";
 import DataTable from "@/components/dataTable/DataTable.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import type { TTableheaders } from "@/components/dataTable/type.ts";
+import FilterBar from "@/components/filterBar/FilterBar.vue";
+import CampaignsFilter from "./CampaignsFilter.vue";
+import { useRSidebarStore } from "@/store/rSideBareStore.ts";
+import RightSideBare from "@/components/sideBar/RightSideBare.vue";
+import Button from "@/components/button/Button.vue";
 
 const campaignStore = useCampaignsStore();
 onMounted(async () => {
   await campaignStore.fetchCampaigns();
   isLoading.value = campaignStore.loading;
 });
+onUnmounted(()=>{
+  rSidebarStore.handleClose(  )
+})
+
+const rSidebarStore = useRSidebarStore()
 const { campaigns } = storeToRefs(campaignStore);
 const { pagination } = storeToRefs(campaignStore)
 const isLoading = ref<boolean>(false);
@@ -95,7 +120,7 @@ const isCreatecampaign = ref(false);
 const { t } = useI18n()
 
 const newcampaign = {
-  label: t('users.new'),
+  label: t('campaigns.new'),
   action: () => (isCreatecampaign.value = true),
   icon: IconSpeakerphone
 };
@@ -105,7 +130,11 @@ const header: TTableheaders[] = [
     textAlign: "left",
     accessor: "campaignName",
     name: () => t('campaigns.columns.campaignName'),
-    render: (record: any) => (record?.campaignName ? record?.campaignName : "-"),
+    render: (record: any) => 
+      h("p",
+      {class: "text-(--text-primary) font-semibold"},
+        record?.campaignName ? record?.campaignName : "-"
+      ),
     width: "20%",
   },
   {
@@ -129,7 +158,7 @@ const header: TTableheaders[] = [
     name: () => t('campaigns.columns.startDate'),
     render: (record: any) =>
       h(FormateDate, {
-        class: 'text-(--success) font-semibold',
+        class: 'text-(--text-secondary) font-semibold',
         date: record.startDate || "-",
       }),
     width: "auto",

@@ -185,10 +185,12 @@
       <h1 class="text-xl font-semibold mb-3">Combobox</h1>
       <div class="flex items-center md:flex-row flex-col gap-3 h-30">
         <Combobox
-          name="country"
-          label="Pays"
-          placeholder="Sélectionner un pays"
-          :options="countries"
+          endpoint="products"
+          optionLabel="productName"
+          optionValue="productName"
+          name="productName"
+          label="Product name"
+          placeholder="Select a product name"
         />
       </div>
     </Card>
@@ -368,12 +370,6 @@ const showInfoToast = () => {
   toast.show("Information", "info", "Une nouvelle mise à jour est disponible.");
 };
 
-const countries = [
-  { label: "Cameroun", value: "cm" },
-  { label: "France", value: "fr" },
-  { label: "Canada", value: "ca" },
-  { label: "Belgique", value: "be" },
-];
 
 // Pagination 
 const totalPages = 10

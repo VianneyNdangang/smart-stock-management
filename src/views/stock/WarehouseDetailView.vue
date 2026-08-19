@@ -16,9 +16,8 @@
 import WarehouseCard from '@/components/card/WarehouseCard.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n'
-import { computed, h, onMounted, ref } from 'vue';
+import { h, onMounted, ref } from 'vue';
 import { useToastStore } from '@/store/toastStore';
-import useFetchData from '@/hooks/request';
 import { apiClient } from '@/store/api';
 import DataTable from '@/components/dataTable/DataTable.vue';
 import ProductsTableSkeleton from '@/components/skeleton/ProductsTableSkeleton.vue';
@@ -36,9 +35,9 @@ const warehouse = ref();
 const toast = useToastStore();
 // const subcategories = computed(() => data.value);
 const stock = ref();
-const page = ref(1);
-const filters = ref<any>();
-const limit = ref(20);
+// const page = ref(1);
+// const filters = ref<any>();
+// const limit = ref(20);
 // const { data, fetchData, pagination, loading } = useFetchData({
 //   limit,
 //   url: "categories",

@@ -1,7 +1,7 @@
 <template>
   <aside
   v-if="store.isSidebar"
-  class="fixed top-22 right-0 bottom-0 z-50
+  class="fixed top-24 right-0 bottom-0 z-50
          flex flex-col bg-(--surface)
          shadow-sm transition-all duration-300
          overflow-hidden"

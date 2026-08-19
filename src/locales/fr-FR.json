@@ -11,8 +11,8 @@
     "selectAll": "Tout sélectionner",
     "search": "Recherche",
     "deleteConfirmation": "Vous êtes sur le point de supprimer {count} éléments. Cette action est irréversible. Voulez-vous continuer ?",
-    "deleteTitle": "Supprimer les éléments sélectionnés ?"
-    ,"columns": {
+    "deleteTitle": "Supprimer les éléments sélectionnés ?",
+    "columns": {
       "id": "ID",
       "names": "Noms",
       "categories": "Catégories",
@@ -37,8 +37,7 @@
     "updateProfile": "Mettre à jour le profil",
     "logout": "Se déconnecter",
     "language": "Langue"
-  }
-  ,
+  },
   "form": {
     "firstName": "Prénom",
     "lastName": "Nom",
@@ -54,20 +53,17 @@
     "update": "Mettre à jour",
     "updatePassword": "Mettre à jour le mot de passe",
     "create": "Créer"
-  }
-  ,
+  },
   "form_extra": {
     "delete": "Supprimer",
     "photo": "Photo de profil",
     "role": "Rôle"
-  }
-  ,
+  },
   "auth": {
     "login": "Se connecter",
     "welcome": "Bienvenue",
     "signin": "Connectez-vous pour continuer à gérer votre inventaire."
-  }
-  ,
+  },
   "roles": {
     "admin": "Administrateur",
     "categoryManager": "Gestionnaire de catégories",
@@ -90,8 +86,7 @@
     "campaigns": "Campagnes",
     "transits": "Transits",
     "settings": "Paramètres"
-  }
-  ,
+  },
   "products": {
     "subtitle": "Gérez votre catalogue de produits, tarifs et informations de stock.",
     "summary": {
@@ -125,8 +120,7 @@
       "creator": "Créé par",
       "actions": "Actions"
     }
-  }
-  ,
+  },
   "card": {
     "products": "Produits",
     "stock": "Stock",
@@ -135,6 +129,7 @@
   },
   "campaigns": {
     "subtitle": "Gérez votre catalogue de campagnes, tarifs et informations de stock.",
+    "new": "Nouvelle campagne",
     "summary": {
       "total": "Total des campagnes",
       "active": "Campagnes actives",
@@ -168,38 +163,59 @@
       "actions": "Actions"
     }
   },
-  "warehouse": {
-  "subtitle": "Gérez vos entrepôts, leurs emplacements, leur capacité et leurs informations de stock.",
-  "summary": {
-    "total": "Total des entrepôts",
-    "active": "Entrepôts actifs",
-    "inactive": "Entrepôts inactifs"
+  "sales": {
+    "subtitle": "Gérez vos ventes et le suivi de vos commandes",
+    "summary": {
+      "orders": "Ventes",
+      "pending": "En attente",
+      "completed": "Terminée",
+      "cancelled": "Annulée"
+    },
+    "columns": {
+      "number": "N° de vente",
+      "warehouseName": "Produits",
+      "status": {
+        "title": "Statut",
+        "pending": "En attente",
+        "completed": "Terminée",
+        "cancelled": "Annulée"
+      },
+      "createby": "Créée par",
+      "createdAt": "Date de création",
+      "actions": "Actions"
+    }
   },
-  "new": "Nouvel entrepôt",
-  "modify": "Modifier l'entrepôt",
-  "createdSuccess": "L'entrepôt {name} a été créé avec succès",
-  "modifiedSuccess": "L'entrepôt {name} a été modifié avec succès",
-  "form": {
-    "warehouseName": "Nom de l'entrepôt",
-    "location": "Emplacement",
-    "address": "Adresse",
-    "city": "Ville",
-    "country": "Pays",
-    "description": "Description",
-    "capacity": "Capacité de stockage",
-    "manager": "Responsable de l'entrepôt",
-    "status": "Statut",
-    "active": "Actif",
-    "inactive": "Inactif",
-    "createButton": "Créer",
-    "modifyButton": "Modifier"
-  }
-},
+  "warehouse": {
+    "subtitle": "Gérez vos entrepôts, leurs emplacements, leur capacité et leurs informations de stock.",
+    "summary": {
+      "total": "Total des entrepôts",
+      "active": "Entrepôts actifs",
+      "inactive": "Entrepôts inactifs"
+    },
+    "new": "Nouvel entrepôt",
+    "modify": "Modifier l'entrepôt",
+    "createdSuccess": "L'entrepôt {name} a été créé avec succès",
+    "modifiedSuccess": "L'entrepôt {name} a été modifié avec succès",
+    "form": {
+      "warehouseName": "Nom de l'entrepôt",
+      "location": "Emplacement",
+      "address": "Adresse",
+      "city": "Ville",
+      "country": "Pays",
+      "description": "Description",
+      "capacity": "Capacité de stockage",
+      "manager": "Responsable de l'entrepôt",
+      "status": "Statut",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "createButton": "Créer",
+      "modifyButton": "Modifier"
+    }
+  },
   "tooltip": {
     "details": "Détails",
     "modify": "Modifier"
-  }
-  ,
+  },
   "users": {
     "subtitle": "Gérez les comptes utilisateurs, permissions et accès",
     "summary": {
@@ -217,8 +233,7 @@
       "role": "Rôle",
       "phone": "Téléphone",
       "actions": "Actions"
-    }
-    ,
+    },
     "new": "Nouvel utilisateur",
     "modify": "Modifier l'utilisateur",
     "createdSuccess": "L'utilisateur {name} a été créé avec succès",

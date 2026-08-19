@@ -30,7 +30,7 @@
       `border-2  cursor-not-allowed:{props.loading} py-1 px-3 h-9.5 rounded font-semibold flex items-center justify-center`,
       props.loading
         ? `cursor-not-allowed border-(--secondary)/50 text-(--secondary)/50`
-        : `cursor-pointer hover:bg-(--secondary-ghost) border-(--secondary) text-(--secondary)`,
+        : `cursor-pointer hover:bg-(--secondary)/20  border-(--secondary) text-(--secondary)`,
     ]"
     @type="[props.type]"
     @click="props.click"

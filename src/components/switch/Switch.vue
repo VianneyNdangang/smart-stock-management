@@ -4,6 +4,7 @@ import VueIcon from "@kalimahapps/vue-icons/VueIcon";
 const props = defineProps<{
   activeIcon?: any;
   inactiveIcon?: any;
+  name?: string;
 }>();
 
 const model = defineModel<boolean>({
@@ -13,7 +14,7 @@ const model = defineModel<boolean>({
 
 <template>
   <button
-  name="switch"
+    :name="name"
     type="button"
     @click="model = !model"
     class="relative inline-flex h-6 w-14 items-center border border-(--border) rounded-full transition-colors duration-300 "

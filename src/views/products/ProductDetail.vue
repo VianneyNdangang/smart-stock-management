@@ -23,6 +23,7 @@
             >
               <img
                 v-for="(image, index) in product.images"
+                :alt="`image `+index"
                 :key="index"
                 :src="image"
                 class="w-24 h-24 rounded-lg border border-(--border) object-cover cursor-pointer hover:border-(--warning) transition"
@@ -167,12 +168,14 @@ const route = useRoute();
 const product = ref();
 const toast = useToastStore();
 const stocks = ref([]);
+const analysis = ref();
 const selectedImage = ref<string>("");
 
 const loadProduct = async (id: string) => {
   try {
     product.value = (await apiClient.get(`products/${id}`)).data;
     stocks.value = (await apiClient.get(`/stock/product/${id}`)).data;
+    analysis.value = (await apiClient.get(`/stock/analysis/products/${id}`)).data;
     selectedImage.value = product.value?.images?.[0];
     scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {

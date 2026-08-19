@@ -21,7 +21,7 @@
           
         </Card> -->
         <DataTable
-          title="Users"
+          :title="t('menu.users')"
           :records="users"
           :headers="header"
           :total="pagination?.total"
@@ -85,6 +85,7 @@ const header: TTableheaders[] = [
       h("div", { class: "flex justify-start gap-2 items-center" }, [
         h(Profile, {
           src: record.profileUrl,
+          name: record?.userName,
           h: "10"
           ,
         }),

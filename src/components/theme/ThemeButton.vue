@@ -1,6 +1,7 @@
 <template>
   <div @click="themeStore.toggleTheme">
     <Switch
+      name="theme"
       :model="isDark"
       :activeIcon="IconMoonStars"
       :inactiveIcon="IconSunHigh"

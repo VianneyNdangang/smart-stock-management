@@ -18,18 +18,21 @@
     >
       <DataSommary
         :title="t('products.summary.total')"
-        :value="pagination?.total"
+        :value="pagination?.totalProducts"
         state="primary"
+        :icon="IconAnalyze"
       />
       <DataSommary
         :title="t('products.summary.nonPerishable')"
-        :value="(pagination?.total ?? 0) - (pagination?.totalPerishables ?? 0)"
+        :value="(pagination?.totalProducts ?? 0) - (pagination?.totalPerishables ?? 0)"
         state="success"
+        :icon="IconPackageImport"
       />
       <DataSommary
         :title="t('products.summary.perishable')"
         :value="pagination?.totalPerishables"
         state="warning"
+        :icon="IconFlask"
       />
     </div>
     <FilterBar
@@ -42,7 +45,7 @@
     <div>
       <div class="flex flex-col">
         <DataTable
-          title="products"
+          :title="t('menu.products')"
           :records="products"
           :headers="header"
           :total="pagination?.total"
@@ -98,7 +101,7 @@ import { ref, onMounted, h } from "vue";
 import { useI18n } from 'vue-i18n'
 import { useproductStore } from "@/store/productsStore";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconEdit, IconEye, IconPackageImport } from "@tabler/icons-vue";
+import { IconAnalyze, IconEdit, IconEye, IconFlask, IconPackageImport } from "@tabler/icons-vue";
 import DataTable from "@/components/dataTable/DataTable.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
@@ -207,19 +210,19 @@ const header: TTableheaders[] = [
   },
   {
     textAlign: "left",
+    accessor: "creator",
+    name: () => t('products.columns.creator'),
+    render: (record: any) => h("p",{class: 'text-(--text-secondary)'},record.creator?.userName? record.creator?.userName: "-") ,
+    width: "auto",
+  },
+  {
+    textAlign: "left",
     accessor: "createdAt",
     name: () => t('products.columns.createdAt'),
     render: (record: any) =>
       h(FormateDate, {
         date: record.createdAt || "-",
       }),
-    width: "auto",
-  },
-  {
-    textAlign: "left",
-    accessor: "creator",
-    name: () => t('products.columns.creator'),
-    render: (record: any) => record.creator?.userName? record.creator?.userName: "-",
     width: "auto",
   },
   {

@@ -1,6 +1,7 @@
 <template>
   <div class="items-center">
     <button
+    name="language"
       class="px-3 py-1 rounded border text-sm"
       @click="toggleLocale"
       :title="t('navbar.language')"

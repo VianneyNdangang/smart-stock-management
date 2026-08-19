@@ -26,12 +26,13 @@
                 <!-- <p class="text-xs text-(--secondary) font-semibold">Informations</p> -->
                 <div class="flex flex-col justify-center items-center gap-2">
                   <Combobox
-                    v-if="isLevel2"
+                    endpoint="categories"
+                    optionLabel="categoryName"
+                    optionValue="id"
                     v-model="parentId"
                     name="parentId"
-                    label="Category Level 1"
-                    placeholder="Sélectionner une categorie"
-                    :options="options"
+                    label="Parent name"
+                    placeholder="Select a parent name"
                     :error="errors.parentId"
                   />
                   <Input
@@ -91,10 +92,9 @@ import Modal from "@/components/molecules/Modal.vue";
 import Card from "@/components/card/Card.vue";
 import { usecategoriesStore } from "@/store/categoryStore";
 import { createCategorySchema } from "@/handler/categoriesHandler.ts";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import Textarea from "@/components/texterea/Textarea.vue";
 import Combobox from "@/components/combobox/Combobox.vue";
-import { storeToRefs } from "pinia";
 import Switch from "@/components/switch/Switch.vue";
 import { IconCircleNumber1, IconCircleNumber2 } from "@tabler/icons-vue";
 import { useToastStore } from "@/store/toastStore";
@@ -117,15 +117,6 @@ const { defineField, errors, handleSubmit, resetForm } = useForm({
   },
 });
 const store = usecategoriesStore();
-const { categories } = storeToRefs(store);
-const options = computed(() =>
-  categories.value
-    .filter((category) => category.level === 1)
-    .map((category) => ({
-      label: category.categoryName,
-      value: category.id,
-    })),
-);
 const [categoryName] = defineField("categoryName");
 const [description] = defineField("description");
 const [parentId] = defineField("parentId");

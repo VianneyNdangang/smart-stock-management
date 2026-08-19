@@ -2,7 +2,7 @@
   <div v-if="item?.children?.length === 0">
     <RouterLink
       v-if="item?.allow"
-      :to="props.item.path"
+      :to="{name: props.item.name}"
       class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--secondary) hover:text-white transition"
       :class="
         route.name === props.item.name
@@ -85,7 +85,7 @@
     >
       <RouterLink
         v-if="p.allow"
-        :to="p.path"
+        :to="{name: p.name}"
         class="flex rounded items-center gap-2 px-3 py-1 mb-1 text-sm transition hover:bg-(--secondary) hover:text-white"
         :class="
           route.name === p.name

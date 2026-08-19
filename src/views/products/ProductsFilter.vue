@@ -28,7 +28,7 @@
             { label: 'Non perishable', value: 'nonperishable' },
           ]"
         />
-        <Combobox
+        <!-- <Combobox
           endpoint="products"
           optionLabel="productName"
           optionValue="productName"
@@ -36,7 +36,7 @@
           name="productName"
           label="Product name"
           placeholder="Select a product name"
-        />
+        /> -->
       </div>
       <div
         class="flex flex-col md:flex-row justify-center md:justify-end items-end gap-3 pl-0 md:pl-6 w-full md:w-1/3"
@@ -70,7 +70,6 @@
 </template>
 <script setup lang="ts">
 import Button from "@/components/button/Button.vue";
-import Combobox from "@/components/combobox/Combobox.vue";
 import Select from "@/components/select/Select.vue";
 // import Tooltip from "@/components/tooltip/Tooltip.vue";
 import { filterProductSchema } from "@/handler/productsHandler";
@@ -94,7 +93,7 @@ const { defineField, handleSubmit } = useForm({
   },
 });
 const [isActif] = defineField("isActif");
-const [productName] = defineField("productName");
+// const [productName] = defineField("productName");
 const [perishable] = defineField("perishable");
 const [limit] = defineField("limit");
 

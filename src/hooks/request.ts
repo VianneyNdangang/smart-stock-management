@@ -24,6 +24,7 @@ export type TPaginationState = {
   hasNext?: boolean;
   hasPrev?: boolean;
   totalPerishables?: number;
+  totalProducts?: number;
 };
 
 const useFetchData = (props: TPagination) => {
@@ -70,6 +71,7 @@ const useFetchData = (props: TPagination) => {
         hasPrev: response.data.hasPrev,
         total: response.data.total,
         totalPerishables: response.data.totalPerishables,
+        totalProducts: response.data.totalProducts,
       };
     } finally {
       loading.value = false;
