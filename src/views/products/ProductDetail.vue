@@ -175,7 +175,7 @@ const loadProduct = async (id: string) => {
   try {
     product.value = (await apiClient.get(`products/${id}`)).data;
     stocks.value = (await apiClient.get(`/stock/product/${id}`)).data;
-    analysis.value = (await apiClient.get(`/stock/analysis/products/${id}`)).data;
+    analysis.value = (await apiClient.get(`/stock-alert/product/${id}`)).data;
     selectedImage.value = product.value?.images?.[0];
     scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {

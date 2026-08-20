@@ -12,7 +12,7 @@ export type TPagination = {
   hasNext?: boolean;
   hasPrev?: boolean;
   totalPerishables?: number;
-  url?: string;
+  url?: Ref<string> | string;
 };
 
 export type TPaginationState = {
@@ -34,7 +34,7 @@ const useFetchData = (props: TPagination) => {
   const pagination = ref<TPaginationState>({
     page: unref(props.page),
     limit: unref(props.limit),
-    url: props.url,
+    url: unref(props.url),
   });
 
 
@@ -55,7 +55,7 @@ const useFetchData = (props: TPagination) => {
       };
 
       const response: AxiosResponse = await apiClient({
-        url: props.url,
+        url: unref(props.url),
         method: "GET",
         params,
       });

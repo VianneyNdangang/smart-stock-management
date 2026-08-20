@@ -19,7 +19,7 @@
 
 
     <section
-      class="flex-1 w-full text-slate-900 overflow-y-auto"
+      class="flex-1 w-full overflow-y-auto"
     >
       <slot />
     </section>

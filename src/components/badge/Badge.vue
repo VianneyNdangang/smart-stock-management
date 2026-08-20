@@ -12,7 +12,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   message: string | number;
-  type: "danger" | "success" | "primary" | "warning";
+  type: "danger" | "success" | "primary" | "warning" ;
 }>();
 
 const variants = {

@@ -39,9 +39,12 @@
       searchProperty="campaignName"
       routeName="campaign_detail"
     >
+    <div class="w-full flex justify-end">
+      <Button type="button" variant="ghost" name="RightSidebar" label="Filter" :icon="IconAdjustmentsHorizontalFilled" :click="()=>{rSidebarStore.handleOpen()}"/>
+    </div>
       <!-- <CampaignsFilter /> -->
     </FilterBar>
-    <Button type="button" variant="ghost" name="RightSidebar" label="Filter" :click="()=>{rSidebarStore.handleOpen()}"/>
+    
     <div>
       <div class="flex flex-col gap-3">
 
@@ -76,7 +79,7 @@ import { ref, onMounted, h, computed, onUnmounted } from "vue";
 import { useI18n } from 'vue-i18n'
 import { useCampaignsStore } from "@/store/campaignsStore";
 import PageHeader from "@/components/molecules/PageHeader.vue";
-import { IconBrandCampaignmonitor, IconEdit, IconEye, IconPlanet, IconPlanetOff, IconSpeakerphone } from "@tabler/icons-vue";
+import { IconAdjustmentsHorizontalFilled, IconBrandCampaignmonitor, IconEdit, IconEye, IconPlanet, IconPlanetOff, IconSpeakerphone } from "@tabler/icons-vue";
 import DataTable from "@/components/dataTable/DataTable.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
@@ -95,7 +98,7 @@ onMounted(async () => {
   isLoading.value = campaignStore.loading;
 });
 onUnmounted(()=>{
-  rSidebarStore.handleClose(  )
+  rSidebarStore.handleClose()
 })
 
 const rSidebarStore = useRSidebarStore()

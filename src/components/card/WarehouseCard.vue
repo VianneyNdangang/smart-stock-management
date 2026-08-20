@@ -65,31 +65,30 @@
         </p>
       </div>
 
-      <div class="rounded-md p-3">
-        <div class="mb-1 flex items-center gap-1.5 text-xs text-(--text-muted)">
-          <IconCalendar size="14" />
-          <span>Created</span>
+      <div class="mt-3 flex items-center gap-3">
+        <Profile h="9" :name="warehouse?.creator?.userName" />
+
+        <div class="min-w-0">
+          <p class="text-xs text-(--text-muted)">Created by</p>
+
+          <p
+            class="truncate text-sm font-medium text-(--text-primary)"
+            :title="warehouse?.creator?.userName"
+          >
+            {{ warehouse?.creator?.userName }}
+          </p>
         </div>
-        <FormateDate :date="warehouse?.createdAt" />
       </div>
     </div>
 
-    <div class="mt-3 flex items-center gap-3">
-      <div
-        class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-(--primary)/10 text-sm font-semibold text-(--primary)"
-      >
-        {{ getInitials(warehouse?.creator?.userName) }}
-      </div>
-
-      <div class="min-w-0">
-        <p class="text-xs text-(--text-muted)">Created by</p>
-
-        <p
-          class="truncate text-sm font-medium text-(--text-primary)"
-          :title="warehouse?.creator?.userName"
-        >
-          {{ warehouse?.creator?.userName }}
-        </p>
+    <div class="rounded-md p-3">
+      <div class="mb-1 flex items-center gap-1.5 text-xs text-(--text-muted)">
+        <IconCalendar size="14" />
+        <span>Created</span>
+        <FormateDate
+          class="text-(--text-primary)"
+          :date="warehouse?.createdAt"
+        />
       </div>
     </div>
   </div>
@@ -105,6 +104,7 @@ import {
 } from "@tabler/icons-vue";
 import FormateDate from "../formateDate/FormateDate.vue";
 import { useRouter } from "vue-router";
+import Profile from "../profile/Profile.vue";
 
 const router = useRouter();
 interface Warehouse {
@@ -122,14 +122,4 @@ interface Warehouse {
 const props = defineProps<{
   warehouse: Warehouse;
 }>();
-
-const getInitials = (name?: string) => {
-  if (!name) return "?";
-
-  return name
-    .split(".")
-    .map((part) => part.charAt(0))
-    .join("")
-    .toUpperCase();
-};
 </script>

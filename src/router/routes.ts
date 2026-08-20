@@ -13,8 +13,9 @@ import StockEntriesView from "@/views/stock/StockEntriesView.vue";
 import CampaignsView from "@/views/promotions/CampaignsView.vue";
 import CategoryDetail from "@/views/categories/CategoryDetail.vue";
 import ForbiddenView from "@/views/security/ForbiddenView.vue";
-import WarehouseView from "@/views/stock/WarehouseView.vue";
-import WarehouseDetailView from "@/views/stock/WarehouseDetailView.vue";
+import BatchesDetail from "@/views/stock/BatchesDetail.vue";
+import WarehouseView from "@/views/stock/warehouse/WarehouseView.vue";
+import WarehouseDetailView from "@/views/stock/warehouse/WarehouseDetailView.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -79,7 +80,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: "stock-detail/:id",
         name: "stock_detail",
-        component: StockEntriesView,
+        component: BatchesDetail,
          meta: {
           requiresAuth: true,
           roles: ["admin", "CategoryManager", "FootWorker"],

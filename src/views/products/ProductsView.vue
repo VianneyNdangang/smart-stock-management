@@ -154,7 +154,7 @@ const header: TTableheaders[] = [
     accessor: "productName",
     name: () => t('products.columns.productName'),
     render: (record: any) =>
-      h("div", { class: "flex justify-start gap-2 items-center w-full" }, [
+      h("div", { class: "flex justify-start gap-2 items-center w-full whitespace-nowrap" }, [
         h(ProductProfile, {
           src: record.images[0],
         }),

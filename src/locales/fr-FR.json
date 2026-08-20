@@ -178,7 +178,8 @@
         "title": "Statut",
         "pending": "En attente",
         "completed": "Terminée",
-        "cancelled": "Annulée"
+        "cancelled": "Annulée",
+        "all": "Tout"
       },
       "createby": "Créée par",
       "createdAt": "Date de création",

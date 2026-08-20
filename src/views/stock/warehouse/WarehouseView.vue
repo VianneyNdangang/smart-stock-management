@@ -34,7 +34,7 @@
     <FilterBar
       searchEndPoint="warehouse"
       searchProperty="warehouseName"
-      routeName="category_detail"
+      routeName="warehouse_detail"
     />
     <div>
       <!-- <LoadingView v-if="" /> -->
@@ -59,10 +59,9 @@
       </div>
     </div>
   </div>
-
 </template>
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import PageHeader from "@/components/molecules/PageHeader.vue";
 import { IconBuildingWarehouse } from "@tabler/icons-vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
@@ -72,14 +71,20 @@ import EmptyState from "@/components/empty/EmptyState.vue";
 import { useI18n } from "vue-i18n";
 import { useWarehousesStore } from "@/store/warehouseStore";
 import WarehouseCard from "@/components/card/WarehouseCard.vue";
+import { useRSidebarStore } from "@/store/rSideBareStore";
 
 const {t} = useI18n()
 
 const store = useWarehousesStore();
+const rSidebarStore = useRSidebarStore()
 const { warehouses } = storeToRefs(store);
 const {pagination } = storeToRefs(store)
 
 onMounted(async () => {
   await store.fetchWarehouses();
 });
+onUnmounted(()=>{
+  rSidebarStore.handleClose(  )
+})
+
 </script>

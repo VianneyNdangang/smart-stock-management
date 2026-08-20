@@ -74,7 +74,7 @@
     "dashboard": "Dashboard",
     "users": "Users",
     "alerts": "Alerts",
-    "sales": "Sales",
+    "sales": "Orders",
     "stock": "Stock",
     "stock_entries": "Stock entries",
     "warehouse": "Warehouses",
@@ -178,7 +178,8 @@
         "title": "Status",
         "pending": "Pending",
         "completed": "Completed",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "all": "All"
       },
       "createby": "Created by",
       "createdAt": "Created at",

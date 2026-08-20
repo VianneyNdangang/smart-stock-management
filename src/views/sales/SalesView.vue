@@ -8,22 +8,22 @@
           await store.fetchOrders();
         }
       "
-      :new="newBatche"
       :loading="store.loading"
     />
     <div
       class="flex justify-center items-center flex-col md:flex-row gap-3"
     >
-      <DataSommary :title="t('sales.summary.orders')" :value="pagination.total" state="primary" />
-      <DataSommary :title="t('sales.summary.pending')" :value="pagination.total" state="warning" />
-      <DataSommary :title="t('sales.summary.completed')" :value="pagination.total" state="success" />
-      <DataSommary :title="t('sales.summary.cancelled')" :value="pagination.total" state="danger" />
+      <DataSommary :title="t('sales.summary.orders')" :value="pagination.total" state="primary" :icon="IconShoppingCart"/>
+      <DataSommary :title="t('sales.summary.pending')" :value="pagination.total" state="warning" :icon="IconClock"/>
+      <DataSommary :title="t('sales.summary.completed')" :value="pagination.total" state="success" :icon="IconCircleCheck" />
+      <DataSommary :title="t('sales.summary.cancelled')" :value="pagination.total" state="danger" :icon="IconCircleX"/>
     </div>
     <FilterBar
       searchEndPoint="batch"
       searchProperty="batchName"
       routeName="category_detail"
     >
+    <SalesFilter/>
     </FilterBar>
     <div>
       <!-- <LoadingView v-if="" /> -->
@@ -43,12 +43,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, h } from "vue";
+import { onMounted, h } from "vue";
 import { useI18n } from "vue-i18n";
 import PageHeader from "@/components/molecules/PageHeader.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import { storeToRefs } from "pinia";
-import { IconEye, IconPackageImport } from "@tabler/icons-vue";
+import { IconCircleCheck, IconCircleX, IconClock, IconEye, IconShoppingCart } from "@tabler/icons-vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import { useRouter } from "vue-router";
 import DataTable from "@/components/dataTable/DataTable.vue";
@@ -57,14 +57,10 @@ import Badge from "@/components/badge/Badge.vue";
 import FilterBar from "@/components/filterBar/FilterBar.vue";
 import { useSalesStore } from "@/store/salesSotre.ts";
 import { formatStatus } from "@/helpers/formateData";
+import SalesFilter from "./SalesFilter.vue";
 
-const isCreateUser = ref(false);
 const { t } = useI18n();
-const newBatche = {
-  label: t("stock.summary.batches"),
-  action: () => (isCreateUser.value = true),
-  icon: IconPackageImport,
-};
+
 const router = useRouter();
 
 const store = useSalesStore();
@@ -202,7 +198,7 @@ const header: TTableheaders[] = [
           },
         })
       ]),
-    width: "auto",
+    width: "10%",
   },
 ];
 </script>
