@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative w-full rounded-(--radius) border  p-3 transition-all duration-200 hover:shadow-md"
+    class="relative w-full rounded-(--radius) border p-3 transition-all duration-200 hover:shadow-md"
     :class="borderClass"
   >
     <!-- Indicateur de priorité -->
@@ -11,7 +11,7 @@
           class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
           :class="iconContainerClass"
         >
-        <vue-icon :name="icon" class="size-6" />
+          <VueIcon :name="icon" class="size-6" />
         </div>
 
         <div class="min-w-0">
@@ -36,14 +36,9 @@
 
       <!-- Score -->
       <div class="shrink-0 text-right">
-        <p class="text-xs text-(--text-secondary)">
-          Priorité
-        </p>
+        <p class="text-xs text-(--text-secondary)">Priorité</p>
 
-        <p
-          class="text-lg font-bold"
-          :class="textClass"
-        >
+        <p class="text-lg font-bold" :class="textClass">
           {{ alert.priorityScore }}
         </p>
       </div>
@@ -54,9 +49,7 @@
       class="mt-4 grid grid-cols-2 gap-3 border-t border-(--border) pt-4 md:grid-cols-4"
     >
       <div>
-        <p class="text-xs text-(--text-secondary)">
-          SKU
-        </p>
+        <p class="text-xs text-(--text-secondary)">SKU</p>
 
         <p
           class="mt-1 truncate text-sm font-medium text-(--text-primary)"
@@ -67,9 +60,7 @@
       </div>
 
       <div>
-        <p class="text-xs text-(--text-secondary)">
-          Entrepôt
-        </p>
+        <p class="text-xs text-(--text-secondary)">Entrepôt</p>
 
         <p
           class="mt-1 truncate text-sm font-medium text-(--text-primary)"
@@ -81,10 +72,7 @@
     </div>
 
     <!-- Raisons -->
-    <div
-      v-if="alert.priorityReasons?.length"
-      class="mt-4 flex flex-wrap gap-2"
-    >
+    <div v-if="alert.priorityReasons?.length" class="mt-4 flex flex-wrap gap-2">
       <span
         v-for="reason in uniqueReasons"
         :key="reason"

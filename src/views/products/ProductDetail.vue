@@ -112,8 +112,7 @@
       </div>
     </section>
 <section class="flex flex-col lg:flex-row gap-3 items-stretch">
-  <div class="flex flex-col gap-3 w-full lg:w-8/12 justify-between">
-    
+  <div class="flex flex-col gap-3 w-full lg:w-12/6 justify-between">
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
         <DataSommary title="Total categories" :value="5000" state="primary" />
         <DataSommary title="Total categories Level 1" :value="2000" state="warning" />

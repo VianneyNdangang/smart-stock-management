@@ -1,24 +1,16 @@
 <template>
   <div
     v-if="message"
-    class="flex items-start gap-3 w-full border p-3"
+    class="flex items-start gap-3 w-full h-full border p-3"
     :class="containerClass"
   >
-    <component
-      :is="icon"
-      :size="20"
-      class="shrink-0 mt-0.5"
-    />
-
+    <VueIcon :name="icon" class="size-6" />
     <div class="flex-1">
-      <p
-        v-if="title"
-        class="font-medium"
-      >
+      <p v-if="title" class="font-medium">
         {{ title }}
       </p>
 
-      <p class="text-sm">
+      <p class="text-xs md:text-sm">
         {{ message }}
       </p>
     </div>
@@ -43,6 +35,7 @@ import {
   IconInfoCircle,
   IconX,
 } from "@tabler/icons-vue";
+import VueIcon from "@kalimahapps/vue-icons/VueIcon";
 
 type MessageType = "success" | "danger" | "warning" | "info";
 
@@ -56,7 +49,7 @@ const props = withDefaults(
   {
     type: "info",
     closable: false,
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -76,14 +69,10 @@ const icon = computed<Component>(() => {
 
 const containerClass = computed(() => {
   const classes = {
-    success:
-      "border-(--success)/20 bg-(--success)/10 text-(--success)",
-    danger:
-      "border-(--danger)/20 bg-(--danger)/10 text-(--danger)",
-    warning:
-      "border-(--warning)/20 bg-(--warning)/10 text-(--warning)",
-    info:
-      "border-(--info)/20 bg-(--info)/10 text-(--info)",
+    success: "border-(--success)/20 bg-(--success)/10 text-(--success)",
+    danger: "border-(--danger)/20 bg-(--danger)/10 text-(--danger)",
+    warning: "border-(--warning)/20 bg-(--warning)/10 text-(--warning)",
+    info: "border-(--info)/20 bg-(--info)/10 text-(--info)",
   };
 
   return classes[props.type];

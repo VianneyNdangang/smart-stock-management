@@ -19,8 +19,8 @@
           duration: 0.4,
         }"
       >
-        <main class="z-0 p-3 md:p-5">
-          <div class="mb-3 z-0" :class="rSidebareStore.isSidebar?`ml-20`:``"> <AlertCarousel :messages="formattedAlerts" /></div>
+        <main class="z-0 mt-2 p-3 md:p-5">
+          <div class="mb-3 z-0 h-25" :class="rSidebareStore.isSidebar?`ml-20`:``"> <AlertCarousel :messages="formattedAlerts" /></div>
           <RouterView />
         </main>
         
@@ -46,10 +46,8 @@ import { apiClient } from "@/store/api";
 import { formatAlertMessage, type AlertMessage } from "@/helpers/formateData";
 import BackButton from "@/components/backbutton/BackButton.vue";
 const uiStore = useUiStore();
-// const alertStore = useAlertsStore()
 const rSidebareStore = useRSidebarStore();
 
-// const { alerts } = storeToRefs(alertStore)
 const alerts = ref([])
 const layoutClass = computed(() => {
   if (rSidebareStore.isSidebar) return "pr-0 md:pr-96";
@@ -62,7 +60,6 @@ const layoutClass = computed(() => {
 
 onMounted(async() => {
   alerts.value = (await apiClient(`stock-alert/warehouse/6a86ba9cbc14cf8074bf1d11`)).data.items
-  // await alertStore.fetchAlerts('6a86ba9cbc14cf8074bf1d11')
   socket.connect();
 
   socket.on("connect", () => {
