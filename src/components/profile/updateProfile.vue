@@ -113,7 +113,7 @@
                 </div>
               </div>
             </form>
-            <div class="w-full flex justify-center items-center">
+            <div class="w-full flex justify-center mt-2 items-center">
               <Button
                 name="update"
                 variant="ghost"

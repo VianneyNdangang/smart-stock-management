@@ -5,12 +5,13 @@ import { deleteToken, SaveToken } from "@/handler/securityHandler";
 import { useRouter } from "vue-router";
 import { useToastStore } from "./toastStore";
 import type { AxiosResponse } from "axios";
+import { connectSocket } from "@/helpers/socket";
 
 export const useProfileStore = defineStore("profile", () => {
-  const connectedUser = ref<any>();
+  const connectedUser = ref<any>(null);
   const router = useRouter();
   const toast = useToastStore();
-  const loading = ref(false)
+  const loading = ref(false);
 
   const fetchProfile = async () => {
     try {
@@ -19,25 +20,27 @@ export const useProfileStore = defineStore("profile", () => {
         url: `/profile`,
       }).then((response) => response.data);
       connectedUser.value = items;
-    } finally{}
+    } finally {
+    }
   };
 
   const loginUser = async (credentials: any) => {
-    loading.value=true
+    loading.value = true;
     try {
       const response = await apiClient.post("/auth/login", credentials);
       const accessToken = response?.data.accessToken;
       const refreshToken = response.data?.refreshTocken;
       SaveToken(accessToken || refreshToken);
       router.push("/");
+      // connectSocket()
     } catch (error) {
       toast.show(
-      "Connexion Echouée",
-      "danger",
-      "Une erreur s'est produite lors de la connexion",
-    );
+        "Connexion Echouée",
+        "danger",
+        "Une erreur s'est produite lors de la connexion",
+      );
     }
-    loading.value=false
+    loading.value = false;
   };
   const logoutUser = () => {
     deleteToken();

@@ -3,7 +3,7 @@
     <RouterLink
       v-if="item?.allow"
       :to="{name: props.item.name}"
-      class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--secondary) hover:text-white transition"
+      class="block rounded px-3 py-1 mb-1 text-md hover:bg-(--secondary) hover:text-white transition whitespace-nowrap"
       :class="
         route.name === props.item.name
           ? `bg-(--secondary)/20 border-l-4 border-(--secondary) text-(--secondary)`
@@ -19,13 +19,15 @@
           <VueIcon
             v-if="props.item.icon"
             :name="props.item.icon"
-            class="size-6"
+            class="size-7"
+            :stroke-width="1.5"
         /></Tooltip>
         <div v-else>
           <VueIcon
             v-if="props.item.icon"
             :name="props.item.icon"
-            class="size-6"
+            class="size-7"
+            :stroke-width="1.5"
           />
         </div>
         <p v-if="uiStore.isSidebar">{{ t(props.item.label) }}</p>
@@ -38,7 +40,7 @@
     class="group [&_summary::-webkit-details-marker]:hidden"
   >
     <summary
-      class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-(--hover) text-(--text-primary)"
+      class="flex px-3 py-1 mb-1 text-md transition items-center justify-between rounded hover:bg-(--hover) text-(--text-primary) whitespace-nowrap"
     >
       <div class="flex items-center gap-2 text-(--text-primary)">
         <Tooltip
@@ -49,14 +51,16 @@
           <VueIcon
             v-if="props.item.icon"
             :name="props.item.icon"
-            class="size-6"
+            class="size-7"
+            :stroke-width="1.5"
           />
         </Tooltip>
         <div v-else>
           <VueIcon
             v-if="props.item.icon"
             :name="props.item.icon"
-            class="size-6"
+            class="size-7"
+            :stroke-width="1.5"
           />
         </div>
 
@@ -86,7 +90,7 @@
       <RouterLink
         v-if="p.allow"
         :to="{name: p.name}"
-        class="flex rounded items-center gap-2 px-3 py-1 mb-1 text-sm transition hover:bg-(--secondary) hover:text-white"
+        class="flex rounded items-center gap-2 px-3 py-1 mb-1 text-sm transition hover:bg-(--secondary) hover:text-white whitespace-nowrap"
         :class="
           route.name === p.name
             ? `bg-(--secondary)/20 border-l-4 border-(--secondary) text-(--secondary)`
@@ -94,9 +98,9 @@
         "
       >
         <Tooltip v-if="!uiStore.isSidebar" :text="t(p.label)" position="right">
-          <VueIcon :name="p.icon" class="size-6" />
+          <VueIcon :name="p.icon" class="size-7" :stroke-width="1.5" />
         </Tooltip>
-        <div v-else><VueIcon :name="p.icon" class="size-6" /></div>
+        <div v-else><VueIcon :name="p.icon" class="size-7" :stroke-width="1.5"/></div>
         <p v-if="uiStore.isSidebar">{{ t(p.label) }}</p>
       </RouterLink>
     </div>

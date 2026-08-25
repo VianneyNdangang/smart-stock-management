@@ -13,7 +13,7 @@
                 : `text-(--warning) bg-(--warning)/10  border-(--warning)/40`
         "
       >
-        <VueIcon v-if="props.icon" :name="props.icon" class="size-5" />
+        <VueIcon v-if="props.icon" :name="props.icon" class="size-5" :stroke-width="1.5"/>
       </div>
       <div>
         <p class="text-sm font-semibold text-(--text-primary) overflow-auto">

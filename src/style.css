@@ -33,10 +33,10 @@
   --secondary-ghost: #f8e39e;
 
   /* States */
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
+  --success: #1ca24d;
+  --warning: #d68c0c;
+  --danger: #cd3b3b;
+  --info: #3776db;
 
   /* Hover */
   --hover: #f7f7f7;

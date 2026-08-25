@@ -7,33 +7,31 @@ export const useAlertsStore = defineStore("alerts", () => {
   const limit = ref(20);
   const page = ref(1);
 //   const id = ref('')
-  const url = ref()
-
+  const url = ref(`stock-alert/warehouse`)
+  const filters = ref<any>(undefined)
   const { data, fetchData, pagination, loading } = useFetchData({
     limit,
     page,
     url,
-    // filters,
+    filters,
   });
 
   const alerts = computed(() => data.value);
+ 
 
-  const fetchAlerts = async (newId: string, newPage?: number, newFilter?: any, ) => {
+  const fetchAlerts = async (newPage?: number, newId?: any, ) => {
    
     if (newPage !== undefined) {
       page.value = newPage;
     }
-    if(newId !== undefined){
-        // id.value = newId 
-        url.value = `stock-alert/warehouse/${newId}`
+
+    if (newId !== undefined) {
+      url.value = `stock-alert/warehouse/${newId}`;
     }
-    if (newFilter !== undefined) {
-    //   filters.value = newFilter;
-    }
-    await fetchData();
+    await fetchData(); 
   };
 
-  const filterAlerts = (values: any) => {
+  // const filterAlerts = (values: any) => {
     // const filterData = {
     //   productName: values.productName || undefined,
 
@@ -54,17 +52,17 @@ export const useAlertsStore = defineStore("alerts", () => {
 
     // filters.value = filterData;
 
-    if (values.limit) {
-      limit.value = values.limit;
-    }
+  //   if (values.limit) {
+  //     limit.value = values.limit;
+  //   }
 
-    page.value = 1;
+  //   page.value = 1;
 
-    fetchData();
-  };
+  //   fetchData();
+  // };
   return {
     fetchAlerts,
-    filterAlerts,
+    // filterAlerts,
     alerts,
     loading,
     pagination,

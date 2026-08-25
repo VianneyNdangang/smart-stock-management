@@ -60,7 +60,7 @@ const useFetchData = (props: TPagination) => {
         params,
       });
 
-      data.value = response.data.items;
+      data.value = response?.data?.items;
 
       pagination.value = {
         ...pagination.value,

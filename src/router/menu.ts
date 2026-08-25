@@ -1,18 +1,17 @@
 import { useProfileStore } from "@/store/profilStore";
 import {
-  IconLayoutDashboard,
-  IconUsersGroup,
+  IconDashboard ,
+  IconUsers ,
   IconAlertCircle,
   IconShoppingCart,
   IconPackage,
-  IconArrowBarToDown,
-  //   IconSettings,
-  IconPackages,
   IconFolders,
-  IconTags,
   IconTruckDelivery,
   IconStack3Filled,
   IconBuildingWarehouse,
+  IconStack2,
+  IconStackPush,
+  IconSpeakerphone,
 } from "@tabler/icons-vue";
 import { computed } from "vue";
 
@@ -31,7 +30,7 @@ const authStore = useProfileStore();
     {
       label: "menu.dashboard",
       path: "/",
-      icon: IconLayoutDashboard,
+      icon: IconDashboard,
       name: "dashboard",
       allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
       children: [],
@@ -39,7 +38,7 @@ const authStore = useProfileStore();
     {
       label: "menu.users",
       path: "/users",
-      icon: IconUsersGroup,
+      icon: IconUsers,
       name: "users",
       allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
       children: [],
@@ -63,14 +62,14 @@ const authStore = useProfileStore();
     {
       label: "menu.stock",
       path: "",
-      icon: IconPackage,
+      icon: IconStack2,
       name: "stock",
       allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
       children: [
         {
           label: "menu.stock_entries",
           path: "/stock-entries",
-          icon: IconArrowBarToDown,
+          icon: IconStackPush,
           name: "stock_entries",
           allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
         },
@@ -117,7 +116,7 @@ const authStore = useProfileStore();
     {
       label: "menu.products",
       path: "/products",
-      icon: IconPackages,
+      icon: IconPackage,
       name: "products",
       allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
       children: [],
@@ -125,7 +124,7 @@ const authStore = useProfileStore();
     {
       label: "menu.campaigns",
       path: "/campaigns",
-      icon: IconTags,
+      icon: IconSpeakerphone,
       name: "campaigns",
       allow: ["admin", "CategoryManager", "FootWorker"].includes(role),
       children: [],

@@ -61,3 +61,34 @@ export const useWarehousesStore = defineStore("warehouses", () => {
     // filterWarehouses,
   };
 });
+
+export const useWarehouseStockStore = defineStore("warehousesStock", () => {
+  const filters = ref<any>();
+  const page = ref(1);
+  const limit = ref(20);
+  const url = ref()
+  const { data, fetchData,pagination, loading } = useFetchData({
+    limit,
+    page,
+    url,
+    filters,
+  });
+
+  const stocks = computed(() => data.value);
+
+  const fetchWarehouseStock = async (id:string, newPage?: number) => {
+    if (newPage) {
+      page.value = newPage;
+    }
+    if(id){
+      url.value = `stock/warehouse/${id}`
+    }
+    await fetchData();
+  };
+  return {
+    fetchWarehouseStock,
+    stocks,
+    loading,
+    pagination,
+  };
+});

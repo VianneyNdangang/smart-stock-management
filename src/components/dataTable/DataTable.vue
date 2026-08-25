@@ -178,6 +178,8 @@ const toggleRecord = (id: string) => {
   }
 };
 
+//  const alerts = computed(() => data.value);
+
 const isFilter = ref(false);
 const handleChange = () => {
   isFilter.value = !isFilter.value;

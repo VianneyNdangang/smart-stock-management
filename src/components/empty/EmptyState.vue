@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-center items-center flex-col w-full min-h-full bg-(--background) border border-(--border) rounded p-15 "
+    class="flex justify-center items-center flex-col w-full min-h-full"
   >
     <div class="text-(--text-muted)"><IconMoodConfuzedFilled stroke={2} size="48" /></div>
     <h3 class="text-2xl font-bold text-(--text-secondary) text-center">

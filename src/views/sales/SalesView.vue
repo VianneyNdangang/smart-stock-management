@@ -194,7 +194,7 @@ const header: TTableheaders[] = [
           size: 18,
           class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
           onClick: () => {
-            router.push({ name: "batch_detail", params: { id: record?.id } });
+            router.push({ name: "sale_detail", params: { id: record?.id } });
           },
         })
       ]),

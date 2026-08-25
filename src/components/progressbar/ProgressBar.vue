@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-3 w-full">
+  <div class="flex items-center gap-3 w-full whit">
     <!-- Pourcentage -->
     <span
       class="text-sm font-medium min-w-10 text-right"

@@ -1,5 +1,6 @@
 <template>
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-3">
+          <BackButton />
     <PageHeader
       title="Stock Entries"
       subtitle="Manage stock entries and inventory"
@@ -13,7 +14,7 @@
     <div
       class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5"
     >
-      <DataSommary title="Batches" :value="pagination.total" state="success" />
+      <DataSommary title="Products" :value="pagination.total" state="success" />
       <!-- <DataSommary title="Total Administrators" :value="users.filter((u: any)=>u.role === 'admin').length" state="success" />
       <DataSommary title="Total Category Managers" :value="users.filter((u: any)=>u.role === 'CategoryManager').length" state="success" />
       <DataSommary title="Total Foot Workers" :value="users.filter((u: any)=>u.role === 'FootWorker').length" state="success" /> -->
@@ -82,18 +83,20 @@ import ProgressBar from "@/components/progressbar/ProgressBar.vue";
 import FormatePrice from "@/components/formatePrice/FormatePrice.vue";
 import FilterBar from "@/components/filterBar/FilterBar.vue";
 import { useBatchesStore } from "@/store/batchesStore.ts";
+import BackButton from "@/components/backbutton/BackButton.vue";
 
 const { t } = useI18n()
 const router = useRouter();
 const route = useRoute()
 const batchId = route.params.id as string
-const selectedBatche = ref();
+const selectedProduct = ref();
 const isCreateBatche = ref(false);
 const store = useBatchesStore();
 const { batches } = storeToRefs(store);
 const { pagination } = storeToRefs(store);
 
 onMounted(() => {
+
   store.fetchBatches(batchId);
 });
 
@@ -112,23 +115,23 @@ const header: TTableheaders[] = [
         {
           class: "text-(--text-primary) font-semibold whitespace-nowrap",
         },
-        record?.name ? record?.name : "-",
+        record?.productName ? record?.name : "-",
       ),
     width: "20%",
   },
-  {
-    textAlign: "left",
-    accessor: "productName",
-    name: () => t('stock.columns.productName'),
-     render: (record: any) =>
-      h(
-        Badge,{
-          type:'primary',
-          message: record?.totalProducts || '-',
-        }
-      ),
-    width: "auto",
-  },
+  // {
+  //   textAlign: "left",
+  //   accessor: "productName",
+  //   name: () => t('stock.columns.productName'),
+  //    render: (record: any) =>
+  //     h(
+  //       Badge,{
+  //         type:'primary',
+  //         message: record?.totalProducts || '-',
+  //       }
+  //     ),
+  //   width: "auto",
+  // },
   {
     textAlign: "left",
     accessor: "units",
@@ -137,7 +140,7 @@ const header: TTableheaders[] = [
       h(
         Badge,{
           type:'primary',
-          message: record?.totalProducts || '-',
+          message: record?.units || '-',
         }
       ),
     width: "auto",
@@ -161,8 +164,8 @@ const header: TTableheaders[] = [
     name: () => t('stock.columns.stockValue'),
     render: (record: any) =>
       h(FormatePrice,{
-        price: record?.sellingPrice
-          ? record?.sellingPrice
+        price: record?.units !== null && record.costPrice !== null
+          ? (record?.units * record.costPrice)
           : "-",
         class: 'text-(--text-primary) font-semibold'
   }),
@@ -181,9 +184,12 @@ const header: TTableheaders[] = [
     name: () => t('stock.columns.progress'),
     render: (record: any) =>
       // record?.role
-      h(ProgressBar, {
+      h('div',{
+        class: "w-40",
+      },
+    h(ProgressBar, {
         percentage: record?.percentage || 50,
-      }),
+      }),),
     width: "12%",
   },
   {
@@ -223,7 +229,7 @@ const header: TTableheaders[] = [
           size: 18,
           class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
           onClick: () => {
-            selectedBatche.value = record;
+            selectedProduct.value = record;
             isCreateBatche.value = true;
           },
         }),

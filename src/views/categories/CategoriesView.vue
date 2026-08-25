@@ -72,7 +72,7 @@
       </div>
     </div>
   </div>
-  <CreateCategory
+  <!-- <CreateCategory
     v-if="isCreateCat"
     :category="categoryEdit"
     :isOpen="isCreateCat"
@@ -82,8 +82,8 @@
         categoryEdit = null;
       }
     "
-  />
-  <DeleteData
+  /> -->
+  <!-- <DeleteData
     :action="() => handleDelete"
     :id="categoryDelete?.id"
     message="Cette action supprimera définitivement cet catégorie ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
@@ -96,7 +96,7 @@
         categoryDelete = null;
       }
     "
-  />
+  /> -->
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";

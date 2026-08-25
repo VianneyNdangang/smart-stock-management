@@ -65,11 +65,11 @@
     </div>
   </div>
 
-  <!-- <Createcampaign
+  <CreateCampaign
   :campaign="selectedcampaign"
   :isOpen="isCreatecampaign"
   @close="()=>isCreatecampaign = false"
-  /> -->
+  />
   <RightSideBare>
     <CampaignsFilter/>
   </RightSideBare>
@@ -91,6 +91,7 @@ import CampaignsFilter from "./CampaignsFilter.vue";
 import { useRSidebarStore } from "@/store/rSideBareStore.ts";
 import RightSideBare from "@/components/sideBar/RightSideBare.vue";
 import Button from "@/components/button/Button.vue";
+import CreateCampaign from "./CreateCampaign.vue";
 
 const campaignStore = useCampaignsStore();
 onMounted(async () => {

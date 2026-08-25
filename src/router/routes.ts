@@ -16,6 +16,7 @@ import ForbiddenView from "@/views/security/ForbiddenView.vue";
 import BatchesDetail from "@/views/stock/BatchesDetail.vue";
 import WarehouseView from "@/views/stock/warehouse/WarehouseView.vue";
 import WarehouseDetailView from "@/views/stock/warehouse/WarehouseDetailView.vue";
+import SaleDetailView from "@/views/sales/SaleDetailView.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -63,6 +64,15 @@ const routes: RouteRecordRaw[] = [
         path: "sales",
         name: "sales",
         component: SalesView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
+      },
+      {
+        path: "sale-detail/:id",
+        name: "sale_detail",
+        component: SaleDetailView,
         meta: {
           requiresAuth: true,
           roles: ["admin", "CategoryManager"],

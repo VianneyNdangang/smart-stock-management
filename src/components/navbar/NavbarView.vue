@@ -3,11 +3,21 @@
     class="fixed z-50 bg-(--surface) text-(--text-prmary) px-4 flex left-0 right-0 shadow-sm transition-all duration-300 ease-in-out"
     :class="uiStore.isSidebar ? `md:left-70` : `md:left-20`"
   >
+          
     <div class="flex justify-between py-4 w-full">
       <div class="cursor-pointer flex justify-center items-center md:hidden">
         <IconMenu2 size="30" @click="() => (isMenu = true)" />
       </div>
-      <div class="flex flex-col md:flex-row gap-2">
+      <div class="flex flex-col justify-center items-center md:flex-row gap-2">
+        <button
+            name="closeSidebar"
+            @click="uiStore.handleChange()"
+            class="cursor-pointer hidden border rounded md:flex justify-center items-center"
+          >
+            <IconChevronsLeft stroke="1.5" size="25"
+              v-if="uiStore.isSidebar"
+            /><IconChevronsRight v-else stroke="1.5" size="25"/>
+          </button>
         <div class="whitespace-nowrap">
           <h1 class="font-bold text-lg capitalize flex">
             <p v-if="Time < 12">{{ t("navbar.greeting.morning") }}</p>
@@ -31,9 +41,9 @@
           />
         </div>
       </div>
-      <div class="flex gap-2 justify-end items-center ml-5">
+      <div class="flex gap-2 md:gap-5 justify-end items-center ml-5">
         <!-- Theme -->
-        <div class="hidden md:flex">
+        <div>
           <ThemeButton />
         </div>
 
@@ -60,14 +70,18 @@
           <Tooltip :text="t('navbar.profile')" position="bottom">
             <div
               @click="isProfile = true"
-              class="flex flex-col justify-center items-center"
+              class="flex gap-2 justify-center items-center"
             >
               <Profile
                 :src="connectedUser?.profileUrl"
                 h="10"
                 :name="connectedUser?.userName"
               />
-              <p class="text-sm">{{ connectedUser?.userName }}</p>
+              <div class="flex flex-col justify-center items-start">
+                <p class="text-sm font-semibold text-(--secondary)">{{ connectedUser?.userName }}</p>
+               <p class="text-xs font-semibold text-(--text-secondary)">{{ connectedUser?.role }}</p>
+              </div>
+              
             </div>
           </Tooltip>
         </div>
@@ -193,6 +207,8 @@
 import { useUiStore } from "@/store/uiStore";
 import {
   IconBellRinging,
+  IconChevronsLeft,
+  IconChevronsRight,
   IconLogout2,
   IconMenu2,
   IconTransitionLeftFilled,
@@ -213,7 +229,7 @@ import { useRouter } from "vue-router";
 import SearchBare from "../search/SearchBare.vue";
 import Tooltip from "../tooltip/Tooltip.vue";
 import LanguageToggle from "./LanguageToggle.vue";
-import socket from "@/helpers/socket.ts";
+import { connectSocket, socket } from "@/helpers/socket.ts";
 
 const store = useProfileStore();
 const uiStore = useUiStore();
@@ -224,6 +240,7 @@ const router = useRouter();
 const { connectedUser } = storeToRefs(store);
 const { t } = useI18n();
 onMounted(async () => {
+  connectSocket();
   store.fetchProfile();
   socket.on("connexion", () => {
     console.log("Connecté au serveur Socket avec l'ID :", socket.id);

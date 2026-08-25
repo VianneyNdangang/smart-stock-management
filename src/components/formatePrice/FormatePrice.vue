@@ -18,7 +18,7 @@ const props = withDefaults(
   {
     currency: "XAF",
     locale: "fr-FR",
-    decimals: 0,
+    decimals: 3,
   }
 );
 

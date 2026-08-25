@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col gap-3">
+    <BackButton />
     <section>
       <Card>
         <div class="flex flex-col gap-3">
@@ -75,7 +76,7 @@
       />
     </section>
     <DataTable
-    v-if="products?.items?.length > 0"
+      v-if="products?.items?.length > 0"
       title="products of this category"
       :records="products.items"
       :headers="header"
@@ -152,14 +153,15 @@ const handlePageChange = async (pag: number) => {
   fetchData();
 };
 
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+import { useI18n } from "vue-i18n";
+import BackButton from "@/components/backbutton/BackButton.vue";
+const { t } = useI18n();
 
 const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "productName",
-    name: () => t('products.columns.productName'),
+    name: () => t("products.columns.productName"),
     render: (record: any) =>
       h("div", { class: "flex justify-start gap-2 items-center w-full" }, [
         h(ProductProfile, {
@@ -178,7 +180,7 @@ const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "units",
-    name: () => t('products.columns.units'),
+    name: () => t("products.columns.units"),
     render: (record: any) =>
       h(Badge, {
         type: "primary",
@@ -189,7 +191,7 @@ const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "catedoryName",
-    name: () => t('products.columns.category'),
+    name: () => t("products.columns.category"),
     render: (record: any) =>
       record?.category?.categoryName ? record?.category?.categoryName : "-",
     width: "auto",
@@ -197,7 +199,7 @@ const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "perishable",
-    name: () => t('products.columns.variant'),
+    name: () => t("products.columns.variant"),
     render: (record: any) =>
       h(Badge, {
         type: record.perishable ? "warning" : "success",
@@ -208,7 +210,7 @@ const header: TTableheaders[] = [
   {
     textAlign: "left",
     accessor: "createdAt",
-    name: () => t('products.columns.createdAt'),
+    name: () => t("products.columns.createdAt"),
     render: (record: any) =>
       // record?.role
       h(FormateDate, {
@@ -219,7 +221,7 @@ const header: TTableheaders[] = [
   {
     textAlign: "right",
     accessor: "actions",
-    name: () => t('products.columns.actions'),
+    name: () => t("products.columns.actions"),
     render: (record: any) =>
       h("div", { class: "flex justify-end gap-2" }, [
         h(IconEye, {

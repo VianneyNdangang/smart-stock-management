@@ -1,87 +1,120 @@
 <template>
-  <div
-    class="relative w-full rounded-(--radius) border p-3 transition-all duration-200 hover:shadow-md"
-    :class="borderClass"
-  >
-    <!-- Indicateur de priorité -->
-    <div class="flex items-start justify-between gap-4 pl-2">
-      <!-- Icône + informations -->
-      <div class="flex min-w-0 items-start gap-3">
+
+
+
+ <Card>
+        <!-- <button onclick="()=>{emit('close')}">X</button> -->
         <div
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-          :class="iconContainerClass"
+          class="relative w-full rounded-(--radius)"
+          :class="borderClass"
         >
-          <VueIcon :name="icon" class="size-6" />
-        </div>
+          <!-- Indicateur de priorité -->
+          <!-- <div
+            class="absolute left-0 top-4 h-10 w-1 rounded-r-full"
+            :class="indicatorClass"
+          /> -->
 
-        <div class="min-w-0">
-          <div class="flex flex-wrap items-center gap-2">
-            <h3 class="font-semibold text-(--text-primary)">
-              {{ alert.title }}
-            </h3>
+          <div class="flex items-start justify-between gap-4 pl-2">
+            <!-- Icône + informations -->
+            <div class="flex min-w-0 items-start gap-3">
+              <div
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+                :class="iconContainerClass"
+              >
+                <component :is="icon" :size="21" />
+              </div>
 
-            <span
-              class="rounded-full px-2 py-0.5 text-xs font-medium"
-              :class="badgeClass"
-            >
-              {{ priorityLabel }}
-            </span>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h3 class="font-semibold text-(--text-primary)">
+                    {{ alert.title }}
+                  </h3>
+
+                  <span
+                    class="rounded-full px-2 py-0.5 text-xs font-medium"
+                    :class="badgeClass"
+                  >
+                    {{ priorityLabel }}
+                  </span>
+                </div>
+
+                <p class="mt-1 text-sm text-(--text-secondary)">
+                  {{ alert.message }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Score -->
+            <div class="shrink-0 text-right">
+              <p class="text-xs text-(--text-secondary)">Priorité</p>
+
+              <p class="text-lg font-bold" :class="textClass">
+                {{ alert.priorityScore }}
+              </p>
+            </div>
           </div>
 
-          <p class="mt-1 text-sm text-(--text-secondary)">
-            {{ alert.message }}
-          </p>
+          <!-- Informations -->
+          <div
+            class="mt-4 grid grid-cols-2 gap-3 border-t border-(--border) pt-4 md:grid-cols-4"
+          >
+            <div>
+              <p class="text-xs text-(--text-secondary)">SKU</p>
+
+              <p
+                class="mt-1 truncate text-sm font-medium text-(--text-primary)"
+                :title="alert.SKU"
+              >
+                {{ alert.SKU }}
+              </p>
+            </div>
+
+            <div>
+              <p class="text-xs text-(--text-secondary)">Stock actuel</p>
+
+              <p class="mt-1 text-sm font-medium text-(--text-primary)">
+                {{ alert.currentStock }} unités
+              </p>
+            </div>
+
+            <div>
+              <p class="text-xs text-(--text-secondary)">Réapprovisionnement</p>
+
+              <p class="mt-1 text-sm font-medium text-(--text-primary)">
+                {{ alert.suggestedRestockUnit }} unités
+              </p>
+            </div>
+
+            <div>
+              <p class="text-xs text-(--text-secondary)">Entrepôt</p>
+
+              <p
+                class="mt-1 truncate text-sm font-medium text-(--text-primary)"
+                :title="alert.warehouseName"
+              >
+                {{ alert.warehouseName }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Raisons -->
+          <div
+            v-if="alert.priorityReasons?.length"
+            class="mt-4 flex flex-wrap gap-2"
+          >
+            <span
+              v-for="reason in uniqueReasons"
+              :key="reason"
+              class="rounded-md bg-(--secondary)/10 px-2 py-1 text-xs text-(--text-secondary)"
+            >
+              {{ formatReason(reason) }}
+            </span>
+          </div>
         </div>
-      </div>
+      </Card>
 
-      <!-- Score -->
-      <div class="shrink-0 text-right">
-        <p class="text-xs text-(--text-secondary)">Priorité</p>
 
-        <p class="text-lg font-bold" :class="textClass">
-          {{ alert.priorityScore }}
-        </p>
-      </div>
-    </div>
-
-    <!-- Informations -->
-    <div
-      class="mt-4 grid grid-cols-2 gap-3 border-t border-(--border) pt-4 md:grid-cols-4"
-    >
-      <div>
-        <p class="text-xs text-(--text-secondary)">SKU</p>
-
-        <p
-          class="mt-1 truncate text-sm font-medium text-(--text-primary)"
-          :title="alert.SKU"
-        >
-          {{ alert.SKU }}
-        </p>
-      </div>
-
-      <div>
-        <p class="text-xs text-(--text-secondary)">Entrepôt</p>
-
-        <p
-          class="mt-1 truncate text-sm font-medium text-(--text-primary)"
-          :title="alert.warehouseName"
-        >
-          {{ alert.warehouseName }}
-        </p>
-      </div>
-    </div>
-
-    <!-- Raisons -->
-    <div v-if="alert.priorityReasons?.length" class="mt-4 flex flex-wrap gap-2">
-      <span
-        v-for="reason in uniqueReasons"
-        :key="reason"
-        class="rounded-(--radius) bg-(--secondary)/10 px-2 py-1 text-xs text-(--text-secondary)"
-      >
-        {{ formatReason(reason) }}
-      </span>
-    </div>
-  </div>
+ 
 </template>
 
 <script setup lang="ts">
@@ -94,6 +127,7 @@ import {
 } from "@tabler/icons-vue";
 import { getAlertType } from "@/helpers/formateData";
 import VueIcon from "@kalimahapps/vue-icons/VueIcon";
+import Card from "./Card.vue";
 
 interface Alert {
   SKU: string;

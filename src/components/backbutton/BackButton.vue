@@ -10,15 +10,19 @@ const goBack = () => {
 </script>
 
 <template>
-  <button
+  <div class="w-full bg-(--surface) p-3 z-100 sticky top-20 mb-3">
+     <button
     type="button"
     @click="goBack"
-    class="fixed cursor-pointer z-999 flex items-center my-2 gap-2 text-sm
+    class="cursor-pointer flex items-center gap-2 text-sm
            text-(--text-secondary)
            transition-colors
-           hover:text-(--text-primary)"
+           hover:text-(--text-primary)
+           font-bold"     
   >
     <IconArrowLeft :size="18" />
     <span>Back</span>
   </button>
+  </div>
+ 
 </template>

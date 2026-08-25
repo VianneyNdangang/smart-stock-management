@@ -139,7 +139,7 @@ const createChart = () => {
 
       plugins: {
         legend: {
-          position: "bottom",
+          position: "center",
         },
 
         title: {

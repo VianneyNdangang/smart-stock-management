@@ -1,19 +1,29 @@
 <template>
-  <div @click="themeStore.toggleTheme">
-    <Switch
-      name="theme"
-      :model="isDark"
-      :activeIcon="IconMoonStars"
-      :inactiveIcon="IconSunHigh"
+  <button
+    @click="themeStore.toggleTheme()"
+    type="button"
+    class="cursor-pointer rounded border px-2 py-1"
+  >
+    <IconSunHigh
+      v-if="isDark"
+      :size="20"
+      :stroke-width="1.5"
     />
-  </div>
+
+    <IconMoonStars
+      v-else
+      :size="20"
+      :stroke-width="1.5"
+    />
+  </button>
 </template>
+
 <script setup lang="ts">
 import { useThemeStore } from "@/store/themeStore";
-import Switch from "../switch/Switch.vue";
 import { IconMoonStars, IconSunHigh } from "@tabler/icons-vue";
 import { storeToRefs } from "pinia";
 
 const themeStore = useThemeStore();
-const isDark = storeToRefs(themeStore);
+
+const { isDark } = storeToRefs(themeStore);
 </script>

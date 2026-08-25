@@ -1,4 +1,4 @@
-export interface AlertMessage {
+export interface AlertMessageType {
   type: "success" | "danger" | "warning" | "info";
   title: string;
   message: string;
@@ -32,10 +32,9 @@ export const formatStatus = (
 };
 
 
-
 export const getAlertType = (
   priorityScore: number
-): AlertMessage["type"] => {
+): AlertMessageType["type"] => {
   if (priorityScore >= 90) {
     return "danger";
   }
@@ -47,7 +46,7 @@ export const getAlertType = (
   return "info";
 };
 
-export const formatAlertMessage = (alert: any): AlertMessage => {
+export const formatAlertMessage = (alert: any): AlertMessageType => {
   const reasons = alert.priorityReasons || [];
 
   const hasExpiry = reasons.includes("approaching_expiry");
