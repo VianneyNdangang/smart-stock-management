@@ -1,6 +1,6 @@
-<template><BackButton />
+<template>
+  <BackButton />
   <div class="flex flex-col gap-3">
-    
     <section class="flex flex-col gap-3">
       <Card>
         <div class="flex flex-col md:flex-row gap-3 w-full">
@@ -27,7 +27,7 @@
                 :alt="`image ` + index"
                 :key="index"
                 :src="image"
-                class="w-24 h-24 rounded-lg border border-(--border) object-cover cursor-pointer hover:border-(--warning) transition"
+                class="w-12 h-12 rounded-lg border border-(--border) object-cover cursor-pointer hover:border-(--warning) transition"
                 @click="selectedImage = image"
               />
             </div>
@@ -64,24 +64,27 @@
                 <div class="rounded border border-(--border) p-3">
                   <p class="text-sm text-(--text-secondary)">Category</p>
                   <p class="font-medium">
-                    {{ product?.category?.categoryName || '-'}}
+                    {{ product?.category?.categoryName || "-" }}
                   </p>
                 </div>
 
                 <div class="rounded border border-(--border) p-3">
                   <p class="text-sm text-(--text-secondary)">Brand</p>
                   <p class="font-medium">
-                    {{ product?.brand?.brandName || '-'}}
+                    {{ product?.brand?.brandName || "-" }}
                   </p>
                 </div>
-
+                <div class="rounded border border-(--border) p-3 max-h-40">
+                  <p class="text-sm text-(--text-secondary)">Specifications</p>
+                  <p class="text-(--text-secondary) mt-2">
+                    {{
+                      product?.specification || "No specification available."
+                    }}
+                  </p>
+                </div>
                 <div class="rounded border border-(--border) p-3">
                   <p class="text-sm text-(--text-secondary)">Created</p>
                   <FormateDate :date="product?.createdAt" />
-                </div>
-                <div class="rounded border border-(--border) p-3">
-                  <p class="text-sm text-(--text-secondary)">Update Date</p>
-                  <FormateDate :date="product?.updateAt || ''" />
                 </div>
               </div>
             </div>
@@ -89,40 +92,37 @@
         </div>
       </Card>
       <div class="flex gap-3 flex-col md:flex-row">
-        <!-- Description -->
-        <!-- <Card>
-          <h2 class="text-xl font-semibold mb-4 text-(--text-primary)">
-            Description
-          </h2>
-
-          <p class="leading-7 text-(--text-secondary)">
-            {{ product?.description || "No description available." }}
-          </p>
-        </Card> -->
-
-        <!-- Specifications -->
         <Card>
-          <h2 class="text-xl font-semibold mb-4 text-(--text-primary)">
-            Specifications
-          </h2>
-
-          <div v-if="product?.specification" class="grid md:grid-cols-2 gap-3">
-            <div class="flex justify-between border-b border-(--border) py-2">
-              <span class="font-medium">{{ product.specification }}</span>
+          <div class="class flex items-center justify-end w-full">
+            <Button
+              name="analysing"
+              type="button"
+              variant="ghost"
+              label="Analyse"
+              w="46"
+              :click="() => handleAnalyst()"
+            />
             </div>
+            <div
+              v-if="messages.length > 0"
+              class="class flex flex-col w-full gap-2 transition-all duration-300"
+              :class="messages.length > 0? `h-full`:`h-0`"
+            >
+              <AlertMessage
+                v-for="item in messages"
+                :message="item.message"
+                :title="item.title"
+                :type="item.type"
+              />
           </div>
-
-          <p v-else class="text-(--text-secondary)">
-            No specifications available.
-          </p>
         </Card>
       </div>
     </section>
-    <section class="flex flex-col md:flex-row gap-3 items-stretch">
+    <section class="grid grid-col-1 md:grid-cols-3 gap-3 items-stretch">
       <div
-        class="flex flex-col gap-3 md:w-2/3 w-full lg:w-12/6 justify-between"
+        class="flex flex-col gap-3 md:col-span-2 justify-between"
       >
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
           <DataSommary title="Total categories" :value="5000" state="primary" />
           <DataSommary
             title="Total categories Level 1"
@@ -150,7 +150,7 @@
       </div>
 
       <Card>
-        <div class="flex h-100 md:h-122">
+        <div class="flex justify-center items-center h-100 md:h-122">
           <Spiner size="lg" v-if="loading" />
           <DoughnutChart
             v-else-if="stockByWarehouseData.values.length > 0"
@@ -178,8 +178,10 @@
   </div>
 </template>
 <script setup lang="ts">
+import AlertMessage from "@/components/alertMessages/AlertMessage.vue";
 import BackButton from "@/components/backbutton/BackButton.vue";
 import Badge from "@/components/badge/Badge.vue";
+import Button from "@/components/button/Button.vue";
 import Card from "@/components/card/Card.vue";
 import BarChart from "@/components/charts/BarChart.vue";
 import DoughnutChart from "@/components/charts/DoughnutChart.vue";
@@ -188,56 +190,62 @@ import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import EmptyState from "@/components/empty/EmptyState.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import Spiner from "@/components/spiner/Spiner.vue";
+import {
+  formatAlertMessage,
+  type AlertMessageType,
+} from "@/helpers/formateData";
 import { apiClient } from "@/store/api";
-import { useToastStore } from "@/store/toastStore";
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
+/** ---Declarations--- */
 const route = useRoute();
+const productId = route.params.id;
+/**Datas */
 const product = ref();
-const toast = useToastStore();
 const stocks = ref([]);
-const analysis = ref();
-const loading = ref(false);
+const salesGraph = ref([])
 const selectedImage = ref<string>("");
+const messages = ref<AlertMessageType[]>([]);
+// const analysis = ref();
 
+/**Loaders */
+const loading = ref(false);
+const analysLoading = ref(false);
+
+/** ---Handlers-- */
 const loadProduct = async (id: string) => {
   loading.value = true;
-
-  try {
-    console.log("🆔 ID :", id);
-
-    console.log("📦 Stock URL :", `/stock/product/${id}`);
-
-    const stockResponse = await apiClient.get(`/stock/product/${id}`);
-
-    console.log("✅ Stock :", stockResponse.data);
-
-    stocks.value = stockResponse.data;
-
-    console.log("📦 Product URL :", `/products/${id}`);
-
+  try { 
     const productResponse = await apiClient.get(`/products/${id}`);
-
-    console.log("✅ Product :", productResponse.data);
-
     product.value = productResponse.data;
-
+    const stockResponse = await apiClient.get(`/stock/product/${id}`);
+    stocks.value = stockResponse.data;
+    const salesResponse = await apiClient.get(`products/${id}/get-graph`);
+    salesGraph.value = salesResponse.data
+   
     selectedImage.value = product.value?.images?.[0] || "";
-
   } catch (error: any) {
-    console.error("❌ Erreur loadProduct :", error);
-
-    console.error("URL :", error?.config?.url);
-    console.error("Status :", error?.response?.status);
-    console.error("Response :", error?.response?.data);
   } finally {
     loading.value = false;
   }
 };
 
+const handleAnalyst = async () => {
+  analysLoading.value = true;
+  try {
+    const response = await apiClient.get(
+      `stock-alert/product/${productId}/recalculate`,
+    );
+    messages.value = response.data.map(formatAlertMessage);
+  } finally {
+    analysLoading.value = false;
+  }
+};
+
+/**  Events*/
 watch(
-  () => route.params.id,
+  () => productId,
   async (newId) => {
     if (!newId) return;
     await loadProduct(newId as string);

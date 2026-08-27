@@ -86,7 +86,6 @@
           </div>
         </div>
       </div>
-
       <DataTable
         :title="t('menu.products')"
         :records="stocks"
@@ -102,15 +101,15 @@
         <ProductsTableSkeleton />
       </DataTable>
     </div>
-    <div class="w-200">
+    <div class="w-200 pt-15">
       <div class="sticky top-33 w-full">
         <Card>
           <p
-            class="truncate font-semibold text-(--text-primary) flex gap-2 py-3"
+            class="truncate font-semibold text-(--text-secondary) flex gap-2 py-3"
           >
-            <IconBell stroke="1.5" /> <span>Alerts</span>
+            <IconBell stroke="1.5" class="text-(--text-muted)"/> <span>Alerts</span>
           </p>
-          <div class="h-145 overflow-scroll scrollbar-none p-1 bg-(--surface)">
+          <div class="h-140 overflow-scroll scrollbar-none p-1 bg-(--surface)">
             <div v-if="alerts.length > 0" class="flex flex-col gap-2 max-h-170">
               <div
                 v-for="(message, index) in formattedAlerts"
@@ -148,6 +147,7 @@
     "
   />
 </template>
+
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";

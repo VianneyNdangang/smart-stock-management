@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import useFetchData from "@/hooks/request";
 
-export const useBatchesStore = defineStore("batches", () => {
+export const useBatcheProductsStore = defineStore("batchesProducts", () => {
 
    const page = ref(1);
    const url = ref()
@@ -12,9 +12,8 @@ export const useBatchesStore = defineStore("batches", () => {
       url,
     });
   
-    const batches = computed(() => data.value);
-  
-    const fetchBatches = async (id: string, newPage?: number) => {
+    const products = computed(() => data.value);
+    const fetchBatcheProducts = async (id: string, newPage?: number) => {
       if (newPage) {
         page.value = newPage;
       }
@@ -22,6 +21,7 @@ export const useBatchesStore = defineStore("batches", () => {
         url.value = `/batch/${id}`;
       }
       await fetchData();
+      console.log("datadatadata",data)
     };
 
 //   const createBatches = async (newBatche: any, id:string) => {
@@ -39,8 +39,8 @@ export const useBatchesStore = defineStore("batches", () => {
 //   }
 
   return {
-    fetchBatches,
-    batches,
+    fetchBatcheProducts,
+    products,
     loading,
     // createBatches,
     // deleteBatches,

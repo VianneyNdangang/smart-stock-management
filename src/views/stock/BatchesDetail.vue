@@ -2,11 +2,11 @@
   <div class="flex flex-col gap-3">
           <BackButton />
     <PageHeader
-      title="Stock Entries"
-      subtitle="Manage stock entries and inventory"
+      :title="batch?.name"
+      :subtitle="batch?.description"
       :refresh="
         async () => {
-          await store.fetchBatches(batchId);
+          await store.fetchBatcheProducts(batchId);
         }
       "
       :loading="store.loading"
@@ -14,7 +14,7 @@
     <div
       class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-5"
     >
-      <DataSommary title="Products" :value="pagination.total" state="success" />
+      <DataSommary title="Products" :value="batch?.batchProducts?.total" state="success" />
       <!-- <DataSommary title="Total Administrators" :value="users.filter((u: any)=>u.role === 'admin').length" state="success" />
       <DataSommary title="Total Category Managers" :value="users.filter((u: any)=>u.role === 'CategoryManager').length" state="success" />
       <DataSommary title="Total Foot Workers" :value="users.filter((u: any)=>u.role === 'FootWorker').length" state="success" /> -->
@@ -31,41 +31,23 @@
       <div class="flex">
         <DataTable
           title="products"
-          :records="batches"
+          :records="batch?.batchProducts?.items"
           :headers="header"
-          :total="pagination?.total"
+          :total="batch?.batchProducts?.total"
           :loading="store.loading"
-          :totalPages="pagination?.totalPages"
-          :page="pagination?.page"
-          :hasNext="pagination?.hasNext"
-          :hasPrev="pagination?.hasPrev"
+          :totalPages="batch?.batchProducts?.totalPages"
+          :page="batch?.batchProducts?.page"
+          :hasNext="batch?.batchProducts?.hasNext"
+          :hasPrev="batch?.batchProducts?.hasPrev"
           :changePage="handlePageChange"
         />
       </div>
     </div>
   </div>
 
-  <!-- <DeleteData
-    :action="
-      () => {
-        handleDelete();
-      }
-    "
-    :id="selectedBatche?.id"
-    :name="selectedBatche?.productName"
-    message="Cette action supprimera définitivement cette batch ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
-    title="Supprimer la batch"
-    :isOpen="isDeleteData"
-    @close="
-      () => {
-        isDeleteData = false;
-        selectedBatche = null;
-      }
-    "
-  /> -->
 </template>
 <script setup lang="ts">
-import { ref, onMounted, h } from "vue";
+import { ref, onMounted, h, computed } from "vue";
 import { useI18n } from 'vue-i18n'
 import PageHeader from "@/components/molecules/PageHeader.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
@@ -82,8 +64,9 @@ import Badge from "@/components/badge/Badge.vue";
 import ProgressBar from "@/components/progressbar/ProgressBar.vue";
 import FormatePrice from "@/components/formatePrice/FormatePrice.vue";
 import FilterBar from "@/components/filterBar/FilterBar.vue";
-import { useBatchesStore } from "@/store/batchesStore.ts";
+import { useBatcheProductsStore } from "@/store/batchesStore.ts";
 import BackButton from "@/components/backbutton/BackButton.vue";
+import { apiClient } from "@/store/api";
 
 const { t } = useI18n()
 const router = useRouter();
@@ -91,20 +74,28 @@ const route = useRoute()
 const batchId = route.params.id as string
 const selectedProduct = ref();
 const isCreateBatche = ref(false);
-const store = useBatchesStore();
-const { batches } = storeToRefs(store);
+const store = useBatcheProductsStore();
+const { products } = storeToRefs(store);
 const { pagination } = storeToRefs(store);
+const batch = ref()
 
-onMounted(() => {
 
-  store.fetchBatches(batchId);
+
+onMounted(async() => {
+  batch.value = (await apiClient.get(`batch/${batchId}`)).data
+  console.log("batchesbatchesbatches",products.value)
+  store.fetchBatcheProducts(batchId);
 });
 
 const handlePageChange = async (page: number) => {
-  await store.fetchBatches(batchId, page);
+  await store.fetchBatcheProducts(batchId, page);
 };
 
-const header: TTableheaders[] = [
+const header = computed<TTableheaders[]>(() => {
+  if (products.value?.length === 0) {
+    return [];
+  }
+return [
   {
     textAlign: "left",
     accessor: "batchName",
@@ -236,5 +227,6 @@ const header: TTableheaders[] = [
       ]),
     width: "auto",
   },
-];
+]}
+);
 </script>

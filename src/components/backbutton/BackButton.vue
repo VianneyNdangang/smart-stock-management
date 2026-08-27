@@ -10,7 +10,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <div class="w-full bg-(--surface) p-3 z-100 sticky top-20 mb-3">
+  <div class="w-full bg-(--surface) p-3 z-40 sticky top-20 mb-3">
      <button
     type="button"
     @click="goBack"

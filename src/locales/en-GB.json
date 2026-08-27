@@ -173,7 +173,7 @@
     },
     "columns": {
       "number": "Sale No.",
-      "warehouseName": "Products",
+      "warehouseName": "Warehouse",
       "status": {
         "title": "Status",
         "pending": "Pending",

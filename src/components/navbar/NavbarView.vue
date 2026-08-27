@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="fixed z-50 bg-(--surface) text-(--text-prmary) px-4 flex left-0 right-0 shadow-sm transition-all duration-300 ease-in-out"
+    class="fixed z-50 bg-(--surface) text-(--text-prmary) px-4 h-19 flex left-0 right-0 shadow-sm transition-all duration-300 ease-in-out"
     :class="uiStore.isSidebar ? `md:left-70` : `md:left-20`"
   >
           
@@ -77,7 +77,7 @@
                 h="10"
                 :name="connectedUser?.userName"
               />
-              <div class="flex flex-col justify-center items-start">
+              <div class="hidden md:flex flex-col justify-center items-start">
                 <p class="text-sm font-semibold text-(--secondary)">{{ connectedUser?.userName }}</p>
                <p class="text-xs font-semibold text-(--text-secondary)">{{ connectedUser?.role }}</p>
               </div>

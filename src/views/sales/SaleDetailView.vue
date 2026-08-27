@@ -68,8 +68,8 @@
           Produits
         </h3>
 
-        <div class="overflow-x-auto rounded border border-(--border)">
-          <table class="w-full text-sm">
+        <div class="overflow-x-auto rounded border border-(--border) overflow-scroll scrollbar-none h-80">
+          <table class=" sticky w-full text-sm">
             <thead>
               <tr class="border-b border-(--border) text-(--text-secondary)">
                 <th class="text-left px-4 py-3">
@@ -103,7 +103,7 @@
                     </p>
 
                     <p class="text-xs text-(--text-secondary)">
-                      SKU : {{ item.product?.SKU || "-" }}
+                      SKU : {{ item.productAttribute?.SKU || "-" }}
                     </p>
                   </div>
                 </td>
@@ -113,11 +113,11 @@
                 </td>
 
                 <td class="text-right px-4 py-3">
-                  {{ formatPrice(item.unitPrice) }}
+                  {{ formatPrice(item?.productAttribute?.price) }}
                 </td>
 
                 <td class="text-right px-4 py-3 font-medium">
-                  {{ formatPrice(item.units * item.unitPrice) }}
+                  {{ formatPrice(item.units * item?.productAttribute?.price) }}
                 </td>
               </tr>
 
@@ -180,7 +180,7 @@ const sale = ref<SaleType>()
 
 const fetchData = async ()=>{
    const response = await apiClient({
-            url: `orderDetails`,
+            url: `order-details`,
             method: "GET",
             params:{
               filter:{id: orderId}
@@ -197,6 +197,26 @@ onMounted(async ()=>{
     
   }finally{ loading.value = false}
 })
+
+
+// {
+//             "id": "6a86babcbc14cf8074c2e6b6",
+//             "orderId": "6a86babcbc14cf8074c2e6af",
+//             "campaignId": null,
+//             "units": 10,
+//             "createdAt": "2026-08-20T07:45:44.346Z",
+//             "paymentMethod": null,
+//             "productAttribute": {
+//                 "SKU": "SKU-LMOFCVD4",
+//                 "price": 1851.2,
+//                 "productId": "6a86ba9cbc14cf8074bf2563",
+//                 "id": "6a86ba9cbc14cf8074bf2564"
+//             },
+//             "creator": {
+//                 "userName": "stephen.casper",
+//                 "id": "6a86ba9cbc14cf8074bf19d6"
+//             }
+//         },
 interface SaleItem {
   id: string | number;
   units: number;
@@ -263,7 +283,7 @@ interface SaleType {
 
 const subTotal = computed(() => {
   return (sale.value?.items || []).reduce(
-    (total, item) => total + item.units * item.unitPrice,
+    (total, item) => total + item.units * item.productAttribute.price,
     0,
   );
 });

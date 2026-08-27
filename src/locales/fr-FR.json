@@ -173,7 +173,7 @@
     },
     "columns": {
       "number": "N° de vente",
-      "warehouseName": "Produits",
+      "warehouseName": "Entrepôt",
       "status": {
         "title": "Statut",
         "pending": "En attente",

@@ -107,6 +107,7 @@ const { campaigns } = storeToRefs(campaignStore);
 const { pagination } = storeToRefs(campaignStore)
 const isLoading = ref<boolean>(false);
 const selectedcampaign = ref();
+const router= useRouter()
 
 const activecampaigns = computed(() =>
   campaigns.value?.filter((u: any) => u.active),
@@ -136,17 +137,22 @@ const header: TTableheaders[] = [
     name: () => t('campaigns.columns.campaignName'),
     render: (record: any) => 
       h("p",
-      {class: "text-(--text-primary) font-semibold"},
+      {class: "text-(--text-primary) font-semibold whitespace-nowrap"},
         record?.campaignName ? record?.campaignName : "-"
       ),
-    width: "20%",
+    width: "30%",
   },
   {
     textAlign: "left",
     accessor: "typeName",
     name: () => t('campaigns.columns.type'),
     render: (record: any) =>
+    h("p",
+      {
+        class: "whitespace-nowrap"
+      }, 
       record?.type?.typeName ? record?.type?.typeName : "-",
+    ),
     width: "auto",
   },
   {
@@ -198,7 +204,7 @@ const header: TTableheaders[] = [
           size: 18,
           class: "cursor-pointer text-(--text-primary) hover:text-blue-700",
           onClick: () => {
-            useRouter().push(`/campaign-detail/${record.id}`);
+           router.push({ name:`campaign_detail`, params:{id:record.id}});
           },
         }),
         h(IconEdit, {

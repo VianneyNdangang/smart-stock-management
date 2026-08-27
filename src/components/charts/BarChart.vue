@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-100">
+  <div class="relative w-full h-full min-h-75">
     <canvas ref="chartRef"></canvas>
   </div>
 </template>
@@ -15,15 +15,16 @@ import {
   LinearScale,
   Tooltip,
   Legend,
-  Title,
 } from "chart.js";
 
+interface ChartData {
+  labels: string[];
+  values: number[];
+}
+
 const props = defineProps<{
-  title: string;
-  data: {
-    labels: string[];
-    values: number[];
-  };
+  title?: string;
+  data: ChartData;
 }>();
 
 Chart.register(
@@ -32,23 +33,33 @@ Chart.register(
   CategoryScale,
   LinearScale,
   Tooltip,
-  Legend,
-  Title
+  Legend
 );
 
 const chartRef = ref<HTMLCanvasElement | null>(null);
 
 let chart: Chart | null = null;
 
+/* -------------------------------------------------------------------------- */
+/*                              CSS VARIABLES                                 */
+/* -------------------------------------------------------------------------- */
 
-/**
- * Création du graphique
- */
+const getCssVariable = (variable: string) => {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(variable)
+    .trim();
+};
+
+/* -------------------------------------------------------------------------- */
+/*                              CREATE CHART                                  */
+/* -------------------------------------------------------------------------- */
+
 const createChart = () => {
-   if (chart) {
+  if (chart) {
     chart.destroy();
     chart = null;
   }
+
   if (!chartRef.value) return;
 
   const ctx = chartRef.value.getContext("2d");
@@ -67,11 +78,18 @@ const createChart = () => {
 
           data: props.data.values,
 
-          backgroundColor: "#c79e46",
+          backgroundColor: getCssVariable("--secondary") || "#c79e46",
 
-          borderRadius: 5,
+          borderRadius: 8,
 
           borderSkipped: false,
+
+          barThickness: 20,
+
+          maxBarThickness: 24,
+
+          hoverBackgroundColor:
+            getCssVariable("--warning") || "#d4ad5c",
         },
       ],
     },
@@ -83,67 +101,190 @@ const createChart = () => {
 
       maintainAspectRatio: false,
 
+      animation: {
+        duration: 800,
+
+        easing: "easeOutQuart",
+      },
+
+      interaction: {
+        mode: "nearest",
+
+        axis: "y",
+
+        intersect: true,
+      },
+
       plugins: {
-        title: {
-          display: true,
-
-          text: props.title,
-
-          font: {
-            size: 18,
-          },
-        },
+        /* ------------------------------------------------------------------ */
+        /*                                LEGEND                               */
+        /* ------------------------------------------------------------------ */
 
         legend: {
           display: false,
         },
+
+        /* ------------------------------------------------------------------ */
+        /*                               TOOLTIP                               */
+        /* ------------------------------------------------------------------ */
+
+        tooltip: {
+          enabled: true,
+
+          backgroundColor:
+            getCssVariable("--surface") || "#ffffff",
+
+          titleColor:
+            getCssVariable("--text-primary") || "#111111",
+
+          bodyColor:
+            getCssVariable("--text-secondary") || "#666666",
+
+          borderColor:
+            getCssVariable("--border") || "#e5e5e5",
+
+          borderWidth: 1,
+
+          padding: 12,
+
+          cornerRadius: 10,
+
+          displayColors: false,
+
+          titleFont: {
+            size: 12,
+
+            weight: "600",
+          },
+
+          bodyFont: {
+            size: 13,
+
+            weight: "700",
+          },
+
+          callbacks: {
+            label: (context: any) => {
+              const value = context.raw ?? 0;
+
+              return ` ${value.toLocaleString("fr-FR")} ventes`;
+            },
+          },
+        },
       },
+
+      /* -------------------------------------------------------------------- */
+      /*                                 AXES                                  */
+      /* -------------------------------------------------------------------- */
 
       scales: {
         x: {
           beginAtZero: true,
 
-          grid: {
+          border: {
             display: false,
+          },
+
+          grid: {
+            color:
+              getCssVariable("--border") || "#eeeeee",
+
+            drawTicks: false,
+
+            lineWidth: 0.5,
+          },
+
+          ticks: {
+            color:
+              getCssVariable("--text-secondary") || "#777777",
+
+            font: {
+              size: 11,
+
+              weight: "500",
+            },
+
+            padding: 8,
           },
         },
 
         y: {
           beginAtZero: true,
+
+          border: {
+            display: false,
+          },
+
+          grid: {
+            display: false,
+          },
+
+          ticks: {
+            color:
+              getCssVariable("--text-primary") || "#222222",
+
+            font: {
+              size: 11,
+
+              weight: "500",
+            },
+
+            padding: 8,
+          },
         },
       },
     },
   });
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                UPDATE                                      */
+/* -------------------------------------------------------------------------- */
+
 const updateChart = () => {
-  if (!chart) return;
+  if (!chart) {
+    createChart();
+    return;
+  }
 
   chart.data.labels = props.data.labels;
 
   chart.data.datasets[0].data = props.data.values;
 
-  chart.update();
+  chart.update("active");
 };
 
+/* -------------------------------------------------------------------------- */
+/*                                  MOUNT                                     */
+/* -------------------------------------------------------------------------- */
 
 onMounted(() => {
   createChart();
 });
 
+/* -------------------------------------------------------------------------- */
+/*                                  WATCH                                     */
+/* -------------------------------------------------------------------------- */
+
 watch(
   () => props.data,
+
   () => {
     updateChart();
   },
+
   {
     deep: true,
   }
 );
 
+/* -------------------------------------------------------------------------- */
+/*                                UNMOUNT                                     */
+/* -------------------------------------------------------------------------- */
 
 onUnmounted(() => {
   chart?.destroy();
+
   chart = null;
 });
 </script>

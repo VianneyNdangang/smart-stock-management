@@ -17,6 +17,7 @@ import BatchesDetail from "@/views/stock/BatchesDetail.vue";
 import WarehouseView from "@/views/stock/warehouse/WarehouseView.vue";
 import WarehouseDetailView from "@/views/stock/warehouse/WarehouseDetailView.vue";
 import SaleDetailView from "@/views/sales/SaleDetailView.vue";
+import CampaignDetailView from "@/views/promotions/CampaignDetailView.vue";
 
 const routes: RouteRecordRaw[] = [
   {
@@ -172,6 +173,15 @@ const routes: RouteRecordRaw[] = [
         path: "campaigns",
         name: "campaigns",
         component: CampaignsView,
+        meta: {
+          requiresAuth: true,
+          roles: ["admin", "CategoryManager"],
+        },
+      },
+      {
+        path: "campaign-detail/:id",
+        name: "campaign_detail",
+        component: CampaignDetailView,
         meta: {
           requiresAuth: true,
           roles: ["admin", "CategoryManager"],

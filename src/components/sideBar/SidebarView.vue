@@ -6,7 +6,7 @@
     "
   >
     <section class="w-full pb-2">
-      <div class="flex gap-2 justify-start items-center">
+      <div class="flex gap-2 justify-start h-17 items-center">
          <img src="/images/glotelho-e-commerce-logo-white-220x60.png" alt="logo" class="w-auto h-15 mb-1.5" />
          <div v-if="uiStore.isSidebar" class="flex flex-col">
           <p class=" font-rounded text-4xl font-bold leading-none">Glotelho</p>

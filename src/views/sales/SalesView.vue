@@ -10,35 +10,53 @@
       "
       :loading="store.loading"
     />
-    <div
-      class="flex justify-center items-center flex-col md:flex-row gap-3"
-    >
-      <DataSommary :title="t('sales.summary.orders')" :value="pagination.total" state="primary" :icon="IconShoppingCart"/>
-      <DataSommary :title="t('sales.summary.pending')" :value="pagination.total" state="warning" :icon="IconClock"/>
-      <DataSommary :title="t('sales.summary.completed')" :value="pagination.total" state="success" :icon="IconCircleCheck" />
-      <DataSommary :title="t('sales.summary.cancelled')" :value="pagination.total" state="danger" :icon="IconCircleX"/>
+    <div class="flex justify-center items-center flex-col md:flex-row gap-3">
+      <DataSommary
+        :title="t('sales.summary.orders')"
+        :value="pagination.total"
+        state="primary"
+        :icon="IconShoppingCart"
+      />
+      <DataSommary
+        :title="t('sales.summary.pending')"
+        :value="pagination.total"
+        state="warning"
+        :icon="IconClock"
+      />
+      <DataSommary
+        :title="t('sales.summary.completed')"
+        :value="pagination.total"
+        state="success"
+        :icon="IconCircleCheck"
+      />
+      <DataSommary
+        :title="t('sales.summary.cancelled')"
+        :value="pagination.total"
+        state="danger"
+        :icon="IconCircleX"
+      />
     </div>
     <FilterBar
       searchEndPoint="batch"
       searchProperty="batchName"
       routeName="category_detail"
     >
-    <SalesFilter/>
+      <SalesFilter />
     </FilterBar>
     <div>
       <!-- <LoadingView v-if="" /> -->
-        <DataTable
-          :title="t('menu.sales')"
-          :records="orders"
-          :headers="header"
-          :total="pagination?.total"
-          :loading="store.loading"
-          :totalPages="pagination?.totalPages"
-          :page="pagination?.page"
-          :hasNext="pagination?.hasNext"
-          :hasPrev="pagination?.hasPrev"
-          :changePage="handlePageChange"
-        />
+      <DataTable
+        :title="t('menu.sales')"
+        :records="orders"
+        :headers="header"
+        :total="pagination?.total"
+        :loading="store.loading"
+        :totalPages="pagination?.totalPages"
+        :page="pagination?.page"
+        :hasNext="pagination?.hasNext"
+        :hasPrev="pagination?.hasPrev"
+        :changePage="handlePageChange"
+      />
     </div>
   </div>
 </template>
@@ -48,7 +66,13 @@ import { useI18n } from "vue-i18n";
 import PageHeader from "@/components/molecules/PageHeader.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import { storeToRefs } from "pinia";
-import { IconCircleCheck, IconCircleX, IconClock, IconEye, IconShoppingCart } from "@tabler/icons-vue";
+import {
+  IconCircleCheck,
+  IconCircleX,
+  IconClock,
+  IconEye,
+  IconShoppingCart,
+} from "@tabler/icons-vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import { useRouter } from "vue-router";
 import DataTable from "@/components/dataTable/DataTable.vue";
@@ -80,14 +104,25 @@ const header: TTableheaders[] = [
     textAlign: "left",
     accessor: "number",
     name: () => t("sales.columns.number"),
+
     render: (record: any) =>
       h(
         "p",
         {
           class: "text-(--text-primary) font-semibold",
         },
-        record?.number ? record?.number : "-",
+        [
+          h(
+            "span",
+            {
+              class: "text-(--text-secondary)",
+            },
+            "N° ",
+          ),
+          record?.orderNumber || "-",
+        ],
       ),
+
     width: "30%",
   },
   {
@@ -95,7 +130,15 @@ const header: TTableheaders[] = [
     accessor: "warehouseName",
     name: () => t("sales.columns.warehouseName"),
     render: (record: any) =>
-      record?.warehouseName ? record?.warehouseName : "-",
+      h(
+        "p",
+        {
+          class: "text-(--text-secondary) font-semibold whitespace-nowrap",
+        },
+        record?.warehouse?.warehouseName
+          ? record?.warehouse?.warehouseName
+          : "-",
+      ),
     width: "10%",
   },
   {
@@ -104,8 +147,8 @@ const header: TTableheaders[] = [
     name: () => t("sales.columns.status.title"),
     render: (record: any) =>
       h(Badge, {
-        type:formatStatus(record?.status, t)?.color,
-        message: formatStatus(record?.status, t )?.text|| "-",
+        type: formatStatus(record?.status, t)?.color,
+        message: formatStatus(record?.status, t)?.text || "-",
       }),
     width: "10%",
   },
@@ -196,7 +239,7 @@ const header: TTableheaders[] = [
           onClick: () => {
             router.push({ name: "sale_detail", params: { id: record?.id } });
           },
-        })
+        }),
       ]),
     width: "10%",
   },

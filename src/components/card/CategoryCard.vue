@@ -22,7 +22,7 @@
         <Badge :message="`Level ` + category.level" type="success" />
       </div>
       <div class="my-4 h-px bg-(--border)" />
-      <div class="text-sm text-(--secondary)">{{ category.description }}</div>
+      <div class="text-sm ">{{ category.description }}</div>
       <div class="mt-3 grid grid-cols-3 gap-4 text-sm">
         <div>
           <p class="text-(--text-muted)">{{ t("card.products") }}</p>
