@@ -33,7 +33,7 @@
               <div class="rounded border border-(--border) p-4 w-full">
                 <p class="text-sm text-(--text-secondary)">Total product</p>
                 <p class="font-medium px-2">
-                  {{ category?.products?.total }}
+                  {{products.length > 0 ? productsPagination.total : category?.products?.total }}
                 </p>
               </div>
             </div>
@@ -45,6 +45,10 @@
         </div>
       </Card>
     </section>
+    <div v-if="store.loading">
+      <LoadingView/>
+    </div>
+    <div v-else>
     <section v-if="subcategories.length > 0" class="flex flex-col gap-2">
       <h1 class="text-lg font-bold text-(--text-primary)">
         Liste sous categories.
@@ -75,21 +79,21 @@
         @changePage="handlePageChange"
       />
     </section>
+    <section  v-if="products?.length > 0">
     <DataTable
-      v-if="products?.items?.length > 0"
       title="products of this category"
-      :records="products.items"
+      :records="products"
       :headers="header"
-      :total="products?.total"
-      :loading="loading"
-      :totalPages="products?.totalPages"
-      :page="products?.page"
-      :hasNext="products?.hasNext"
-      :hasPrev="products?.hasPrev"
-      :changePage="handlePageChange"
-    >
-      <ProductsTableSkeleton />
-    </DataTable>
+      :total="productsPagination.total"
+      :loading="false"
+      :totalPages="productsPagination.totalPages"
+      :page="productsPagination.page"
+      :hasNext="productsPagination.hasNext"
+      :hasPrev="productsPagination.hasPrev"
+      :changePage="handleProductsPageChange"
+    />
+    </section>
+    </div>
     <section class="flex flex-col gap-2 w-full"></section>
   </div>
 </template>
@@ -103,7 +107,6 @@ import FormateDate from "@/components/formateDate/FormateDate.vue";
 import Pagination from "@/components/pagination/Pagination.vue";
 import ProductProfile from "@/components/profile/ProductProfile.vue";
 import CategoryCardSkeleton from "@/components/skeleton/CategoryCardSkeleton.vue";
-import ProductsTableSkeleton from "@/components/skeleton/ProductsTableSkeleton.vue";
 import useFetchData from "@/hooks/request";
 import { apiClient } from "@/store/api";
 import { useToastStore } from "@/store/toastStore";
@@ -113,10 +116,14 @@ import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
+
+const store = useCategoriyProductsStore();
+
 const category = ref();
 const toast = useToastStore();
 const subcategories = computed(() => data.value);
-const products = ref();
+const { products } = storeToRefs(store)
+const productsPagination = computed(()=> store.pagination) 
 const page = ref(1);
 const filters = ref<any>();
 const limit = ref(20);
@@ -131,10 +138,12 @@ const handleChangecategory = async (id: string) => {
   try {
     const items = (await apiClient.get(`categories/${id}`)).data;
     category.value = items;
+    store.fetchCategoryProducts(items.id)
+
+
     filters.value = {
       parentId: items.id,
     };
-    products.value = items.products;
     fetchData();
   } catch (error) {
     toast.show(
@@ -153,11 +162,21 @@ const handlePageChange = async (pag: number) => {
   fetchData();
 };
 
+const handleProductsPageChange = async (page: number) => {
+  await store.fetchCategoryProducts( category.value?.id ,page);
+};
 import { useI18n } from "vue-i18n";
+import { useCategoriyProductsStore } from "@/store/categoryStore";
 import BackButton from "@/components/backbutton/BackButton.vue";
+import { storeToRefs } from "pinia";
+import LoadingView from "@/components/molecules/LoadingView.vue";
 const { t } = useI18n();
 
-const header: TTableheaders[] = [
+const header = computed<TTableheaders[]>(()=>{
+  if(products.value.length < 0){
+    return []
+  }
+ return [
   {
     textAlign: "left",
     accessor: "productName",
@@ -235,4 +254,5 @@ const header: TTableheaders[] = [
     width: "auto",
   },
 ];
+})
 </script>

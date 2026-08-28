@@ -1,6 +1,6 @@
 <template>
   <BackButton />
-  <div class="flex gap-3">
+  <div class="flex flex-col xl:flex-row gap-3">
     <div
       class="flex flex-col gap-3 w-full"
       :class="rSidebarStore.isSidebar ? `pl-20` : ``"
@@ -101,7 +101,7 @@
         <ProductsTableSkeleton />
       </DataTable>
     </div>
-    <div class="w-200 pt-15">
+    <div class="w-full xl:w-200 pt-15">
       <div class="sticky top-33 w-full">
         <Card>
           <p

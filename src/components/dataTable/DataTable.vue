@@ -22,7 +22,7 @@
             />
           </div>
         </div>
-        <div class="flex items-center justify-end gap-2 w-full">
+        <!-- <div class="flex items-center justify-end gap-2 w-full">
           <div
             class="transition-all duration-300"
             :class="isFilter ? `w-80` : `w-0`"
@@ -44,7 +44,7 @@
             variant="ghost"
             type="button"
           />
-        </div>
+        </div> -->
       </div>
       <div
         v-if="props.records?.length === 0"
@@ -141,13 +141,14 @@ const props = withDefaults(defineProps<TDatatableProps>(), {
 import { computed, ref, isVNode } from "vue";
 import { useI18n } from 'vue-i18n'
 import Card from "../card/Card.vue";
-import Button from "../button/Button.vue";
+// import Button from "../button/Button.vue";
 import EmptyState from "../empty/EmptyState.vue";
-import Input from "../input/Input.vue";
-import { IconSearch, IconTrash } from "@tabler/icons-vue";
+// import Input from "../input/Input.vue";
+// import { IconSearch, IconTrash } from "@tabler/icons-vue";
 import Checkbox from "../checkbox/Checkbox.vue";
 import type { TDatatableProps } from "./type.ts";
 import Pagination from "../pagination/Pagination.vue";
+import { IconTrash } from "@tabler/icons-vue";
 
 //Checkbox
 const selectedIds = ref<string[]>([]);
@@ -180,10 +181,10 @@ const toggleRecord = (id: string) => {
 
 //  const alerts = computed(() => data.value);
 
-const isFilter = ref(false);
-const handleChange = () => {
-  isFilter.value = !isFilter.value;
-};
+// const isFilter = ref(false);
+// const handleChange = () => {
+//   isFilter.value = !isFilter.value;
+// };
 const filter = ref("");
 
 const { t, te } = useI18n();

@@ -19,13 +19,15 @@
         }"
       >
         <main class="z-0 p-3  md:p-5">
-          <RouterView />
+          <LoadingView v-if="loadingStore.isLoading" />
+<RouterView v-else />
         </main>
       </motion.div>
     </div>
   </div>
   <main v-if="$route.meta.hideNavigation">
-    <RouterView />
+    <LoadingView v-if="loadingStore.isLoading" />
+<RouterView v-else />
   </main>
 </template>
 <script setup lang="ts">
@@ -38,11 +40,12 @@ import { computed, onMounted, onUnmounted } from "vue";
 import { useRSidebarStore } from "@/store/rSideBareStore";
 import ScrollButton from "@/components/scrollButton/ScrollButton.vue";
 // import socket from "@/helpers/socket";
-import { useAlertsStore } from "@/store/alertsStore";
 import { connectSocket, socket } from "@/helpers/socket";
+import { useLoadingStore } from "@/store/loadingStore";
+import LoadingView from "@/components/molecules/LoadingView.vue";
 const uiStore = useUiStore()
-const alertStore = useAlertsStore()
 const rSidebareStore = useRSidebarStore();
+const loadingStore =useLoadingStore()
 
 const layoutClass = computed(() => {
   if (rSidebareStore.isSidebar) return "pr-0 md:pr-96";
@@ -52,19 +55,7 @@ const layoutClass = computed(() => {
   return "pl-0 md:pl-20";
 });
 
-onMounted(async () => {
-  await alertStore.fetchAlerts()
-  
-  connectSocket();
 
-  socket.on("peak-sale-candidates", (data) => {
-    console.log("peak-sale-candidates :", data);
-  });
-});
-
-onUnmounted(() => {
-  socket.off("connect");
-});
 
 
 </script>

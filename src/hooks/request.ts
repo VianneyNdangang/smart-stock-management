@@ -6,6 +6,7 @@ import { getSearch } from "@/helpers/utils";
 export type TPagination = {
   page?: Ref<number> | number;
   limit?: Ref<number> | number;
+  keys?: string;
   filters?: Ref<any> | any;
   totalPages?: number;
   total?: number;
@@ -37,7 +38,6 @@ const useFetchData = (props: TPagination) => {
     url: unref(props.url),
   });
 
-
   const fetchData = async () => {
     try {
       loading.value = true;
@@ -60,17 +60,20 @@ const useFetchData = (props: TPagination) => {
         params,
       });
 
-      data.value = response?.data?.items;
+      const responseData = props.keys
+        ? response.data[props.keys]
+        : response.data;
+      data.value = responseData.items;
 
       pagination.value = {
         ...pagination.value,
-        page: response.data.page,
-        limit: response.data.limit,
-        totalPages: response.data.totalPages,
-        hasNext: response.data.hasNext,
-        hasPrev: response.data.hasPrev,
-        total: response.data.total,
-        totalPerishables: response.data.totalPerishables,
+        page: responseData.page,
+        limit: responseData.limit,
+        totalPages: responseData.totalPages,
+        hasNext: responseData.hasNext,
+        hasPrev: responseData.hasPrev,
+        total: responseData.total,
+        totalPerishables: responseData.totalPerishables,
         totalProducts: response.data.totalProducts,
       };
     } finally {

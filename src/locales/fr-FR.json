@@ -177,6 +177,7 @@
       "status": {
         "title": "Statut",
         "pending": "En attente",
+        "active": "En cours",
         "completed": "Terminée",
         "cancelled": "Annulée",
         "all": "Tout"

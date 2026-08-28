@@ -198,29 +198,11 @@ onMounted(async ()=>{
   }finally{ loading.value = false}
 })
 
-
-// {
-//             "id": "6a86babcbc14cf8074c2e6b6",
-//             "orderId": "6a86babcbc14cf8074c2e6af",
-//             "campaignId": null,
-//             "units": 10,
-//             "createdAt": "2026-08-20T07:45:44.346Z",
-//             "paymentMethod": null,
-//             "productAttribute": {
-//                 "SKU": "SKU-LMOFCVD4",
-//                 "price": 1851.2,
-//                 "productId": "6a86ba9cbc14cf8074bf2563",
-//                 "id": "6a86ba9cbc14cf8074bf2564"
-//             },
-//             "creator": {
-//                 "userName": "stephen.casper",
-//                 "id": "6a86ba9cbc14cf8074bf19d6"
-//             }
-//         },
 interface SaleItem {
   id: string | number;
   units: number;
   unitPrice: number;
+  productAttribute: any;
   product?: {
     productName?: string;
     SKU?: string;
@@ -241,45 +223,6 @@ interface SaleType {
   paymentMethod?: string;
   items?: SaleItem[];
 }
-
-// const sale: Sale ={
-//   reference: "VNT-2026-00125",
-//   status: "completed",
-//   createdAt: "2026-08-25T10:30:00",
-//   paymentMethod: "mobile_money",
-
-//   customer: {
-//     name: "Client Exemple",
-//   },
-
-//   seller: {
-//     userName: "Admin",
-//   },
-
-//   discount: 5000,
-
-//   items: [
-//     {
-//       id: 1,
-//       units: 2,
-//       unitPrice: 150000,
-//       product: {
-//         productName: "iPhone 15",
-//         SKU: "IPH15-128",
-//       },
-//     },
-//     {
-//       id: 2,
-//       units: 1,
-//       unitPrice: 85000,
-//       product: {
-//         productName: "AirPods Pro",
-//         SKU: "APP-2",
-//       },
-//     },
-//   ],
-// };
-
 
 const subTotal = computed(() => {
   return (sale.value?.items || []).reduce(

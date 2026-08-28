@@ -5,7 +5,7 @@ export interface AlertMessageType {
 }
 
 export const formatStatus = (
-  status: string,
+  status: "pending"|"completed"|"cancelled"|"active",
   t: (key: string) => string
 ) => {
   let text = "success";
@@ -20,6 +20,11 @@ export const formatStatus = (
     case "completed":
       text = t("sales.columns.status.completed");
       color = "success";
+      break;
+
+     case "active":
+      text = t("sales.columns.status.active");
+      color = "primary";
       break;
 
     case "cancelled":

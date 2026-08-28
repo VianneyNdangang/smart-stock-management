@@ -10,6 +10,7 @@ export const useBatcheProductsStore = defineStore("batchesProducts", () => {
       limit: 50,
       page,
       url,
+      keys: 'batchProducts'
     });
   
     const products = computed(() => data.value);

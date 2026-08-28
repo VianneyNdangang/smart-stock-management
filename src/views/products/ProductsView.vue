@@ -72,7 +72,7 @@
       }
     "
   />
-  <DeleteData
+  <!-- <DeleteData
     :loading="isLoading"
     message="Cette action supprimera définitivement cet utilisateur ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
     title="Supprission de produit"
@@ -84,8 +84,8 @@
       }
     "
     :action="() => handleDelete"
-  />
-  <RightSideBare>
+  /> -->
+  <!-- <RightSideBare>
     <div class="flex flex-col justify-center items-center">
       <h1 class="text-lg text-(--text-primary)">
         {{ selectedProduct?.productName }}
@@ -94,7 +94,7 @@
         <img src="#" class="h-50 w-50" />
       </div>
     </div>
-  </RightSideBare>
+  </RightSideBare> -->
 </template>
 <script setup lang="ts">
 import { ref, onMounted, h } from "vue";
@@ -106,9 +106,6 @@ import DataTable from "@/components/dataTable/DataTable.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
 import { storeToRefs } from "pinia";
-import DeleteData from "../delateData/DeleteData.vue";
-import RightSideBare from "@/components/sideBar/RightSideBare.vue";
-import { useToastStore } from "@/store/toastStore.ts";
 import CreateProduct from "./CreateProduct.vue";
 import { useRouter } from "vue-router";
 import ProductProfile from "@/components/profile/ProductProfile.vue";
@@ -117,9 +114,10 @@ import Badge from "@/components/badge/Badge.vue";
 import ProductsTableSkeleton from "@/components/skeleton/ProductsTableSkeleton.vue";
 import FilterBar from "@/components/filterBar/FilterBar.vue";
 import ProductsFilter from "./ProductsFilter.vue";
+import { computed } from "vue";
 
 const productStore = useproductStore();
-const toast = useToastStore();
+// const toast = useToastStore();
 const router = useRouter();
 
 onMounted(async () => {
@@ -133,7 +131,6 @@ const isLoading = ref<boolean>(false);
 const selectedProduct = ref();
 
 const isCreateProduct = ref(false);
-const isDeleteData = ref(false);
 
 const { t } = useI18n()
 
@@ -143,12 +140,15 @@ const newProduct = {
   icon: IconPackageImport,
 };
 
-
 const handlePageChange = async (page: number) => {
   await productStore.fetchProducts(page);
 };
 
-const header: TTableheaders[] = [
+const header = computed<TTableheaders[]>(()=>{
+  if(products.value.length === 0){
+    return []
+  }
+return [
   {
     textAlign: "left",
     accessor: "productName",
@@ -186,7 +186,7 @@ const header: TTableheaders[] = [
     accessor: "productBrandName",
     name: () => t('products.columns.brand'),
     render: (record: any) =>
-      record?.brand.productBrandName ? record?.brand?.productBrandName : "-",
+      record?.brand?.productBrandName ? record?.brand?.productBrandName : "-",
     width: "auto",
   },
   {
@@ -194,7 +194,7 @@ const header: TTableheaders[] = [
     accessor: "catedoryName",
     name: () => t('products.columns.category'),
     render: (record: any) =>
-      record?.category.categoryName ? record?.category?.categoryName : "-",
+      record?.category?.categoryName ? record?.category?.categoryName : "-",
     width: "auto",
   },
   {
@@ -203,8 +203,8 @@ const header: TTableheaders[] = [
     name: () => t('products.columns.variant'),
     render: (record: any) =>
       h(Badge, {
-        type: record.perishable ? "warning" : "success",
-        message: record.perishable ? "Perishable" : "Non Perishable",
+        type: record?.perishable ? "warning" : "success",
+        message: record?.perishable ? "Perishable" : "Non Perishable",
       }),
     width: "auto",
   },
@@ -221,7 +221,7 @@ const header: TTableheaders[] = [
     name: () => t('products.columns.createdAt'),
     render: (record: any) =>
       h(FormateDate, {
-        date: record.createdAt || "-",
+        date: record?.createdAt || "-",
       }),
     width: "auto",
   },
@@ -250,27 +250,28 @@ const header: TTableheaders[] = [
     width: "auto",
   },
 ];
+});
 
-const handleDelete = async () => {
-  isLoading.value = true;
-  try {
-    await productStore.deleteProducts(selectedProduct.value.id);
-    isDeleteData.value = false;
-    toast.show(
-      "Opperation effectuer",
-      "success",
-      "Le produit " + selectedProduct.value.productName + " a ete supprime",
-    );
-  } catch (error) {
-    toast.show(
-      "Echec de l'opperation",
-      "danger",
-      "Le produit " +
-        selectedProduct.value.productName +
-        " n'a pas ete supprime",
-    );
-  } finally {
-    isLoading.value = false;
-  }
-};
+// const handleDelete = async () => {
+//   isLoading.value = true;
+//   try {
+//     await productStore.deleteProducts(selectedProduct.value.id);
+//     isDeleteData.value = false;
+//     toast.show(
+//       "Opperation effectuer",
+//       "success",
+//       "Le produit " + selectedProduct.value.productName + " a ete supprime",
+//     );
+//   } catch (error) {
+//     toast.show(
+//       "Echec de l'opperation",
+//       "danger",
+//       "Le produit " +
+//         selectedProduct.value.productName +
+//         " n'a pas ete supprime",
+//     );
+//   } finally {
+//     isLoading.value = false;
+//   }
+// };
 </script>

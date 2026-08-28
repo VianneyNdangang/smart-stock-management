@@ -21,9 +21,7 @@
       searchEndPoint="batch"
       searchProperty="name"
       routeName="stock_detail"
-    >
-      <CategoriesFilter />
-    </FilterBar>
+    />
     <div>
       <!-- <LoadingView v-if="" /> -->
       <!-- <div class="flex"> -->
@@ -58,7 +56,6 @@ import type { TTableheaders } from "@/components/dataTable/type.ts";
 import Badge from "@/components/badge/Badge.vue";
 import FormatePrice from "@/components/formatePrice/FormatePrice.vue";
 import FilterBar from "@/components/filterBar/FilterBar.vue";
-import AlertCarousel from "@/components/alertMessages/AlertCarousel.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -206,21 +203,4 @@ const header: TTableheaders[] = [
   },
 ];
 
-const messages = [
-  {
-    type: "warning",
-    title: "Stock faible",
-    message: "Le produit Coca-Cola est presque épuisé.",
-  },
-  {
-    type: "danger",
-    title: "Stock épuisé",
-    message: "Le produit Pepsi n'est plus disponible.",
-  },
-  {
-    type: "info",
-    title: "Nouvelle vente",
-    message: "Une nouvelle vente vient d'être enregistrée.",
-  },
-];
 </script>

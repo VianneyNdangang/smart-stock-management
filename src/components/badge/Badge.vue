@@ -12,10 +12,10 @@
 <script setup lang="ts">
 const props = defineProps<{
   message: string | number;
-  type: "danger" | "success" | "primary" | "warning" ;
+  type: "danger" | "success" | "primary" | "warning" | string;
 }>();
 
-const variants = {
+const variants: any = {
   danger: "text-(--danger) bg-(--danger)/10 border-(--danger)/40",
   success: "text-(--success) bg-(--success)/10 border-(--success)/40",
   primary: "text-(--primary) bg-(--primary)/10 border-(--primary)/40",

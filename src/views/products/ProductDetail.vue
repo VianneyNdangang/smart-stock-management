@@ -35,8 +35,8 @@
 
           <!-- Informations -->
           <div class="flex flex-col gap-3 w-full">
-            <div>
-              <div class="flex items-center justify-between">
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center justify-between mb-3">
                 <h1 class="text-3xl font-bold mt-3 text-(--text-primary)">
                   {{ product?.productName }}
                 </h1>
@@ -47,11 +47,44 @@
                   "
                 />
               </div>
-              <p class="font-bold text-xl">
-                {{ product?.units }}
-              </p>
-            </div>
 
+              <div>
+                <div class="grid grid-cols-2 mb-1">
+                  <h1 class="text-lp font-semibold text-(--text-secondary)">
+                    {{ "Variant" }}
+                  </h1>
+                  <div class="">
+                    <Select v-model="index" name="items" :options="options" />
+                  </div>
+                </div>
+                <Separator />
+                <div class="flex flex-col gap-2 mt-2">
+                  <div class="flex justify-between items-center gap-2">
+                    <p class="text-(--text-muted)">SKU</p>
+                    <span>
+                      {{ product?.items[index]?.SKU || "-" }}
+                    </span>
+                  </div>
+                  <div class="flex justify-between items-center gap-2">
+                    <p class="text-(--text-muted)">Attribute</p>
+                    <span>
+                      {{ product?.items[index]?.attribute || "-" }}
+                    </span>
+                  </div>
+                  <div class="flex justify-between items-center gap-2">
+                    <p class="text-(--text-muted)">Price</p>
+                    <FormatePrice :price="product?.items[index].price" />
+                  </div>
+                  <div class="flex justify-between items-center gap-2">
+                    <p class="text-(--text-muted)">Unit</p>
+                    <span>
+                      {{ product?.items[index]?.units || "-" }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Separator />
             <div class="flex flex-col justify-end gap-3 h-full w-full">
               <div class="rounded border border-(--border) p-3 max-h-40">
                 <p class="text-sm text-(--text-secondary)">Description</p>
@@ -60,14 +93,13 @@
                 </p>
               </div>
 
-              <div class="grid grid-cols-2 gap-3">
+              <div class="grid grid-cols-4 gap-3">
                 <div class="rounded border border-(--border) p-3">
                   <p class="text-sm text-(--text-secondary)">Category</p>
                   <p class="font-medium">
                     {{ product?.category?.categoryName || "-" }}
                   </p>
                 </div>
-
                 <div class="rounded border border-(--border) p-3">
                   <p class="text-sm text-(--text-secondary)">Brand</p>
                   <p class="font-medium">
@@ -84,7 +116,7 @@
                 </div>
                 <div class="rounded border border-(--border) p-3">
                   <p class="text-sm text-(--text-secondary)">Created</p>
-                  <FormateDate :date="product?.createdAt" />
+                  <FormateDate :date="product?.items[0]?.createdAt" />
                 </div>
               </div>
             </div>
@@ -102,26 +134,24 @@
               w="46"
               :click="() => handleAnalyst()"
             />
-            </div>
-            <div
-              v-if="messages.length > 0"
-              class="class flex flex-col w-full gap-2 transition-all duration-300"
-              :class="messages.length > 0? `h-full`:`h-0`"
-            >
-              <AlertMessage
-                v-for="item in messages"
-                :message="item.message"
-                :title="item.title"
-                :type="item.type"
-              />
+          </div>
+          <div
+            v-if="messages.length > 0"
+            class="class flex flex-col w-full gap-2 transition-all duration-300"
+            :class="messages.length > 0 ? `h-full` : `h-0`"
+          >
+            <AlertMessage
+              v-for="item in messages"
+              :message="item.message"
+              :title="item.title"
+              :type="item.type"
+            />
           </div>
         </Card>
       </div>
     </section>
     <section class="grid grid-col-1 md:grid-cols-3 gap-3 items-stretch">
-      <div
-        class="flex flex-col gap-3 md:col-span-2 justify-between"
-      >
+      <div class="flex flex-col gap-3 md:col-span-2 justify-between">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full">
           <DataSommary title="Total categories" :value="5000" state="primary" />
           <DataSommary
@@ -164,7 +194,7 @@
 
     <section class="flex flex-col md:flex-row gap-3">
       <Card>
-        <div class="flex h-100 md:h-100 overflow-auto">
+        <div class="flex h-100 md:h-100">
           <Spiner size="lg" v-if="loading" />
           <BarChart
             v-else-if="salesByWarehouseData.values.length > 0"
@@ -189,41 +219,72 @@ import LineChart from "@/components/charts/LineChart.vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import EmptyState from "@/components/empty/EmptyState.vue";
 import FormateDate from "@/components/formateDate/FormateDate.vue";
+import FormatePrice from "@/components/formatePrice/FormatePrice.vue";
+import Select from "@/components/select/Select.vue";
+import Separator from "@/components/separator/Separator.vue";
 import Spiner from "@/components/spiner/Spiner.vue";
 import {
   formatAlertMessage,
   type AlertMessageType,
 } from "@/helpers/formateData";
 import { apiClient } from "@/store/api";
-import { computed, ref, watch } from "vue";
+import { computed, ref, unref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 /** ---Declarations--- */
 const route = useRoute();
-const productId = route.params.id;
+// const productId = route.params.id;
 /**Datas */
 const product = ref();
+// const productAttribute = ref();
 const stocks = ref([]);
-const salesGraph = ref([])
+const index = ref<number>(0);
+const attributeId = computed(()=>{ return product.value?.items[index.value]?.attributeId});
+const salesGraph = ref<any[]>([]);
 const selectedImage = ref<string>("");
 const messages = ref<AlertMessageType[]>([]);
 // const analysis = ref();
+
+const options = computed<{ label: string; value: number }[]>(() => {
+  const data = [] as { label: string; value: number }[];
+  product.value?.items.forEach((element: any) => {
+    data.push({
+      label: element.SKU,
+      value: product.value?.items.indexOf(element),
+    });
+  });
+  return data;
+});
 
 /**Loaders */
 const loading = ref(false);
 const analysLoading = ref(false);
 
 /** ---Handlers-- */
+// const getAttribute = async () => {
+//   try {
+//     const response = await apiClient({
+//       url: `productAttribute`,
+//       method: "GET",
+//       params: {
+//         filter: { id: productId },
+//       },
+//     });
+//     productAttribute.value = response;
+//   } catch (error) {}
+// };
+
 const loadProduct = async (id: string) => {
   loading.value = true;
-  try { 
+  try {
     const productResponse = await apiClient.get(`/products/${id}`);
     product.value = productResponse.data;
     const stockResponse = await apiClient.get(`/stock/product/${id}`);
     stocks.value = stockResponse.data;
-    const salesResponse = await apiClient.get(`products/${id}/get-graph`);
-    salesGraph.value = salesResponse.data
-   
+
+    // getAttribute();
+    //  = salesResponse.data;
+
     selectedImage.value = product.value?.images?.[0] || "";
   } catch (error: any) {
   } finally {
@@ -231,11 +292,17 @@ const loadProduct = async (id: string) => {
   }
 };
 
+const handleGetSales = async () => {
+  salesGraph.value = (
+    await apiClient.get(`products/${unref(attributeId)}/get-graph`)
+  ).data;
+};
+
 const handleAnalyst = async () => {
   analysLoading.value = true;
   try {
     const response = await apiClient.get(
-      `stock-alert/product/${productId}/recalculate`,
+      `stock-alert/product/${route.params.id}/recalculate`,
     );
     messages.value = response.data.map(formatAlertMessage);
   } finally {
@@ -245,7 +312,7 @@ const handleAnalyst = async () => {
 
 /**  Events*/
 watch(
-  () => productId,
+  () => route.params.id,
   async (newId) => {
     if (!newId) return;
     await loadProduct(newId as string);
@@ -255,6 +322,13 @@ watch(
   },
 );
 
+watch(
+  () => attributeId.value,
+  () => {
+    handleGetSales();
+  },
+  { immediate: true },
+);
 const stockByWarehouseData = computed(() => {
   const data = {
     labels: [] as string[],
@@ -267,44 +341,33 @@ const stockByWarehouseData = computed(() => {
   return data;
 });
 
-const monthlySalesData = {
-  labels: [
-    "Jan",
-    "Fév",
-    "Mar",
-    "Avr",
-    "Mai",
-    "Juin",
-    "Juil",
-    "Août",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Déc",
-  ],
+const monthlySalesData = computed(() => {
+  const data = {
+    labels: [] as string[],
+    values: [] as number[],
+  };
+  salesGraph.value?.forEach((item: any) => {
+    data.labels.push(item.date);
+    data.values.push(item.totalQuantity);
+  });
+  return data;
+});
 
-  values:
-    // []
-    [
-      12500, 15800, 14300, 18700, 22400, 20100, 24500, 26800, 23900, 28100,
-      31500, 32500,
-    ],
-};
-
-const salesByWarehouseData = {
-  labels: [
-    "Yaoundé Centre",
-    "Douala Bonamoussadi",
-    "Bafoussam",
-    "Garoua",
-    "Bamenda",
-    "Kribi",
-    "Bertoua",
-    "Ebolowa",
-    "Ngaoundéré",
-    "Limbé",
-  ],
-
-  values: [852, 1045, 637, 489, 713, 368, 421, 294, 556, 478],
-};
+const salesByWarehouseData = computed(() => {
+  const data = {
+    labels: [] as string[],
+    values: [] as number[],
+  };
+  for (let i = 0; i < salesGraph.value?.length; i++) {
+    const index = data.labels.indexOf(salesGraph.value[i]?.warehouseName);
+    if (index === -1) {
+      data.labels.push(salesGraph.value[i]?.warehouseName);
+      data.values.push(salesGraph.value[i]?.totalQuantity);
+    } else {
+      const quantity = Number(salesGraph.value[i].totalQuantity) || 0;
+      data.values[index] += quantity;
+    }
+  }
+  return data;
+});
 </script>

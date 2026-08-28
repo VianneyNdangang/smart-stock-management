@@ -72,31 +72,6 @@
       </div>
     </div>
   </div>
-  <!-- <CreateCategory
-    v-if="isCreateCat"
-    :category="categoryEdit"
-    :isOpen="isCreateCat"
-    @close="
-      () => {
-        isCreateCat = false;
-        categoryEdit = null;
-      }
-    "
-  /> -->
-  <!-- <DeleteData
-    :action="() => handleDelete"
-    :id="categoryDelete?.id"
-    message="Cette action supprimera définitivement cet catégorie ainsi que les données qui lui sont associées. Cette opération est irréversible. Voulez-vous continuer ?"
-    title="Supprimer la catégorie"
-    :isOpen="isDeleteCat"
-    :loading="loading"
-    @close="
-      () => {
-        isDeleteCat = false;
-        categoryDelete = null;
-      }
-    "
-  /> -->
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
@@ -104,11 +79,8 @@ import PageHeader from "@/components/molecules/PageHeader.vue";
 import { IconFolderPlus } from "@tabler/icons-vue";
 import DataSommary from "@/components/dataSommary/DataSommary.vue";
 import { usecategoriesStore } from "@/store/categoryStore";
-import CreateCategory from "./CreateCategory.vue";
-import DeleteData from "../delateData/DeleteData.vue";
 import { storeToRefs } from "pinia";
 import Pagination from "@/components/pagination/Pagination.vue";
-import { useToastStore } from "@/store/toastStore.ts";
 import CategoryCard from "@/components/card/CategoryCard.vue";
 import CategoryCardSkeleton from "@/components/skeleton/CategoryCardSkeleton.vue";
 import FilterBar from "@/components/filterBar/FilterBar.vue";
@@ -116,22 +88,17 @@ import CategoriesFilter from "./CategoriesFilter.vue";
 import EmptyState from "@/components/empty/EmptyState.vue";
 
 const isCreateCat = ref(false);
-const isDeleteCat = ref(false);
 const newCategory = {
   label: "New Category",
   action: () => (isCreateCat.value = true),
   icon: IconFolderPlus,
 };
 
-const selectedCat = ref();
-const categoryDelete = ref();
 const categoryEdit = ref();
 // const categoryDetail = ref();
 const store = usecategoriesStore();
-const toast = useToastStore();
 const { categories } = storeToRefs(store);
 const { pagination } = storeToRefs(store);
-const loading = ref(false);
 
 const handlePageChange = async (page: number) => {
   await store.fetchCategories(page);
@@ -140,27 +107,6 @@ const handlePageChange = async (page: number) => {
 const editeHandler = (item: any) => {
   categoryEdit.value = item;
   isCreateCat.value = true;
-};
-const handleDelete = async () => {
-  loading.value = false;
-  try {
-    await store.deleteCategory(selectedCat.value.id);
-    store.fetchCategories();
-    selectedCat.value = null;
-    toast.show(
-      "Operation Effectuee",
-      "success",
-      "La categorie a ete supprimee avec success",
-    );
-  } catch (error) {
-    toast.show(
-      "Operation Effectuee",
-      "danger",
-      "La categorie a ete supprimee avec success",
-    );
-  } finally {
-    loading.value = false;
-  }
 };
 onMounted(async () => {
   await store.fetchCategories();

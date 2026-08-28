@@ -24,7 +24,6 @@ export const usecategoriesStore = defineStore("categories", () => {
   };
 
   const filterCategories = (values: any) => {
-    // console.log("valuesvaluesvaluesvalues", values);
     const data = {
       productId: values.productId,
       level: values.level === ''? undefined :Number(values.level),
@@ -39,6 +38,15 @@ export const usecategoriesStore = defineStore("categories", () => {
     limit.value = values.limit;
     fetchCategories();
   };
+
+  const filterSubCategories = (values: any) => {
+    const data = {
+      parentId: values.parentId,
+    };
+    filters.value = data;
+    fetchCategories();
+  };
+
   const createCategory = async (data: any, id?: string) => {
     const response = await apiClient({
       method: id ? "PATCH" : "POST",
@@ -60,5 +68,57 @@ export const usecategoriesStore = defineStore("categories", () => {
     deleteCategory,
     pagination,
     filterCategories,
+    filterSubCategories,
+  };
+});
+
+
+export const useCategoriyProductsStore = defineStore("categorieProducts", () => {
+  const filters = ref<any>();
+  const page = ref(1);
+  const limit = ref(20);
+  const url = ref()
+  const { data, fetchData, pagination, loading } = useFetchData({
+    limit,
+    page,
+    url,
+    filters,
+    keys: 'products'
+  });
+
+  const products = computed(() => data.value);
+
+  const fetchCategoryProducts = async (id?: string, newPage?: number) => {
+    if (newPage) {
+      page.value = newPage;
+    }if(id){
+      url.value = `categories/${id}`
+    }
+    await fetchData();
+  };
+
+  // const filterCategoryProducts = (values: any) => {
+  //   // console.log("valuesvaluesvaluesvalues", values);
+  //   const data = {
+  //     productId: values.productId,
+  //     level: values.level === ''? undefined :Number(values.level),
+  //     isActif:
+  //       values.isActif === "actif"
+  //         ? true
+  //         : values.isActif === "inactive"
+  //           ? false
+  //           : undefined,
+  //   };
+  //   filters.value = data;
+  //   limit.value = values.limit;
+  //   fetchCategoryProducts();
+  // };
+
+  return {
+    fetchCategoryProducts,
+    products,
+    loading,
+    pagination,
+    // filterCategoryProducts,
   };
 });

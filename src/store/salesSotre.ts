@@ -57,3 +57,31 @@ export const useSalesStore = defineStore("sales", () => {
     pagination,
   };
 });
+
+
+export const useOrderProductsStore = defineStore("orderProducts", () => {
+  const page = ref(1);
+  const url = ref()
+  const { data, fetchData, pagination, loading } = useFetchData({
+    page,
+    url,
+  });
+
+  const orderProducts = computed(() => data.value);
+
+  const fetchOrderProducts = async (newId?: string, newPage?: number) => {
+    if (newPage) {
+      page.value = newPage;
+    } if (newId){
+      url.value = `order-details/${newId}`;
+     
+    }
+     await fetchData();
+  };
+  return {
+    fetchOrderProducts,
+    orderProducts,
+    loading,
+    pagination,
+  };
+});
