@@ -8,7 +8,7 @@
       <div class="cursor-pointer flex justify-center items-center md:hidden">
         <IconMenu2 size="30" @click="() => (isMenu = true)" />
       </div>
-      <div class="flex flex-col justify-center items-center md:flex-row gap-2">
+      <div class="flex flex-col justify-center items-center md:flex-row gap-1 md:gap-2">
         <button
             name="closeSidebar"
             @click="uiStore.handleChange()"
@@ -19,7 +19,7 @@
             /><IconChevronsRight v-else stroke="1.5" size="25"/>
           </button>
         <div class="whitespace-nowrap">
-          <h1 class="font-bold text-lg capitalize flex">
+          <h1 class="font-bold text-sm md:text-lg capitalize flex">
             <p v-if="Time < 12">{{ t("navbar.greeting.morning") }}</p>
             <p v-else-if="Time >= 12 && Time < 17">
               {{ t("navbar.greeting.afternoon") }}
@@ -43,12 +43,14 @@
       </div>
       <div class="flex gap-2 md:gap-5 justify-end items-center ml-5">
         <!-- Theme -->
-        <div>
-          <ThemeButton />
+        <div class="flex justify-end items-center gap-2 md:gap-5">
+          <MobileSearchBare/>
+          <ThemeButton /> 
+          <LanguageToggle />
+          <IconDotsVertical class=" flex md:hidden px-1 py-0.5 border rounded h-8"/>
         </div>
 
-        <LanguageToggle />
-
+       
         <!-- Notificatons -->
         <div
           class="relative hidden md:flex items-center justify-center h-9 w-9 rounded-full cursor-pointer text-(--secondary) hover:bg-(--background-secondary) hover:text-(--primary) transition-all duration-200"
@@ -66,7 +68,7 @@
 
           <IconBellRinging :size="20" stroke-width="1.8" />
         </div>
-        <div>
+        <div class="hidden md:flex">
           <Tooltip :text="t('navbar.profile')" position="bottom">
             <div
               @click="isProfile = true"
@@ -209,8 +211,10 @@ import {
   IconBellRinging,
   IconChevronsLeft,
   IconChevronsRight,
+  IconDotsVertical,
   IconLogout2,
   IconMenu2,
+  IconSearch,
   IconTransitionLeftFilled,
   IconTransitionRightFilled,
 } from "@tabler/icons-vue";
@@ -230,6 +234,7 @@ import SearchBare from "../search/SearchBare.vue";
 import Tooltip from "../tooltip/Tooltip.vue";
 import LanguageToggle from "./LanguageToggle.vue";
 import { connectSocket, socket } from "@/helpers/socket.ts";
+import MobileSearchBare from "../search/MobileSearchBare.vue";
 
 const store = useProfileStore();
 const uiStore = useUiStore();

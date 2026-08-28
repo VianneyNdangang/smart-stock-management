@@ -7,12 +7,12 @@ export const useAlertsStore = defineStore("alerts", () => {
   const limit = ref(20);
   const page = ref(1);
 //   const id = ref('')
-  const url = ref(`stock-alert/warehouse`)
+  // const url = ref()
   const filters = ref<any>(undefined)
   const { data, fetchData, pagination, loading } = useFetchData({
     limit,
     page,
-    url,
+    url: `stock-alert/warehouse`,
     filters,
   });
 
@@ -26,7 +26,7 @@ export const useAlertsStore = defineStore("alerts", () => {
     }
 
     if (newId !== undefined) {
-      url.value = `stock-alert/warehouse/${newId}`;
+      filters.value = {warehouseId: newId};
     }
     await fetchData(); 
   };

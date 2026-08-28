@@ -2,7 +2,7 @@
   <button
     @click="themeStore.toggleTheme()"
     type="button"
-    class="cursor-pointer rounded border px-2 py-1"
+    class="cursor-pointer rounded border px-1 md:px-2 py-0.5 md:py-1 min-h-8"
   >
     <IconSunHigh
       v-if="isDark"

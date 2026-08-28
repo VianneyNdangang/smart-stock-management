@@ -65,11 +65,25 @@
                       {{ product?.items[index]?.SKU || "-" }}
                     </span>
                   </div>
-                  <div class="flex justify-between items-center gap-2">
+                  <div>
                     <p class="text-(--text-muted)">Attribute</p>
-                    <span>
-                      {{ product?.items[index]?.attribute || "-" }}
-                    </span>
+                    <Separator />
+                    <div class="pl-5">
+                      <div class="flex justify-between items-center text-sm gap-2">
+                        <p class="text-(--text-muted)">Colour</p>
+                        <span>
+                          {{ product?.items[index]?.attribute.colour || "-" }}
+                        </span>
+                      </div>
+                      <div class="flex justify-between items-center text-sm gap-2">
+                        <p class="text-(--text-muted)">Dimensions</p>
+                        <span>
+                          {{
+                            product?.items[index]?.attribute.dimensions || "-"
+                          }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div class="flex justify-between items-center gap-2">
                     <p class="text-(--text-muted)">Price</p>
@@ -103,7 +117,7 @@
                 <div class="rounded border border-(--border) p-3">
                   <p class="text-sm text-(--text-secondary)">Brand</p>
                   <p class="font-medium">
-                    {{ product?.brand?.brandName || "-" }}
+                    {{ product?.brand?.productBrandName || "-" }}
                   </p>
                 </div>
                 <div class="rounded border border-(--border) p-3 max-h-40">
@@ -168,7 +182,7 @@
 
         <Card>
           <div class="flex h-100 md:h-100">
-            <Spiner size="lg" v-if="loading" />
+            <Spiner size="lg" v-if="salesLoading" />
             <LineChart
               v-else-if="monthlySalesData.values.length > 0"
               title="Evolution des ventes par mois"
@@ -195,7 +209,7 @@
     <section class="flex flex-col md:flex-row gap-3">
       <Card>
         <div class="flex h-100 md:h-100">
-          <Spiner size="lg" v-if="loading" />
+          <Spiner size="lg" v-if="salesLoading" />
           <BarChart
             v-else-if="salesByWarehouseData.values.length > 0"
             title="Evolution des ventes par magasin"
@@ -239,7 +253,9 @@ const product = ref();
 // const productAttribute = ref();
 const stocks = ref([]);
 const index = ref<number>(0);
-const attributeId = computed(()=>{ return product.value?.items[index.value]?.attributeId});
+const productAttributeId = computed(() => {
+  return product.value?.items[index.value]?.id;
+});
 const salesGraph = ref<any[]>([]);
 const selectedImage = ref<string>("");
 const messages = ref<AlertMessageType[]>([]);
@@ -259,20 +275,7 @@ const options = computed<{ label: string; value: number }[]>(() => {
 /**Loaders */
 const loading = ref(false);
 const analysLoading = ref(false);
-
-/** ---Handlers-- */
-// const getAttribute = async () => {
-//   try {
-//     const response = await apiClient({
-//       url: `productAttribute`,
-//       method: "GET",
-//       params: {
-//         filter: { id: productId },
-//       },
-//     });
-//     productAttribute.value = response;
-//   } catch (error) {}
-// };
+const salesLoading = ref(false);
 
 const loadProduct = async (id: string) => {
   loading.value = true;
@@ -293,9 +296,16 @@ const loadProduct = async (id: string) => {
 };
 
 const handleGetSales = async () => {
-  salesGraph.value = (
-    await apiClient.get(`products/${unref(attributeId)}/get-graph`)
-  ).data;
+  salesLoading.value = true;
+  try {
+    salesGraph.value = (
+      await apiClient.get(`products/${unref(productAttributeId)}/get-graph`)
+    ).data;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    salesLoading.value = false;
+  }
 };
 
 const handleAnalyst = async () => {
@@ -323,7 +333,7 @@ watch(
 );
 
 watch(
-  () => attributeId.value,
+  () => productAttributeId.value,
   () => {
     handleGetSales();
   },

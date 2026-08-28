@@ -2,7 +2,7 @@
   <div
     class="flex flex-col gap-3 transition-all duration-300"
   >
-    <!-- <PageHeader
+    <PageHeader
       :title="t('menu.alerts')"
       subtitle="alerts"
       :refresh="
@@ -11,7 +11,7 @@
         }
       "
       :loading="alertstore.loading"
-    /> -->
+    />
     <div
       class="flex justify-center md:justify-end items-center flex-col md:flex-row gap-3"
     >
@@ -35,20 +35,18 @@
       /> -->
     </div>
     <FilterBar
-      searchEndPoint="alerts"
+      searchEndPoint="stock-alert/warehouse"
       searchProperty="productName"
       routeName="product_detail"
     >
     </FilterBar>
     <div>
-
-
       <div class="flex flex-col gap-3">
         <div
-          v-if="alertes.length > 0"
-          class="grid grid-cols-1 md:grid-cols-1 gap-3 w-full"
+          v-if="alertstore.alerts.length > 0"
+          class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-3 w-full"
         >
-          <div v-for="alert in alertes">
+          <div v-for="alert in alertstore.alerts">
             <AlertCard :alert="alert"/>
           </div>
         </div>
@@ -64,7 +62,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-// import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n'
 // import { usealertstore } from "@/store/alertsStore";
 // import PageHeader from "@/components/molecules/PageHeader.vue";
 // import RightSideBare from "@/components/sideBar/RightSideBare.vue";
@@ -78,17 +76,19 @@ import AlertCard from "@/components/card/AlertCard.vue";
 import { connectSocket, socket } from "@/helpers/socket";
 // import { user_token } from "@/helpers/constant";
 import EmptyState from "@/components/empty/EmptyState.vue";
+import PageHeader from "@/components/molecules/PageHeader.vue";
 // import { computed } from "vue";
 
 
 
 const alertes = ref<any[]>([])
 const alertstore = useAlertsStore();
+const {t} = useI18n()
 // const router = useRouter();
 // const {alerts} = storeToRefs(alertstore);
 onMounted(async () => {
   // await alertStore.fetchAlerts()
-  
+  alertstore.fetchAlerts()
   connectSocket();
 
   socket.on("peak-sale-candidates", (data) => {
