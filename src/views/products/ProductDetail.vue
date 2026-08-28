@@ -58,7 +58,7 @@
                   </div>
                 </div>
                 <Separator />
-                <div class="flex flex-col gap-2 mt-2">
+                <div class="flex flex-col gap-4 mt-2">
                   <div class="flex justify-between items-center gap-2">
                     <p class="text-(--text-muted)">SKU</p>
                     <span>
@@ -68,7 +68,7 @@
                   <div>
                     <p class="text-(--text-muted)">Attribute</p>
                     <Separator />
-                    <div class="pl-5">
+                    <div class="flex flex-col gap-2 mt-1 pl-5">
                       <div class="flex justify-between items-center text-sm gap-2">
                         <p class="text-(--text-muted)">Colour</p>
                         <span>
@@ -92,7 +92,7 @@
                   <div class="flex justify-between items-center gap-2">
                     <p class="text-(--text-muted)">Unit</p>
                     <span>
-                      {{ product?.items[index]?.units || "-" }}
+                      {{ product?.skuBreakdown[index]?.units || "-" }}
                     </span>
                   </div>
                 </div>
@@ -212,7 +212,6 @@
           <Spiner size="lg" v-if="salesLoading" />
           <BarChart
             v-else-if="salesByWarehouseData.values.length > 0"
-            title="Evolution des ventes par magasin"
             :data="salesByWarehouseData"
           />
           <EmptyState v-else title="Aucune donnee" message="" />
